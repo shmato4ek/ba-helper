@@ -1,0 +1,76 @@
+﻿using AutoMapper;
+using BAHelper.BLL.Services.Abstract;
+using BAHelper.Common.DTOs.Project;
+using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.Subtask;
+using BAHelper.DAL.Context;
+using BAHelper.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BAHelper.BLL.Services
+{
+    public class ProjectTaskService : BaseService
+    {
+        public ProjectTaskService(BAHelperDbContext context, IMapper mapper)
+        :base(context, mapper) { }
+
+        public async Task<ProjectDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto)
+        {
+            var projectEntity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == newProjectTaskDto.ProjectId);
+            if (projectEntity != null)
+            {
+                var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
+                projectEntity.Tasks.Add(projectTaskEntity);
+                _context.Update(projectEntity);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<ProjectDTO>(newProjectTaskDto);
+            }
+            return null;
+        }
+
+        public async Task<ProjectTaskDTO> UpdateTask(UpdateProjectTaskDTO updatedProjectTask)
+        {
+            var projectTaskEntity = await _context.Tasks.FirstOrDefaultAsync(p => p.Id == updatedProjectTask.Id);
+            if (projectTaskEntity != null)
+            {
+                projectTaskEntity.TimeForTask = updatedProjectTask.TimeForTask;
+                projectTaskEntity.TaskName = updatedProjectTask.TaskName;
+                projectTaskEntity.Description = updatedProjectTask.Description;
+                _context.Update(projectTaskEntity);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<ProjectTaskDTO>(projectTaskEntity);
+            }
+            return null;
+        }
+
+        public async Task<ProjectTaskDTO> AddSubtask(NewSubtaskDTO newSubtask)
+        {
+            var taskEntity = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == newSubtask.TaskId);
+            if (taskEntity != null)
+            {
+                var subtaskEntity = _mapper.Map<Subtask>(newSubtask);
+                taskEntity.Subtasks.Add(subtaskEntity);
+                _context.Update(subtaskEntity);
+                await _context.SaveChangesAsync();
+                return _mapper.Map<ProjectTaskDTO>(taskEntity);
+            }
+            return null;
+        }
+
+        public async Task<List<SubtaskDTO>> GetAllSubtasks(int taskId)
+        {
+            var taskEntity = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == taskId);
+            if(taskEntity != null)
+            {
+                var subtasks = await _context.Subtasks.Where(t => t.TaskId == taskEntity.Id).ToListAsync();
+                return _mapper.Map<List<SubtaskDTO>>(subtasks);
+            }
+            return null;
+        }
+    }
+}
