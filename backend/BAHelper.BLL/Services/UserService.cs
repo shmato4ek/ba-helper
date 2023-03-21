@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.MappingProfiles;
 using BAHelper.BLL.Services.Abstract;
+using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.User;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
@@ -33,6 +35,21 @@ namespace BAHelper.BLL.Services
             var allUsers = await _context.Users.ToListAsync();
             var allUsersDTO = _mapper.Map<List<UserDTO>>(allUsers);
             return allUsersDTO;
+        }
+
+        public async Task<List<ProjectTaskDTO>> GetAllUsersTasks(int userId)
+        {
+            var userEntity = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity != null)
+            {
+                var tasksEntity = await _context.Tasks.Where(task => task.Id == userId).ToListAsync();
+                if (tasksEntity != null)
+                {
+                    return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
+                }
+                return null;
+            }
+            return null;
         }
     }
 }

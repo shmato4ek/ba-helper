@@ -32,11 +32,11 @@ namespace BAHelper.API.Controllers
             return Ok();
         }
 
-        [HttpGet("Word")]
-        public async Task<IActionResult> CreateWordFile(int documentId)
-        {
-            DocumentDTO documentDTO = await _documentService.CreateWordDocument(documentId);
-            return Ok(documentDTO);
-        }
+        //[HttpGet("Word")]
+        //public async Task<IActionResult> CreateWordFile(int documentId)
+        //{
+        //    DocumentDTO documentDTO = await _documentService.CreateWordDocument(documentId);
+        //    return Ok(documentDTO);
+        //}
     }
 }

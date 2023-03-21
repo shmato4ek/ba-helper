@@ -9,7 +9,7 @@ namespace BAHelper.DAL.Entities
     public class ProjectTask
     {
         public int Id { get; set; }
-        public double TimeForTask { get; set; }
+        public DateTime Deadine { get; set; }
         public int ProjectId { get; set; }
         public string TaskName { get; set; }
         public string Description { get; set; }

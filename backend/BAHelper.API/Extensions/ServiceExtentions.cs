@@ -16,6 +16,9 @@ namespace BAHelper.API.Extensions
                                 Path.Combine(Directory.GetCurrentDirectory(),
                                 "./LocalFiles")));
             services.AddScoped<DownloadService>();
+            services.AddScoped<ProjectService>();
+            services.AddScoped<ProjectTaskService>();
+            services.AddScoped<ScheduleService>();
         }
 
         public static void RegisterAutoMapper(this IServiceCollection services)

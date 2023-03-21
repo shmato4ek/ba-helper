@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BAHelper.BLL.MappingProfiles
 {
-    public class ProjectTaskDTO : Profile
+    public class ProjectTaskProfile : Profile
     {
-        public ProjectTaskDTO()
+        public ProjectTaskProfile()
         {
             CreateMap<NewProjectTaskDTO, ProjectTask>();
             CreateMap<ProjectTask, ProjectTaskDTO>();

@@ -5,6 +5,7 @@ using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +33,20 @@ namespace BAHelper.BLL.Services
             if (projectEntity != null)
             {
                 projectEntity.ProjectName = updatedProject.ProjectName;
-                projectEntity.Difficulty = updatedProject.Difficulty;
                 projectEntity.Deadline = updatedProject.Deadline;
                 _context.Update(projectEntity);
                 await _context.SaveChangesAsync();
                 return _mapper.Map<ProjectDTO>(projectEntity);
+            }
+            return null;
+        }
+
+        public async Task<List<ProjectDTO>> GetAllUsersOwnProject(int userId)
+        {
+            var projectsEntity = await _context.Projects.Where(project => project.AuthorId == userId).ToListAsync();
+            if (projectsEntity != null)
+            {
+                return _mapper.Map<List<ProjectDTO>>(projectsEntity);
             }
             return null;
         }
@@ -51,7 +61,5 @@ namespace BAHelper.BLL.Services
             }
             return null;
         }
-
-        public async Task<>
     }
 }

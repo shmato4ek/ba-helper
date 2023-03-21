@@ -12,10 +12,8 @@ namespace BAHelper.Common.DTOs.Project
     {
         public int Id { get; set; }
         public DateTime Deadline { get; set; }
-        public int UserId { get; set; }
-        public int Difficulty { get; set; }
+        public int AuthorId { get; set; }
         public string ProjectName { get; set; }
         public List<ProjectTaskDTO> Tasks { get; set; }
-        public ScheduleDTO Schedule { get; set; }
     }
 }

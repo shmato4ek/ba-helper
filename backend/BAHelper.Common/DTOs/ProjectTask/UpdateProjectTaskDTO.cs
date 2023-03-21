@@ -10,7 +10,7 @@ namespace BAHelper.Common.DTOs.ProjectTask
     public class UpdateProjectTaskDTO
     {
         public int Id { get; set; }
-        public double TimeForTask { get; set; }
+        public DateTime DeadLine { get; set; }
         public string TaskName { get; set; }
         public string Description { get; set; }
     }

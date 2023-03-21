@@ -25,10 +25,14 @@ namespace BAHelper.BLL.Services
             if (projectEntity != null)
             {
                 var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
+                if(projectEntity.Tasks == null)
+                {
+                    projectEntity.Tasks = new List<ProjectTask>();
+                }
                 projectEntity.Tasks.Add(projectTaskEntity);
                 _context.Update(projectEntity);
                 await _context.SaveChangesAsync();
-                return _mapper.Map<ProjectDTO>(newProjectTaskDto);
+                return _mapper.Map<ProjectDTO>(projectEntity);
             }
             return null;
         }
@@ -38,7 +42,7 @@ namespace BAHelper.BLL.Services
             var projectTaskEntity = await _context.Tasks.FirstOrDefaultAsync(p => p.Id == updatedProjectTask.Id);
             if (projectTaskEntity != null)
             {
-                projectTaskEntity.TimeForTask = updatedProjectTask.TimeForTask;
+                projectTaskEntity.Deadine = updatedProjectTask.DeadLine;
                 projectTaskEntity.TaskName = updatedProjectTask.TaskName;
                 projectTaskEntity.Description = updatedProjectTask.Description;
                 _context.Update(projectTaskEntity);
