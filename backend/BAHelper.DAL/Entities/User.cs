@@ -11,6 +11,7 @@ namespace BAHelper.DAL.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public ICollection<Document> Documents { get; set; }
+        public List<Project> Projects { get; set; }
+        public List<Document> Documents { get; set; }
     }
 }

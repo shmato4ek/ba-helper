@@ -15,6 +15,7 @@ namespace BAHelper.DAL.Entities.Configuration
             builder.HasKey(p => p.Id);
             builder.Property(p => p.ProjectName).IsRequired();
             builder.HasOne<User>().WithMany().HasForeignKey(p => p.AuthorId);
+            builder.HasMany(p => p.Users).WithMany(p => p.Projects);
         }
     }
 }
