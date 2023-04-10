@@ -79,7 +79,9 @@ namespace BAHelper.BLL.Services
                     glossaryHeader.ApplyStyle(headerStyle.Name);
 
                     Paragraph glossaryParagraph = section.AddParagraph();
-                    var documentGlossary = await _context.Glossaries.Where(g => g.DocumentId == documentEntity.Id).ToListAsync();
+                    var documentGlossary = await _context.Glossaries
+                        .Where(g => g.DocumentId == documentEntity.Id)
+                        .ToListAsync();
                     if (documentGlossary != null)
                     {
                         List<string> glossaryTableHeaders = new List<string>();

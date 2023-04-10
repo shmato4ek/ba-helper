@@ -271,6 +271,21 @@ namespace BAHelper.DAL.Migrations
                     b.ToTable("UserStoryFormulas");
                 });
 
+            modelBuilder.Entity("ProjectTaskUser", b =>
+                {
+                    b.Property<int>("TasksId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TasksId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ProjectTaskUser");
+                });
+
             modelBuilder.Entity("ProjectUser", b =>
                 {
                     b.Property<int>("ProjectsId")
@@ -384,6 +399,21 @@ namespace BAHelper.DAL.Migrations
                     b.HasOne("BAHelper.DAL.Entities.UserStory", null)
                         .WithMany("Formulas")
                         .HasForeignKey("UserStoryId1");
+                });
+
+            modelBuilder.Entity("ProjectTaskUser", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.ProjectTask", null)
+                        .WithMany()
+                        .HasForeignKey("TasksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BAHelper.DAL.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectUser", b =>

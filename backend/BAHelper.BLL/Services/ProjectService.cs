@@ -61,5 +61,31 @@ namespace BAHelper.BLL.Services
             }
             return null;
         }
+        
+        public async Task<ProjectDTO> AddUserToProject(int projectId, int userId)
+        {
+            var projectEntity = await _context
+                .Projects
+                .Include(project => project.Users)
+                .FirstOrDefaultAsync(project => project.Id == projectId);
+            if (projectEntity != null) 
+            {
+                var userEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+                if (userEntity != null)
+                {
+                    if(projectEntity.Users == null)
+                    {
+                        projectEntity.Users = new List<User>();
+                    }
+                    projectEntity.Users.Add(userEntity);
+                    _context.SaveChanges();
+                    return _mapper.Map<ProjectDTO>(projectEntity);
+                }
+                return null;
+            }
+            return null;
+        }
     }
 }

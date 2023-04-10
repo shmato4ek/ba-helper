@@ -1,5 +1,6 @@
 ﻿using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.Schedule;
+using BAHelper.Common.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace BAHelper.Common.DTOs.Project
         public int AuthorId { get; set; }
         public string ProjectName { get; set; }
         public List<ProjectTaskDTO> Tasks { get; set; }
+        public List<UserDTO> Users { get; set; }
     }
 }

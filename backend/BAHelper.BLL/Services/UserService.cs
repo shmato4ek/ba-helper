@@ -39,10 +39,10 @@ namespace BAHelper.BLL.Services
 
         public async Task<List<ProjectTaskDTO>> GetAllUsersTasks(int userId)
         {
-            var userEntity = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+            var userEntity = await _context.Users.Include(user => user.Tasks).FirstOrDefaultAsync(user => user.Id == userId);
             if (userEntity != null)
             {
-                var tasksEntity = await _context.Tasks.Where(task => task.Id == userId).ToListAsync();
+                var tasksEntity = userEntity.Tasks;
                 if (tasksEntity != null)
                 {
                     return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);

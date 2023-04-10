@@ -48,7 +48,11 @@ namespace BAHelper.BLL.Services
 
         public async Task<List<DocumentDTO>> GetAllUsersDocumentsById(int userId)
         {
-            var documentsEntities = await _context.Documents.Where(document => document.UserId == userId).ToListAsync();
+            var documentsEntities = await _context
+                .Documents
+                .Include(doc => doc.Glossary)
+                .Where(document => document.UserId == userId)
+                .ToListAsync();
             if (documentsEntities == null)
             {
                 return null;
@@ -62,7 +66,10 @@ namespace BAHelper.BLL.Services
 
         public async Task<DocumentDTO> AddGlossary(NewGlossaryDTO newGlossaryDTO)
         {
-            var documentEntity = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == newGlossaryDTO.DocumentId);
+            var documentEntity = await _context
+                .Documents
+                .Include(doc => doc.Glossary)
+                .FirstOrDefaultAsync(doc => doc.Id == newGlossaryDTO.DocumentId);
             if (documentEntity != null)
             {
                 var glossaryEntity = _mapper.Map<Glossary>(newGlossaryDTO);

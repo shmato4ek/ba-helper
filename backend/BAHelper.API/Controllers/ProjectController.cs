@@ -38,6 +38,12 @@ namespace BAHelper.API.Controllers
             return Ok(tasks);
         }
 
+        [HttpPut("Add user to project")]
+        public async Task<IActionResult> AddUserToProject(int projectId, int userId)
+        {
+            return Ok(await _projectService.AddUserToProject(projectId, userId));
+        }
+
         //[HttpPost]
         //public async Task<IActionResult> CreateProject([FromBody] NewProjectDTO newProject)
         //{

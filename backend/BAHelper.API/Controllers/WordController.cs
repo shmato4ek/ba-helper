@@ -18,12 +18,12 @@ namespace BAHelper.API.Controllers
             _documentService = documentService;
         }
 
-        [HttpGet("CreateDoc")]
-        public async Task<IActionResult> CreateDoc(int userId, [FromBody] NewDocumentDto newDocument)
-        {
-            await _wordService.CreateDocument(userId, newDocument);
-            return Ok();
-        }
+        //[HttpGet("CreateDoc")]
+        //public async Task<IActionResult> CreateDoc(int userId, [FromBody] NewDocumentDto newDocument)
+        //{
+        //    await _wordService.CreateDocument(userId, newDocument);
+        //    return Ok();
+        //}
 
         [HttpGet("CreateWordFile")]
         public async Task<IActionResult> CreateWordFile(int documentId)
