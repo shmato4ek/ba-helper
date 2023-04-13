@@ -88,5 +88,30 @@ namespace BAHelper.BLL.Services
             }
             return null;
         }
+
+        public async Task<DocumentDTO> DeleteDocument(int documentId, int userId)
+        {
+            var docEntity = await _context
+                .Documents
+                .FirstOrDefaultAsync(doc => doc.Id == documentId);
+            if (docEntity != null) 
+            {
+                var userEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+                if(userEntity != null)
+                {
+                    if(userEntity.Id == docEntity.UserId)
+                    {
+                        _context.Documents.Remove(docEntity);
+                        _context.SaveChanges();
+                        return _mapper.Map<DocumentDTO>(docEntity);
+                    }
+                    return null;
+                }
+                return null;
+            }
+            return null;
+        }
     }
 }

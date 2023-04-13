@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BAHelper.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,6 @@ namespace BAHelper.DAL.Entities
         public string Description { get; set; }
         public List<User> Users { get; set; }
         public List<Subtask> Subtasks { get; set; }
+        public TaskState TaskState { get; set; } = TaskState.Pending;
     }
 }

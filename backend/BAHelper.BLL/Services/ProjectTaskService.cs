@@ -3,6 +3,7 @@ using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Project;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.Subtask;
+using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -137,6 +138,42 @@ namespace BAHelper.BLL.Services
             {
                 var tasks = projectEntity.Tasks;
                 return _mapper.Map<List<ProjectTaskDTO>>(tasks);
+            }
+            return null;
+        }
+
+        public async Task<ProjectTaskDTO> ChangeTaskState(int userId, int taskId, TaskState taskState)
+        {
+            var taskEntity = await _context
+                .Tasks
+                .Include(task => task.Users)
+                .FirstOrDefaultAsync(task => task.Id == taskId);
+            if (taskEntity != null) 
+            {
+                var userEntity = taskEntity
+                    .Users
+                    .FirstOrDefault(user => user.Id == userId);
+                if (userEntity != null)
+                {
+                    taskEntity.TaskState = taskState;
+                    _context.Tasks.Update(taskEntity);
+                    _context.SaveChanges();
+                    return _mapper.Map<ProjectTaskDTO>(taskEntity);
+                }
+                return null;
+            }
+            return null;
+        }
+
+        public async Task<ProjectDTO> DeleteTask(int taskId)
+        {
+            var taskEntity = await _context
+                .Tasks
+                .FirstOrDefaultAsync(task => task.Id == taskId);
+            if (taskEntity != null)
+            {
+                _context.Tasks.Remove(taskEntity);
+                _context.SaveChanges();
             }
             return null;
         }

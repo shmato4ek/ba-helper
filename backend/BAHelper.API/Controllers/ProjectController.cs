@@ -58,5 +58,11 @@ namespace BAHelper.API.Controllers
             var project = await _projectService.UpdateProject(updatedProject);
             return Ok(project);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProject(int projectId, int userId)
+        {
+            return Ok(await _projectService.DeleteProject(projectId, userId));
+        }
     }
 }

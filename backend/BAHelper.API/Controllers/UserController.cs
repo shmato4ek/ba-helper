@@ -37,5 +37,11 @@ namespace BAHelper.API.Controllers
         {
             return Ok(await _userService.GetAllUsersTasks(userId));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            return Ok(await _userService.DeleteUser(userId));
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BAHelper.Common.DTOs.Subtask;
 using BAHelper.Common.DTOs.User;
+using BAHelper.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace BAHelper.Common.DTOs.ProjectTask
         public string Description { get; set; }
         public List<UserDTO> Users { get; set; }
         public List<SubtaskDTO> Subtasks { get; set; }
+        public TaskState TaskState { get; set; } = TaskState.Pending;
     }
 }

@@ -2,6 +2,7 @@
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Project;
 using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.User;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,31 @@ namespace BAHelper.BLL.Services
                     projectEntity.Users.Add(userEntity);
                     _context.SaveChanges();
                     return _mapper.Map<ProjectDTO>(projectEntity);
+                }
+                return null;
+            }
+            return null;
+        }
+
+        public async Task<UserDTO> DeleteProject(int projectId, int userId)
+        {
+            var projectEntity = await _context
+                .Projects
+                .FirstOrDefaultAsync(project => project.Id == projectId);
+            if (projectEntity != null)
+            {
+                var userEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+                if (userEntity != null)
+                {
+                    if (projectEntity.AuthorId == userEntity.Id)
+                    {
+                        _context.Projects.Remove(projectEntity);
+                        _context.SaveChanges();
+                        return _mapper.Map<UserDTO>(userEntity);
+                    }
+                    return null;
                 }
                 return null;
             }

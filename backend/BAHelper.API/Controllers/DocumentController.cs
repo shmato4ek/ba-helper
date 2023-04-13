@@ -44,5 +44,11 @@ namespace BAHelper.API.Controllers
             DocumentDTO updatedDocument = await _documentService.AddGlossary(newGlossary);
             return Ok(updatedDocument);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteDocument(int documentId, int userId)
+        {
+            return Ok(await _documentService.DeleteDocument(documentId, userId));
+        }
     }
 }

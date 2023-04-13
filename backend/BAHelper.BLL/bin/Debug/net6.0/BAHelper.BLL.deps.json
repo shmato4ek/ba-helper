@@ -802,6 +802,7 @@
       },
       "BAHelper.DAL/1.0.0": {
         "dependencies": {
+          "BAHelper.Common": "1.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.2",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.1"
         },

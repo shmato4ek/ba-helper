@@ -1,5 +1,6 @@
 ﻿using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +39,18 @@ namespace BAHelper.API.Controllers
         public async Task<IActionResult> GetProjectsTasks(int projectId)
         {
             return Ok(await _projectTaskService.GetAllTasksByProjectId(projectId));
+        }
+
+        [HttpPut("Change state")]
+        public async Task<IActionResult> ChangeTaskState(int userId, int taskId, TaskState taskState)
+        {
+            return Ok(await _projectTaskService.ChangeTaskState(userId, taskId, taskState));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTask(int taskId)
+        {
+            return Ok(await _projectTaskService.DeleteTask(taskId));
         }
     }
 }

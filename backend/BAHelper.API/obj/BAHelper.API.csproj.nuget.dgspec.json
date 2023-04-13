@@ -269,7 +269,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\BA Hepler\\ba-helper\\backend\\BAHelper.Common\\BAHelper.Common.csproj": {
+                "projectPath": "D:\\BA Hepler\\ba-helper\\backend\\BAHelper.Common\\BAHelper.Common.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

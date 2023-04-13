@@ -411,6 +411,19 @@
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
         }
+      },
+      "BAHelper.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.1"
+        },
+        "compile": {
+          "bin/placeholder/BAHelper.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BAHelper.Common.dll": {}
+        }
       }
     }
   },
@@ -1029,10 +1042,16 @@
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "BAHelper.Common/1.0.0": {
+      "type": "project",
+      "path": "../BAHelper.Common/BAHelper.Common.csproj",
+      "msbuildProject": "../BAHelper.Common/BAHelper.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "BAHelper.Common >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.2",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 7.0.1"
@@ -1064,7 +1083,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\BA Hepler\\ba-helper\\backend\\BAHelper.Common\\BAHelper.Common.csproj": {
+              "projectPath": "D:\\BA Hepler\\ba-helper\\backend\\BAHelper.Common\\BAHelper.Common.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
