@@ -66,8 +66,12 @@ namespace BAHelper.BLL.Services
             if (taskEntity != null)
             {
                 var subtaskEntity = _mapper.Map<Subtask>(newSubtask);
+                if (taskEntity.Subtasks == null)
+                {
+                    taskEntity.Subtasks = new List<Subtask>();
+                }
                 taskEntity.Subtasks.Add(subtaskEntity);
-                _context.Update(subtaskEntity);
+                _context.Update(taskEntity);
                 await _context.SaveChangesAsync();
                 return _mapper.Map<ProjectTaskDTO>(taskEntity);
             }
@@ -131,15 +135,13 @@ namespace BAHelper.BLL.Services
 
         public async Task<List<ProjectTaskDTO>> GetAllTasksByProjectId(int projectId)
         {
-            var projectEntity = await _context.Projects
-                .Include(project => project.Tasks)
-                .FirstOrDefaultAsync(project => project.Id == projectId);
-            if (projectEntity != null)
-            {
-                var tasks = projectEntity.Tasks;
-                return _mapper.Map<List<ProjectTaskDTO>>(tasks);
-            }
-            return null;
+            var tasksEntities = await _context
+                .Tasks
+                .Include(task => task.Users)
+                .Include(task => task.Subtasks)
+                .Where(task => task.ProjectId == projectId)
+                .ToListAsync();
+            return _mapper.Map<List<ProjectTaskDTO>>(tasksEntities);
         }
 
         public async Task<ProjectTaskDTO> ChangeTaskState(int userId, int taskId, TaskState taskState)
@@ -163,6 +165,33 @@ namespace BAHelper.BLL.Services
                 return null;
             }
             return null;
+        }
+
+        public async Task<ProjectTaskDTO> ApproveTask(int taskId, int userId)
+        {
+            var taskEntity = await _context
+                .Tasks
+                .Include(task => task.Users)
+                .FirstOrDefaultAsync(task => task.Id == taskId);
+            if (taskEntity != null) 
+            {
+                var projectEntity = await _context
+                    .Projects
+                    .FirstOrDefaultAsync(project => project.Id == taskEntity.ProjectId);
+                if(projectEntity != null) 
+                {
+                    if(projectEntity.AuthorId == userId)
+                    {
+                        taskEntity.TaskState = TaskState.Approved;
+                        _context.Tasks.Update(taskEntity);
+                        _context.SaveChanges();
+                        return _mapper.Map<ProjectTaskDTO>(taskEntity);
+                    }
+                    return null;
+                }
+                return null;
+            }
+            return null; 
         }
 
         public async Task<ProjectDTO> DeleteTask(int taskId)

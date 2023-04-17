@@ -1,8 +1,10 @@
 ﻿using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.Subtask;
 using BAHelper.Common.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BAHelper.API.Controllers
 {
@@ -51,6 +53,18 @@ namespace BAHelper.API.Controllers
         public async Task<IActionResult> DeleteTask(int taskId)
         {
             return Ok(await _projectTaskService.DeleteTask(taskId));
+        }
+
+        [HttpPut("Add subtask")]
+        public async Task<IActionResult> AddSubtask([FromBody] NewSubtaskDTO newSubtask)
+        {
+            return Ok(await _projectTaskService.AddSubtask(newSubtask));
+        }
+
+        [HttpPut("Approve task")]
+        public async Task<IActionResult> ApproveTask(int taskId, int userId)
+        {
+            return Ok(await _projectTaskService.ApproveTask(taskId, userId));
         }
     }
 }
