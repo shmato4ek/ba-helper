@@ -20,6 +20,7 @@ namespace BAHelper.DAL.Context
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> Tasks { get; set; }
         public DbSet<Subtask> Subtasks { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public BAHelperDbContext() { }
         public BAHelperDbContext(DbContextOptions<BAHelperDbContext> options) : base(options)

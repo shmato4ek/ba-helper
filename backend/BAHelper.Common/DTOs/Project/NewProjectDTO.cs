@@ -10,7 +10,6 @@ namespace BAHelper.Common.DTOs.Project
     public class NewProjectDTO
     {
         public DateTime Deadline { get; set; }
-        public int AuthorId { get; set; }
         public string ProjectName { get; set; }
     }
 }

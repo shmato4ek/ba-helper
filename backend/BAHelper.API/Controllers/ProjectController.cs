@@ -1,7 +1,9 @@
-﻿using BAHelper.BLL.Services;
+﻿using BAHelper.API.Extensions;
+using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Project;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace BAHelper.API.Controllers
 {
@@ -19,50 +21,45 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody] NewProjectDTO newProject)
+        public async Task<ActionResult> CreateProject([FromBody] NewProjectDTO newProject)
         {
-            return Ok(await _projectService.CreateProject(newProject));
+            return Ok(await _projectService.CreateProject(newProject, this.GetUserIdFromToken()));
         }
 
-        [HttpGet("Own projects")]
-        public async Task<IActionResult> GetAllUsersProject(int userId)
+        [HttpGet("user/{userId:int}")]
+        public async Task<ActionResult> GetAllUsersProject(int userId)
         {
             var projects = await _projectService.GetAllUsersOwnProject(userId);
             return Ok(projects);
         }
 
-        [HttpGet("AllTasks")]
-        public async Task<IActionResult> GetAllProjectTasks(int projectId)
+        [HttpGet("project/{projectId:int}")]
+        public async Task<ActionResult> GetAllProjectTasks(int projectId)
         {
             var tasks = await _projectService.GetAllProjectTasks(projectId);
             return Ok(tasks);
         }
 
-        [HttpPut("Add user to project")]
-        public async Task<IActionResult> AddUserToProject(int projectId, int userId)
+        [HttpPut("add-user/{userId:int}")]
+        public async Task<ActionResult> AddUserToProject(int projectId, int userId)
         {
             return Ok(await _projectService.AddUserToProject(projectId, userId));
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateProject([FromBody] NewProjectDTO newProject)
-        //{
-        //    var project = await _projectService.CreateProject(newProject);
-        //    await _scheduleService.CreateSchedule();
-        //    return Ok(project);
-        //}
-
         [HttpPut]
-        public async Task<IActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)
+        public async Task<ActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)
         {
             var project = await _projectService.UpdateProject(updatedProject);
             return Ok(project);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteProject(int projectId, int userId)
+        [HttpDelete("{projectId:int}")]
+        public async Task<ActionResult> DeleteProject(int projectId)
         {
-            return Ok(await _projectService.DeleteProject(projectId, userId));
+            Request.Headers.TryGetValue(HeaderNames.Authorization, out Microsoft.Extensions.Primitives.StringValues value);
+            var token = value.ToString();
+            await _projectService.DeleteProject(projectId, token);
+            return NoContent();
         }
     }
 }

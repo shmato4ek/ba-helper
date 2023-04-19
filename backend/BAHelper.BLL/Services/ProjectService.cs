@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,10 @@ namespace BAHelper.BLL.Services
         public ProjectService(BAHelperDbContext context, IMapper mapper)
             : base(context, mapper) { }
 
-        public async Task<ProjectDTO> CreateProject(NewProjectDTO newProject)
+        public async Task<ProjectDTO> CreateProject(NewProjectDTO newProject, int userId)
         {
             var projectEntity = _mapper.Map<Project>(newProject);
+            projectEntity.AuthorId = userId;
             _context.Projects.Add(projectEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDTO>(projectEntity);
@@ -89,29 +91,29 @@ namespace BAHelper.BLL.Services
             return null;
         }
 
-        public async Task<UserDTO> DeleteProject(int projectId, int userId)
+        public async Task DeleteProject(int projectId, string token)
         {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userId = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "id")?.Value;
+            if (userId == null) 
+            {
+                return;
+            }
             var projectEntity = await _context
                 .Projects
                 .FirstOrDefaultAsync(project => project.Id == projectId);
-            if (projectEntity != null)
+            if (projectEntity == null)
             {
-                var userEntity = await _context
-                    .Users
-                    .FirstOrDefaultAsync(user => user.Id == userId);
-                if (userEntity != null)
-                {
-                    if (projectEntity.AuthorId == userEntity.Id)
-                    {
-                        _context.Projects.Remove(projectEntity);
-                        _context.SaveChanges();
-                        return _mapper.Map<UserDTO>(userEntity);
-                    }
-                    return null;
-                }
-                return null;
+                return;
             }
-            return null;
+            if (projectEntity.AuthorId != Convert.ToInt32(userId))
+            {
+                return;
+            }
+
+            _context.Projects.Remove(projectEntity);
+            _context.SaveChanges();
         }
     }
 }

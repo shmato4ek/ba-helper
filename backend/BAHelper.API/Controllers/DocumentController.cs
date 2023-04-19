@@ -1,4 +1,5 @@
-﻿using BAHelper.BLL.Services;
+﻿using BAHelper.API.Extensions;
+using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
 using Microsoft.AspNetCore.Http;
@@ -18,13 +19,13 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDocument(int userId, NewDocumentDto newDocumentDto)
+        public async Task<IActionResult> CreateDocument(NewDocumentDto newDocumentDto)
         {
-            DocumentDTO createdDocument = await _documentService.CreateDocument(userId, newDocumentDto);
+            DocumentDTO createdDocument = await _documentService.CreateDocument(this.GetUserIdFromToken(), newDocumentDto);
             return Ok(createdDocument);
         }
 
-        [HttpGet]
+        [HttpGet("user/{userId:int}")]
         public async Task<IActionResult> GetAllDocuments(int userId)
         {
             List<DocumentDTO> documents = await _documentService.GetAllUsersDocumentsById(userId);

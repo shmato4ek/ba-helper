@@ -1,4 +1,5 @@
-﻿using BAHelper.BLL.Services;
+﻿using BAHelper.API.Extensions;
+using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
 using BAHelper.Common.DTOs.User;
@@ -42,6 +43,15 @@ namespace BAHelper.API.Controllers
         public async Task<IActionResult> DeleteUser(int userId)
         {
             return Ok(await _userService.DeleteUser(userId));
+        }
+
+        [HttpGet]
+        [Route("FromToken")]
+        public async Task<IActionResult> GetUserFromToken()
+        {
+            var user = await _userService.GetUserById(this.GetUserIdFromToken());
+
+            return Ok(user);
         }
     }
 }

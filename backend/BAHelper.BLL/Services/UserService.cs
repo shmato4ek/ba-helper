@@ -3,10 +3,12 @@ using BAHelper.BLL.MappingProfiles;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.User;
+using BAHelper.Common.Security;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +26,22 @@ namespace BAHelper.BLL.Services
         }
         public async Task<UserDTO> CreateUser(NewUserDTO newUser)
         {
-            var UserEntity = _mapper.Map<User>(newUser);
-            _context.Users.Add(UserEntity);
+            var userEntity = _mapper.Map<User>(newUser);
+
+            var salt = SecurityHelper.GetRandomBytes();
+            userEntity.Salt = Convert.ToBase64String(salt);
+            userEntity.Password = SecurityHelper.HashPassword(newUser.Password, salt);
+
+            var isUserExist = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Email == newUser.Email) != null;
+            if (isUserExist)
+            {
+                return null;
+            }
+            _context.Users.Add(userEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<UserDTO>(UserEntity);
+            return _mapper.Map<UserDTO>(userEntity);
         }
 
         public async Task<List<UserDTO>> GetAllUsers()
@@ -69,6 +83,14 @@ namespace BAHelper.BLL.Services
                 return _mapper.Map<UserDTO>(userEntity);
             }
             return null;
+        }
+
+        public async Task<UserDTO> GetUserById(int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            return _mapper.Map<UserDTO>(userEntity);
         }
     }
 }
