@@ -30,7 +30,6 @@ namespace BAHelper.BLL.Services
             {
                 return null;
             }
-            var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
             if (projectEntity.AuthorId != userId)
             {
                 return null;
@@ -39,6 +38,8 @@ namespace BAHelper.BLL.Services
             {
                 projectEntity.Tasks = new List<ProjectTask>();
             }
+            var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
+            projectEntity.Hours += projectTaskEntity.Hours;
             projectEntity.Tasks.Add(projectTaskEntity);
             _context.Update(projectEntity);
             await _context.SaveChangesAsync();
@@ -140,41 +141,42 @@ namespace BAHelper.BLL.Services
             return null;
         }
 
-        public async Task<ProjectTaskDTO> AddUserToTask(int taskId, int userId, int currentUserId)
+        public async Task<ProjectTaskDTO> AddUserToTask(int taskId, string email, int userId)
         {
             var taskEntity = await _context
                 .Tasks
                 .Include(task => task.Users)
                 .FirstOrDefaultAsync(task => task.Id == taskId);
+
             if (taskEntity == null) 
             {
                 return null;
             }
-            var userEntity = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+
+            var userEntity = await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
             if (userEntity == null) 
             {
                 return null;
             }
+
             var projectEntity = await _context.Projects.FirstOrDefaultAsync(project => project.Id == taskEntity.ProjectId);
-            if (projectEntity == null)
+            if (projectEntity == null || projectEntity.AuthorId != userId)
             {
                 return null;
             }
-            if(projectEntity.AuthorId != currentUserId)
-            {
-                return null;
-            }    
 
             if (taskEntity.Users == null)
             {
                 taskEntity.Users = new List<User>();
             }
+
             if (taskEntity.Users.FirstOrDefault(user => user.Id == userId) == null)
             {
                 taskEntity.Users.Add(userEntity);
                 _context.Users.Update(userEntity);
                 await _context.SaveChangesAsync();
             }
+
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
 
         }
@@ -335,6 +337,8 @@ namespace BAHelper.BLL.Services
             {
                 return;
             }
+            projectEntity.Hours -= taskEntity.Hours;
+            _context.Projects.Update(projectEntity);
             _context.Tasks.Remove(taskEntity);
             await _context.SaveChangesAsync();
         }

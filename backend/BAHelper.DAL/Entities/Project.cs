@@ -12,6 +12,7 @@ namespace BAHelper.DAL.Entities
         public DateTime Deadline { get; set; }
         public int AuthorId { get; set; }
         public string ProjectName { get; set; }
+        public double Hours { get; set; }
         public List<ProjectTask> Tasks { get; set; }
         public List<User> Users { get; set; }
     }

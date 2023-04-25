@@ -25,6 +25,7 @@ namespace BAHelper.BLL.Services
         {
             var projectEntity = _mapper.Map<Project>(newProject);
             projectEntity.AuthorId = userId;
+            projectEntity.Hours = 0;
             _context.Projects.Add(projectEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDTO>(projectEntity);
@@ -65,30 +66,30 @@ namespace BAHelper.BLL.Services
             return null;
         }
         
-        public async Task<ProjectDTO> AddUserToProject(int projectId, int userId)
+        public async Task<ProjectDTO> AddUserToProject(int projectId, string email, int userId)
         {
             var projectEntity = await _context
                 .Projects
                 .Include(project => project.Users)
                 .FirstOrDefaultAsync(project => project.Id == projectId);
-            if (projectEntity != null) 
+            if (projectEntity is null || projectEntity.AuthorId != userId)
             {
-                var userEntity = await _context
-                    .Users
-                    .FirstOrDefaultAsync(user => user.Id == userId);
-                if (userEntity != null)
-                {
-                    if(projectEntity.Users == null)
-                    {
-                        projectEntity.Users = new List<User>();
-                    }
-                    projectEntity.Users.Add(userEntity);
-                    _context.SaveChanges();
-                    return _mapper.Map<ProjectDTO>(projectEntity);
-                }
                 return null;
             }
-            return null;
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Email == email);
+            if (userEntity is null)
+            {
+                return null;
+            }
+            if (projectEntity.Users == null)
+            {
+                projectEntity.Users = new List<User>();
+            }
+            projectEntity.Users.Add(userEntity);
+            _context.SaveChanges();
+            return _mapper.Map<ProjectDTO>(projectEntity);
         }
 
         public async Task DeleteProject(int projectId, string token)

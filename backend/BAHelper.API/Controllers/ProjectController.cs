@@ -41,9 +41,9 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPut("add-user/{userId:int}")]
-        public async Task<ActionResult> AddUserToProject(int projectId, int userId)
+        public async Task<ActionResult> AddUserToProject(int projectId, string email)
         {
-            return Ok(await _projectService.AddUserToProject(projectId, userId));
+            return Ok(await _projectService.AddUserToProject(projectId, email, this.GetUserIdFromToken()));
         }
 
         [HttpPut]
