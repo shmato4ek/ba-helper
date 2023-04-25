@@ -6,6 +6,7 @@ using BAHelper.Common.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Spire.Pdf.Annotations;
 
 namespace BAHelper.API.Controllers
 {
@@ -32,6 +33,18 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectTaskService.AddUserToTask(taskId, userId, this.GetUserIdFromToken()));
         }
 
+        [HttpPut("task/update")]
+        public async Task<ActionResult> UpdateTask([FromBody] UpdateProjectTaskDTO updatedTask)
+        {
+            return Ok(await _projectTaskService.UpdateTask(updatedTask, this.GetUserIdFromToken()));
+        }
+
+        [HttpPut("subtask/update")]
+        public async Task<ActionResult> UpdateSubtask([FromBody] UpdateSubtaskDTO updatedSubtask)
+        {
+            return Ok(await _projectTaskService.UpdateSubtask(updatedSubtask, this.GetUserIdFromToken()));
+        }
+
         [HttpGet("project/{userId:int}")]
         public async Task<IActionResult> GetUserTasks(int projectId)
         {
@@ -44,16 +57,29 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectTaskService.GetAllTasksByProjectId(projectId));
         }
 
-        [HttpPut("change-state")]
+        [HttpPut("task/state")]
         public async Task<IActionResult> ChangeTaskState(int taskId, TaskState taskState)
         {
             return Ok(await _projectTaskService.ChangeTaskState(this.GetUserIdFromToken(), taskId, taskState));
         }
 
-        [HttpDelete]
+        [HttpPut("subtask/state")]
+        public async Task<ActionResult> ChangeSubtaskState(int subtaskId, TaskState taskState)
+        {
+            return Ok(await _projectTaskService.ChangeSubtaskState(subtaskId, taskState, this.GetUserIdFromToken()));
+        }
+
+        [HttpDelete("task")]
         public async Task<IActionResult> DeleteTask(int taskId)
         {
-            await _projectTaskService.DeleteTask(taskId);
+            await _projectTaskService.DeleteTask(taskId, this.GetUserIdFromToken());
+            return NoContent();
+        }
+
+        [HttpDelete("subtask")]
+        public async Task<ActionResult> DeleteSubtask(int subtaskId)
+        {
+            await _projectTaskService.DeleteSubtask(subtaskId, this.GetUserIdFromToken());
             return NoContent();
         }
 
@@ -63,10 +89,16 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectTaskService.AddSubtask(newSubtask, this.GetUserIdFromToken()));
         }
 
-        [HttpPut("Approve")]
+        [HttpPut("task/approve")]
         public async Task<IActionResult> ApproveTask(int taskId)
         {
             return Ok(await _projectTaskService.ApproveTask(taskId, this.GetUserIdFromToken()));
+        }
+
+        [HttpPut("subtask/approve")]
+        public async Task<ActionResult> ApproveSubtask(int subtaskId)
+        {
+            return Ok(await _projectTaskService.ApproveSubtask(subtaskId, this.GetUserIdFromToken()));
         }
     }
 }
