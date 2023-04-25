@@ -2,15 +2,18 @@
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
+using BAHelper.Common.DTOs.UserStory;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Office.Interop.Word;
+using Spire.Pdf.Exporting.XPS.Schema;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,11 +26,61 @@ namespace BAHelper.BLL.Services
 
         public async Task<DocumentDTO> CreateDocument(int userId, NewDocumentDto newDocumentDto)
         {
-            var documentEntity = _mapper.Map<DAL.Entities.Document>(newDocumentDto);
+            var documentEntity = new DAL.Entities.Document();
             documentEntity.UserId = userId;
+            documentEntity.ProjectAim = newDocumentDto.ProjectAim;
+            documentEntity.Name = newDocumentDto.Name;
+
             _context.Documents.Add(documentEntity);
             await _context.SaveChangesAsync();
+
+            documentEntity.Glossary = _mapper.Map<List<Glossary>>(newDocumentDto.Glossary);
+            foreach(var glossary in documentEntity.Glossary)
+            {
+                glossary.DocumentId = documentEntity.Id;
+            }
+            await _context.SaveChangesAsync();
+            foreach(var userStory in newDocumentDto.UserStories)
+            {
+                await AddUserStory(documentEntity.Id, userStory);
+            }
             return _mapper.Map<DocumentDTO>(documentEntity);
+        }
+
+        public async Task<UserStoryDTO> AddUserStory(int documentId, NewUserStoryDTO newUserStory)
+        {
+            var documentEntity = await _context
+                .Documents
+                .Include(doc => doc.UserStories)
+                .FirstOrDefaultAsync(doc => doc.Id == documentId);
+            if (documentEntity is null)
+            {
+                return null;
+            }
+            var userStoryEntity = new UserStory { Name = newUserStory.Name, DocumentId = documentId };
+            _context.UserStories.Add(userStoryEntity);
+            await _context.SaveChangesAsync();
+            if (userStoryEntity.AcceptanceCriterias == null)
+            {
+                userStoryEntity.AcceptanceCriterias = new List<AcceptanceCriteria>();
+            }
+            foreach(var criteria in newUserStory.AcceptanceCriterias)
+            {
+                criteria.UserStoryId = userStoryEntity.Id;
+                userStoryEntity.AcceptanceCriterias.Add(_mapper.Map<AcceptanceCriteria>(criteria));
+            }
+            if (userStoryEntity.Formulas == null)
+            {
+                userStoryEntity.Formulas = new List<UserStoryFormula>();
+            }
+            foreach(var formula in newUserStory.UserStoryFormulas)
+            {
+                formula.UserStoryId = userStoryEntity.Id;
+                userStoryEntity.Formulas.Add(_mapper.Map<UserStoryFormula>(formula));
+            }
+            _context.UserStories.Update(userStoryEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserStoryDTO>(userStoryEntity);
         }
 
         public async Task<DocumentDTO> AddProjectAim(int documentId, string projectAim)
@@ -64,30 +117,30 @@ namespace BAHelper.BLL.Services
             }
         }
 
-        public async Task<DocumentDTO> AddGlossary(NewGlossaryDTO newGlossaryDTO)
-        {
-            var documentEntity = await _context
-                .Documents
-                .Include(doc => doc.Glossary)
-                .FirstOrDefaultAsync(doc => doc.Id == newGlossaryDTO.DocumentId);
-            if (documentEntity != null)
-            {
-                var glossaryEntity = _mapper.Map<Glossary>(newGlossaryDTO);
-                if (documentEntity.Glossary == null)
-                {
-                    documentEntity.Glossary = new List<Glossary>();
-                }
-                documentEntity.Glossary.Add(glossaryEntity);
-                _context.Documents.Update(documentEntity);
-                await _context.SaveChangesAsync();
-                var updatedDocument = await _context.Documents
-                    .Where(doc => doc.Id == newGlossaryDTO.DocumentId)
-                    .Include(doc => doc.Glossary)
-                    .FirstOrDefaultAsync();
-                return _mapper.Map<DocumentDTO>(updatedDocument);
-            }
-            return null;
-        }
+        //public async Task<DocumentDTO> AddGlossary(NewGlossaryDTO newGlossaryDTO)
+        //{
+        //    var documentEntity = await _context
+        //        .Documents
+        //        .Include(doc => doc.Glossary)
+        //        .FirstOrDefaultAsync(doc => doc.Id == newGlossaryDTO.DocumentId);
+        //    if (documentEntity != null)
+        //    {
+        //        var glossaryEntity = _mapper.Map<Glossary>(newGlossaryDTO);
+        //        if (documentEntity.Glossary == null)
+        //        {
+        //            documentEntity.Glossary = new List<Glossary>();
+        //        }
+        //        documentEntity.Glossary.Add(glossaryEntity);
+        //        _context.Documents.Update(documentEntity);
+        //        await _context.SaveChangesAsync();
+        //        var updatedDocument = await _context.Documents
+        //            .Where(doc => doc.Id == newGlossaryDTO.DocumentId)
+        //            .Include(doc => doc.Glossary)
+        //            .FirstOrDefaultAsync();
+        //        return _mapper.Map<DocumentDTO>(updatedDocument);
+        //    }
+        //    return null;
+        //}
 
         public async Task<DocumentDTO> DeleteDocument(int documentId, int userId)
         {

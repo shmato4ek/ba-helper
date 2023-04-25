@@ -14,11 +14,16 @@ namespace BAHelper.BLL.Services
 {
     public class DownloadService : BaseService
     {
-        public DownloadService(BAHelperDbContext context, IMapper mapper)
-            : base(context, mapper) { }
+        private readonly WordService _wordService;
+        public DownloadService(BAHelperDbContext context, IMapper mapper, WordService wordService)
+            : base(context, mapper) 
+        {
+            _wordService = wordService;
+        }
 
         public async Task<DownloadFileModel> DownloadDocument(int documentId)
         {
+            await _wordService.CreateWordFile(documentId);
             var foundDocument = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == documentId);
             if (foundDocument == null)
             {

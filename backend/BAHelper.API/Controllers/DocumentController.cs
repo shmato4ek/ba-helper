@@ -21,7 +21,7 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDocument(NewDocumentDto newDocumentDto)
         {
-            DocumentDTO createdDocument = await _documentService.CreateDocument(this.GetUserIdFromToken(), newDocumentDto);
+            DocumentDTO createdDocument = await _documentService.CreateDocument(5, newDocumentDto);
             return Ok(createdDocument);
         }
 
@@ -39,12 +39,12 @@ namespace BAHelper.API.Controllers
             return Ok(updatedDocument);
         }
 
-        [HttpPut("AddGlossary")]
-        public async Task<IActionResult> AddGlossary(NewGlossaryDTO newGlossary)
-        {
-            DocumentDTO updatedDocument = await _documentService.AddGlossary(newGlossary);
-            return Ok(updatedDocument);
-        }
+        //[HttpPut("AddGlossary")]
+        //public async Task<IActionResult> AddGlossary(NewGlossaryDTO newGlossary)
+        //{
+        //    DocumentDTO updatedDocument = await _documentService.AddGlossary(newGlossary);
+        //    return Ok(updatedDocument);
+        //}
 
         [HttpDelete]
         public async Task<IActionResult> DeleteDocument(int documentId, int userId)

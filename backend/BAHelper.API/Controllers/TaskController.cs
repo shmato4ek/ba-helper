@@ -28,9 +28,9 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPut("assign/{taskId:int}")]
-        public async Task<IActionResult> AddUsersToTask(int taskId, int userId)
+        public async Task<IActionResult> AddUsersToTask(int taskId, string email)
         {
-            return Ok(await _projectTaskService.AddUserToTask(taskId, userId, this.GetUserIdFromToken()));
+            return Ok(await _projectTaskService.AddUserToTask(taskId, email, this.GetUserIdFromToken()));
         }
 
         [HttpPut("task/update")]
