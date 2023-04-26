@@ -14,7 +14,7 @@ namespace BAHelper.BLL.MappingProfiles
     {
         public UserStoryFormulaProfile() 
         {
-            CreateMap<UserStoryFormulaDTO, UserStoryFormula>();
+            CreateMap<NewUserStoryFormulaDTO, UserStoryFormula>();
             CreateMap<UserStoryFormula, UserStoryFormulaDTO>();
 
         }

@@ -13,7 +13,7 @@ namespace BAHelper.BLL.MappingProfiles
     {
         public AcceptanceCriteriaProfile() 
         {
-            CreateMap<AcceptanceCriteriaDTO, AcceptanceCriteria>();
+            CreateMap<NewAcceptanceCriteriaDTO, AcceptanceCriteria>();
             CreateMap<AcceptanceCriteria, AcceptanceCriteriaDTO>();
         }
     }

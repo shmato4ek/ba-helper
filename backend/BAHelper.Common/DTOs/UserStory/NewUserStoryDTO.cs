@@ -11,7 +11,7 @@ namespace BAHelper.Common.DTOs.UserStory
     public class NewUserStoryDTO
     {
         public string Name { get; set; }
-        public List<UserStoryFormulaDTO> UserStoryFormulas { get; set; }
-        public List<AcceptanceCriteriaDTO> AcceptanceCriterias { get; set; }
+        public List<NewUserStoryFormulaDTO> UserStoryFormulas { get; set; }
+        public List<NewAcceptanceCriteriaDTO> AcceptanceCriterias { get; set; }
     }
 }
