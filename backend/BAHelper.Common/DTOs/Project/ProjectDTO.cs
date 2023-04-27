@@ -16,6 +16,7 @@ namespace BAHelper.Common.DTOs.Project
         public int AuthorId { get; set; }
         public string ProjectName { get; set; }
         public double Hours { get; set; }
+        public bool IsDeleted { get; set; }
         public List<ProjectTaskDTO> Tasks { get; set; }
         public List<UserDTO> Users { get; set; }
     }

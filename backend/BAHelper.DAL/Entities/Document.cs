@@ -12,6 +12,7 @@ namespace BAHelper.DAL.Entities
         public int UserId { get; set; }
         public string Name { get; set; }
         public string? ProjectAim { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public List<Glossary> Glossary { get; set; }
         public List<UserStory> UserStories { get; set; }
     }

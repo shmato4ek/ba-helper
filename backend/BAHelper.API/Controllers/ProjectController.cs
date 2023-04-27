@@ -53,6 +53,13 @@ namespace BAHelper.API.Controllers
             return Ok(project);
         }
 
+        [HttpPut("archive/{projectId:int}")]
+        public async Task<ActionResult> MoveToArchive(int projectId)
+        {
+            await _projectService.MoveToArchive(projectId, this.GetUserIdFromToken());
+            return NoContent();
+        }
+
         [HttpDelete("{projectId:int}")]
         public async Task<ActionResult> DeleteProject(int projectId)
         {

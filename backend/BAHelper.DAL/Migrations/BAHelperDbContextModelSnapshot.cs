@@ -57,6 +57,9 @@ namespace BAHelper.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -126,6 +129,9 @@ namespace BAHelper.DAL.Migrations
 
                     b.Property<double>("Hours")
                         .HasColumnType("double precision");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()

@@ -28,28 +28,26 @@ namespace BAHelper.API.Controllers
         [HttpGet("user/{userId:int}")]
         public async Task<IActionResult> GetAllDocuments(int userId)
         {
-            List<DocumentDTO> documents = await _documentService.GetAllUsersDocumentsById(userId);
-            return Ok(documents);
+            return Ok(await _documentService.GetAllUsersDocumentsById(userId));
         }
 
-        [HttpPut("ProjectAim")]
-        public async Task<IActionResult> AddProjectAim(int documentId, string projectAim)
+        public async Task<ActionResult> UpdateDocument([FromBody] UpdateDocumentDTO updatedDocument)
         {
-            DocumentDTO updatedDocument = await _documentService.AddProjectAim(documentId, projectAim);
-            return Ok(updatedDocument);
+            return Ok(await _documentService.UpdateDocument(updatedDocument));
         }
 
-        //[HttpPut("AddGlossary")]
-        //public async Task<IActionResult> AddGlossary(NewGlossaryDTO newGlossary)
-        //{
-        //    DocumentDTO updatedDocument = await _documentService.AddGlossary(newGlossary);
-        //    return Ok(updatedDocument);
-        //}
+        [HttpPut("archive/{documentId:int}")]
+        public async Task<ActionResult> MoveToArvhive(int documentId)
+        {
+            await _documentService.MoveToArchive(documentId, this.GetUserIdFromToken());
+            return NoContent();
+        }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteDocument(int documentId, int userId)
+        public async Task<IActionResult> DeleteDocument(int documentId)
         {
-            return Ok(await _documentService.DeleteDocument(documentId, userId));
+            await _documentService.DeleteDocument(documentId, this.GetUserIdFromToken());
+            return NoContent();
         }
     }
 }

@@ -147,55 +147,67 @@ namespace BAHelper.BLL.Services
                 return documentsDTO;
             }
         }
+        public async Task<DocumentDTO> UpdateDocument(UpdateDocumentDTO updatedDocument)
+        {
+            var documentEntity = await _context
+                .Documents
+                .Include(doc => doc.UserStories)
+                .Include(doc => doc.Glossary)
+                .FirstOrDefaultAsync(doc => doc.Id == updatedDocument.Id);
+            if (documentEntity is null)
+            {
+                return null;
+            }
+            documentEntity.Name = updatedDocument.Name;
+            documentEntity.ProjectAim = updatedDocument.ProjectAim;
+            documentEntity.Glossary = _mapper.Map<List<Glossary>>(updatedDocument.Glossaries);
+            documentEntity.UserStories = _mapper.Map<List<UserStory>>(updatedDocument.UserStories);
+            _context.Documents.Update(documentEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<DocumentDTO>(documentEntity);
+        }
 
-        //public async Task<DocumentDTO> AddGlossary(NewGlossaryDTO newGlossaryDTO)
-        //{
-        //    var documentEntity = await _context
-        //        .Documents
-        //        .Include(doc => doc.Glossary)
-        //        .FirstOrDefaultAsync(doc => doc.Id == newGlossaryDTO.DocumentId);
-        //    if (documentEntity != null)
-        //    {
-        //        var glossaryEntity = _mapper.Map<Glossary>(newGlossaryDTO);
-        //        if (documentEntity.Glossary == null)
-        //        {
-        //            documentEntity.Glossary = new List<Glossary>();
-        //        }
-        //        documentEntity.Glossary.Add(glossaryEntity);
-        //        _context.Documents.Update(documentEntity);
-        //        await _context.SaveChangesAsync();
-        //        var updatedDocument = await _context.Documents
-        //            .Where(doc => doc.Id == newGlossaryDTO.DocumentId)
-        //            .Include(doc => doc.Glossary)
-        //            .FirstOrDefaultAsync();
-        //        return _mapper.Map<DocumentDTO>(updatedDocument);
-        //    }
-        //    return null;
-        //}
-
-        public async Task<DocumentDTO> DeleteDocument(int documentId, int userId)
+        public async System.Threading.Tasks.Task MoveToArchive(int documentId, int userId)
         {
             var docEntity = await _context
                 .Documents
                 .FirstOrDefaultAsync(doc => doc.Id == documentId);
-            if (docEntity != null) 
+            if (docEntity is null)
             {
-                var userEntity = await _context
-                    .Users
-                    .FirstOrDefaultAsync(user => user.Id == userId);
-                if(userEntity != null)
-                {
-                    if(userEntity.Id == docEntity.UserId)
-                    {
-                        _context.Documents.Remove(docEntity);
-                        _context.SaveChanges();
-                        return _mapper.Map<DocumentDTO>(docEntity);
-                    }
-                    return null;
-                }
-                return null;
+                return;
             }
-            return null;
+            if (docEntity.UserId != userId)
+            {
+                return;
+            }
+            docEntity.IsDeleted = true;
+            _context.Documents.Update(docEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async System.Threading.Tasks.Task DeleteDocument(int documentId, int userId)
+        {
+            var docEntity = await _context
+                .Documents
+                .FirstOrDefaultAsync(doc => doc.Id == documentId);
+            if (docEntity is null)
+            {
+                return;
+            }
+
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                return;
+            }
+            if (userEntity.Id != docEntity.Id)
+            {
+                return;
+            }
+            _context.Documents.Remove(docEntity);
+            await _context.SaveChangesAsync();
         }
     }
 }

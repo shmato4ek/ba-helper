@@ -26,6 +26,7 @@ namespace BAHelper.BLL.Services
             var projectEntity = _mapper.Map<Project>(newProject);
             projectEntity.AuthorId = userId;
             projectEntity.Hours = 0;
+            projectEntity.IsDeleted = false;
             _context.Projects.Add(projectEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDTO>(projectEntity);
@@ -65,7 +66,7 @@ namespace BAHelper.BLL.Services
             }
             return null;
         }
-        
+
         public async Task<ProjectDTO> AddUserToProject(int projectId, string email, int userId)
         {
             var projectEntity = await _context
@@ -90,6 +91,26 @@ namespace BAHelper.BLL.Services
             projectEntity.Users.Add(userEntity);
             _context.SaveChanges();
             return _mapper.Map<ProjectDTO>(projectEntity);
+        }
+
+        public async Task MoveToArchive(int projectId, int userId)
+        {
+            var projectEntity = await _context
+                .Projects
+                .FirstOrDefaultAsync(project => project.Id == projectId);
+            if (projectEntity is null)
+            {
+                return;
+            }
+
+            if (projectEntity.AuthorId != userId)
+            {
+                return;
+            }
+
+            projectEntity.IsDeleted = true;
+            _context.Projects.Update(projectEntity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteProject(int projectId, string token)
