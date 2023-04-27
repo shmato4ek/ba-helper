@@ -56,6 +56,24 @@ namespace BAHelper.BLL.Services
             return null;
         }
 
+        public async Task<List<ProjectDTO>> GetAllUsersProjects(int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                return null;
+            }
+            var projectsEntity = await _context
+                .Projects
+                .Include(project => project.Tasks)
+                .ThenInclude(task => task.Subtasks)
+                .Where(project => project.Users.Contains(userEntity))
+                .ToListAsync();
+            return _mapper.Map<List<ProjectDTO>>(projectsEntity);
+        }
+
         public async Task<List<ProjectTaskDTO>> GetAllProjectTasks(int projectId)
         {
             var projectEntity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);

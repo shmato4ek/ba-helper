@@ -26,11 +26,17 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectService.CreateProject(newProject, this.GetUserIdFromToken()));
         }
 
-        [HttpGet("user/{userId:int}")]
-        public async Task<ActionResult> GetAllUsersProject(int userId)
+        [HttpGet("user/own")]
+        public async Task<ActionResult> GetAllUsersOwnProject()
         {
-            var projects = await _projectService.GetAllUsersOwnProject(userId);
+            var projects = await _projectService.GetAllUsersOwnProject(5);
             return Ok(projects);
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult> GetAllUsersProjects()
+        {
+            return Ok(await _projectService.GetAllUsersProjects(5));
         }
 
         [HttpGet("project/{projectId:int}")]

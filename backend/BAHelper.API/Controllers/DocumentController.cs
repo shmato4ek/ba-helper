@@ -31,6 +31,7 @@ namespace BAHelper.API.Controllers
             return Ok(await _documentService.GetAllUsersDocumentsById(userId));
         }
 
+        [HttpPut]
         public async Task<ActionResult> UpdateDocument([FromBody] UpdateDocumentDTO updatedDocument)
         {
             return Ok(await _documentService.UpdateDocument(updatedDocument));
