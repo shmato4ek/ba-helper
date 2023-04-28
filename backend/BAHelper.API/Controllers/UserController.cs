@@ -27,16 +27,16 @@ namespace BAHelper.API.Controllers
             return Ok(createdUser);
         }
 
-        [HttpGet("users")]
+        [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("tasks")]
-        public async Task<IActionResult> GetAllUsersTasks(int userId)
+        public async Task<IActionResult> GetAllUsersTasks()
         {
-            return Ok(await _userService.GetAllUsersTasks(userId));
+            return Ok(await _userService.GetAllUsersTasks(this.GetUserIdFromToken()));
         }
 
         [HttpDelete]

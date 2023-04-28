@@ -21,23 +21,23 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDocument(NewDocumentDto newDocumentDto)
         {
-            DocumentDTO createdDocument = await _documentService.CreateDocument(5, newDocumentDto);
+            DocumentDTO createdDocument = await _documentService.CreateDocument(this.GetUserIdFromToken(), newDocumentDto);
             return Ok(createdDocument);
         }
 
-        [HttpGet("user/{userId:int}")]
-        public async Task<IActionResult> GetAllDocuments(int userId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetAllDocuments()
         {
-            return Ok(await _documentService.GetAllUsersDocumentsById(userId));
+            return Ok(await _documentService.GetAllUsersDocumentsById(this.GetUserIdFromToken()));
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateDocument([FromBody] UpdateDocumentDTO updatedDocument)
         {
-            return Ok(await _documentService.UpdateDocument(updatedDocument));
+            return Ok(await _documentService.UpdateDocument(updatedDocument, this.GetUserIdFromToken()));
         }
 
-        [HttpPut("archive/{documentId:int}")]
+        [HttpPut("archive")]
         public async Task<ActionResult> MoveToArvhive(int documentId)
         {
             await _documentService.MoveToArchive(documentId, this.GetUserIdFromToken());

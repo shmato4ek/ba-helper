@@ -21,43 +21,43 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTask([FromBody] NewProjectTaskDTO newTaskDto)
+        public async Task<IActionResult> AddTask([FromBody] NewProjectTaskDTO newTaskDto, int projectId)
         {
-            var createdTask = await _projectTaskService.AddProjectTask(newTaskDto, this.GetUserIdFromToken());
+            var createdTask = await _projectTaskService.AddProjectTask(newTaskDto, projectId, this.GetUserIdFromToken());
             return Ok(createdTask);
         }
 
-        [HttpPut("assign/{taskId:int}")]
+        [HttpPut("assign")]
         public async Task<IActionResult> AddUsersToTask(int taskId, string email)
         {
             return Ok(await _projectTaskService.AddUserToTask(taskId, email, this.GetUserIdFromToken()));
         }
 
-        [HttpPut("task/update")]
+        [HttpPut]
         public async Task<ActionResult> UpdateTask([FromBody] UpdateProjectTaskDTO updatedTask)
         {
             return Ok(await _projectTaskService.UpdateTask(updatedTask, this.GetUserIdFromToken()));
         }
 
-        [HttpPut("subtask/update")]
+        [HttpPut("subtask")]
         public async Task<ActionResult> UpdateSubtask([FromBody] UpdateSubtaskDTO updatedSubtask)
         {
             return Ok(await _projectTaskService.UpdateSubtask(updatedSubtask, this.GetUserIdFromToken()));
         }
 
-        [HttpGet("project/{userId:int}")]
+        [HttpGet("project/user")]
         public async Task<IActionResult> GetUserTasks(int projectId)
         {
             return Ok(await _projectTaskService.GetAllUsersTasksByProject(this.GetUserIdFromToken(), projectId));
         }
 
-        [HttpGet("project/{projectId:int}")]
+        [HttpGet("project")]
         public async Task<IActionResult> GetProjectsTasks(int projectId)
         {
             return Ok(await _projectTaskService.GetAllTasksByProjectId(projectId));
         }
 
-        [HttpPut("task/state")]
+        [HttpPut("state")]
         public async Task<IActionResult> ChangeTaskState(int taskId, TaskState taskState)
         {
             return Ok(await _projectTaskService.ChangeTaskState(this.GetUserIdFromToken(), taskId, taskState));
@@ -69,7 +69,7 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectTaskService.ChangeSubtaskState(subtaskId, taskState, this.GetUserIdFromToken()));
         }
 
-        [HttpDelete("task")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteTask(int taskId)
         {
             await _projectTaskService.DeleteTask(taskId, this.GetUserIdFromToken());
@@ -83,13 +83,13 @@ namespace BAHelper.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("subtask")]
+        [HttpPost("subtask")]
         public async Task<IActionResult> AddSubtask([FromBody] NewSubtaskDTO newSubtask)
         {
             return Ok(await _projectTaskService.AddSubtask(newSubtask, this.GetUserIdFromToken()));
         }
 
-        [HttpPut("task/approve")]
+        [HttpPut("approve")]
         public async Task<IActionResult> ApproveTask(int taskId)
         {
             return Ok(await _projectTaskService.ApproveTask(taskId, this.GetUserIdFromToken()));

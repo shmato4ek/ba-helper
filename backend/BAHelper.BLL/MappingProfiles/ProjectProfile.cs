@@ -16,6 +16,7 @@ namespace BAHelper.BLL.MappingProfiles
         {
             CreateMap<NewProjectDTO, Project>();
             CreateMap<Project, ProjectDTO>();
+            CreateMap<Project, ProjectInfoDTO>();
         }
     }
 }

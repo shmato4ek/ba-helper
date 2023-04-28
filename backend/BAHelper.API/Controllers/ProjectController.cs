@@ -12,18 +12,16 @@ namespace BAHelper.API.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly ProjectService _projectService;
-        private readonly ScheduleService _scheduleService;
 
-        public ProjectController(ProjectService projectService, ScheduleService scheduleService)
+        public ProjectController(ProjectService projectService)
         {
             _projectService = projectService;
-            _scheduleService = scheduleService;
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateProject([FromBody] NewProjectDTO newProject)
         {
-            return Ok(await _projectService.CreateProject(newProject, this.GetUserIdFromToken()));
+            return Ok(await _projectService.CreateProject(newProject, 5));
         }
 
         [HttpGet("user/own")]
@@ -36,17 +34,17 @@ namespace BAHelper.API.Controllers
         [HttpGet("user")]
         public async Task<ActionResult> GetAllUsersProjects()
         {
-            return Ok(await _projectService.GetAllUsersProjects(5));
+            return Ok(await _projectService.GetAllUsersProjects(this.GetUserIdFromToken()));
         }
 
-        [HttpGet("project/{projectId:int}")]
+        [HttpGet("tasks")]
         public async Task<ActionResult> GetAllProjectTasks(int projectId)
         {
             var tasks = await _projectService.GetAllProjectTasks(projectId);
             return Ok(tasks);
         }
 
-        [HttpPut("add-user/{userId:int}")]
+        [HttpPut("add-user")]
         public async Task<ActionResult> AddUserToProject(int projectId, string email)
         {
             return Ok(await _projectService.AddUserToProject(projectId, email, this.GetUserIdFromToken()));
@@ -59,7 +57,7 @@ namespace BAHelper.API.Controllers
             return Ok(project);
         }
 
-        [HttpPut("archive/{projectId:int}")]
+        [HttpPut("archive")]
         public async Task<ActionResult> MoveToArchive(int projectId)
         {
             await _projectService.MoveToArchive(projectId, this.GetUserIdFromToken());

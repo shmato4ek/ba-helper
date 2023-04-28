@@ -147,7 +147,7 @@ namespace BAHelper.BLL.Services
                 return documentsDTO;
             }
         }
-        public async Task<DocumentDTO> UpdateDocument(UpdateDocumentDTO updatedDocument)
+        public async Task<DocumentDTO> UpdateDocument(UpdateDocumentDTO updatedDocument, int userId)
         {
             var documentEntity = await _context
                 .Documents
@@ -155,6 +155,10 @@ namespace BAHelper.BLL.Services
                 .Include(doc => doc.Glossary)
                 .FirstOrDefaultAsync(doc => doc.Id == updatedDocument.Id);
             if (documentEntity is null)
+            {
+                return null;
+            }
+            if (documentEntity.UserId != userId)
             {
                 return null;
             }

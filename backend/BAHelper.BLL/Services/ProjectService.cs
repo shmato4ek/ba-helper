@@ -18,18 +18,48 @@ namespace BAHelper.BLL.Services
 {
     public class ProjectService : BaseService
     {
-        public ProjectService(BAHelperDbContext context, IMapper mapper)
-            : base(context, mapper) { }
-
-        public async Task<ProjectDTO> CreateProject(NewProjectDTO newProject, int userId)
+        private readonly ProjectTaskService _projectTaskService;
+        public ProjectService(BAHelperDbContext context, IMapper mapper, ProjectTaskService projectTaskService)
+            : base(context, mapper) 
         {
-            var projectEntity = _mapper.Map<Project>(newProject);
+            _projectTaskService = projectTaskService;
+        }
+
+        public async Task<ProjectInfoDTO> CreateProject(NewProjectDTO newProject, int userId)
+        {
+            var projectEntity = new Project();
+            projectEntity.ProjectName = newProject.ProjectName;
+            projectEntity.Deadline = newProject.Deadline;
             projectEntity.AuthorId = userId;
             projectEntity.Hours = 0;
             projectEntity.IsDeleted = false;
             _context.Projects.Add(projectEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProjectDTO>(projectEntity);
+            var unregisteredUsers = new List<string>();
+            foreach (var email in newProject.UsersEmails)
+            {
+                if (await UserEmailCheck(email))
+                {
+                    await AddUserToProject(projectEntity.Id, email, userId);
+                }
+                else
+                {
+                    unregisteredUsers.Add(email);
+                }
+            }
+            foreach (var task in newProject.Tasks)
+            {
+                await _projectTaskService.AddProjectTask(task, projectEntity.Id, userId);
+            }
+            return _mapper.Map<ProjectInfoDTO>(projectEntity);
+        }
+
+        private async Task<bool> UserEmailCheck(string email)
+        {
+            var foundUser = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Email == email);
+            return foundUser != null;
         }
 
         public async Task<ProjectDTO> UpdateProject(UpdateProjectDTO updatedProject)

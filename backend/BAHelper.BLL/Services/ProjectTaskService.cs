@@ -20,12 +20,12 @@ namespace BAHelper.BLL.Services
         public ProjectTaskService(BAHelperDbContext context, IMapper mapper)
         :base(context, mapper) { }
 
-        public async Task<ProjectDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int userId)
+        public async Task<ProjectTaskDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int projectId, int userId)
         {
             var projectEntity = await _context
                 .Projects
                 .Include(project => project.Tasks)
-                .FirstOrDefaultAsync(p => p.Id == newProjectTaskDto.ProjectId);
+                .FirstOrDefaultAsync(p => p.Id == projectId);
             if (projectEntity == null) 
             {
                 return null;
@@ -39,11 +39,12 @@ namespace BAHelper.BLL.Services
                 projectEntity.Tasks = new List<ProjectTask>();
             }
             var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
+            projectTaskEntity.ProjectId = projectId;
             projectEntity.Hours += projectTaskEntity.Hours;
             projectEntity.Tasks.Add(projectTaskEntity);
             _context.Update(projectEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProjectDTO>(projectEntity);
+            return _mapper.Map<ProjectTaskDTO>(projectTaskEntity);
         }
 
         public async Task<ProjectTaskDTO> UpdateTask(UpdateProjectTaskDTO updatedProjectTask, int userId)
@@ -101,7 +102,7 @@ namespace BAHelper.BLL.Services
             return _mapper.Map<SubtaskDTO>(subtaskEntity);
         }
 
-        public async Task<ProjectTaskDTO> AddSubtask(NewSubtaskDTO newSubtask, int userId)
+        public async Task<SubtaskDTO> AddSubtask(NewSubtaskDTO newSubtask, int userId)
         {
             var taskEntity = await _context
                 .Tasks
@@ -125,7 +126,7 @@ namespace BAHelper.BLL.Services
             taskEntity.Subtasks.Add(subtaskEntity);
             _context.Update(taskEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProjectTaskDTO>(taskEntity);
+            return _mapper.Map<SubtaskDTO>(subtaskEntity);
         }
 
         public async Task<List<SubtaskDTO>> GetAllSubtasks(int taskId)
