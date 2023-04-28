@@ -19,14 +19,13 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDocument(NewDocumentDto newDocumentDto)
+        public async Task<ActionResult> CreateDocument(NewDocumentDto newDocumentDto)
         {
-            DocumentDTO createdDocument = await _documentService.CreateDocument(this.GetUserIdFromToken(), newDocumentDto);
-            return Ok(createdDocument);
+            return Ok(await _documentService.CreateDocument(this.GetUserIdFromToken(), newDocumentDto));
         }
 
         [HttpGet("user")]
-        public async Task<IActionResult> GetAllDocuments()
+        public async Task<ActionResult> GetAllDocuments()
         {
             return Ok(await _documentService.GetAllUsersDocumentsById(this.GetUserIdFromToken()));
         }
@@ -45,7 +44,7 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteDocument(int documentId)
+        public async Task<ActionResult> DeleteDocument(int documentId)
         {
             await _documentService.DeleteDocument(documentId, this.GetUserIdFromToken());
             return NoContent();

@@ -21,37 +21,34 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(NewUserDTO userDTO)
+        public async Task<ActionResult> CreateUser(NewUserDTO userDTO)
         {
-            UserDTO createdUser = await _userService.CreateUser(userDTO);
-            return Ok(createdUser);
+            return Ok(await _userService.CreateUser(userDTO));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<ActionResult> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("tasks")]
-        public async Task<IActionResult> GetAllUsersTasks()
+        public async Task<ActionResult> GetAllUsersTasks()
         {
             return Ok(await _userService.GetAllUsersTasks(this.GetUserIdFromToken()));
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUser(int userId)
+        public async Task<ActionResult> DeleteUser()
         {
-            return Ok(await _userService.DeleteUser(userId));
+            return Ok(await _userService.DeleteUser(this.GetUserIdFromToken()));
         }
 
         [HttpGet]
         [Route("FromToken")]
         public async Task<IActionResult> GetUserFromToken()
         {
-            var user = await _userService.GetUserById(this.GetUserIdFromToken());
-
-            return Ok(user);
+            return Ok(await _userService.GetUserById(this.GetUserIdFromToken()));
         }
     }
 }

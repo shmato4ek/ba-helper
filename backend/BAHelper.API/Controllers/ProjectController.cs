@@ -21,14 +21,13 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProject([FromBody] NewProjectDTO newProject)
         {
-            return Ok(await _projectService.CreateProject(newProject, 5));
+            return Ok(await _projectService.CreateProject(newProject, this.GetUserIdFromToken()));
         }
 
         [HttpGet("user/own")]
         public async Task<ActionResult> GetAllUsersOwnProject()
         {
-            var projects = await _projectService.GetAllUsersOwnProject(5);
-            return Ok(projects);
+            return Ok(await _projectService.GetAllUsersOwnProject(this.GetUserIdFromToken()));
         }
 
         [HttpGet("user")]
@@ -40,8 +39,7 @@ namespace BAHelper.API.Controllers
         [HttpGet("tasks")]
         public async Task<ActionResult> GetAllProjectTasks(int projectId)
         {
-            var tasks = await _projectService.GetAllProjectTasks(projectId);
-            return Ok(tasks);
+            return Ok(await _projectService.GetAllProjectTasks(projectId));
         }
 
         [HttpPut("add-user")]
@@ -53,8 +51,7 @@ namespace BAHelper.API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)
         {
-            var project = await _projectService.UpdateProject(updatedProject);
-            return Ok(project);
+            return Ok(await _projectService.UpdateProject(updatedProject));
         }
 
         [HttpPut("archive")]
@@ -64,12 +61,10 @@ namespace BAHelper.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{projectId:int}")]
+        [HttpDelete]
         public async Task<ActionResult> DeleteProject(int projectId)
         {
-            Request.Headers.TryGetValue(HeaderNames.Authorization, out Microsoft.Extensions.Primitives.StringValues value);
-            var token = value.ToString();
-            await _projectService.DeleteProject(projectId, token);
+            await _projectService.DeleteProject(projectId, this.GetUserIdFromToken());
             return NoContent();
         }
     }

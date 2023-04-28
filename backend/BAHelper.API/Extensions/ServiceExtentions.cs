@@ -23,7 +23,6 @@ namespace BAHelper.API.Extensions
             services.AddScoped<DownloadService>();
             services.AddScoped<ProjectService>();
             services.AddScoped<ProjectTaskService>();
-            services.AddScoped<ScheduleService>();
             services.AddScoped<AuthService>();
             services.AddScoped<JwtFactory>();
         }

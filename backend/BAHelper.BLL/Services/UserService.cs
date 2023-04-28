@@ -59,16 +59,16 @@ namespace BAHelper.BLL.Services
                 .Users
                 .Include(user => user.Tasks)
                 .FirstOrDefaultAsync(user => user.Id == userId);
-            if (userEntity != null)
+            if (userEntity is null)
             {
-                var tasksEntity = userEntity.Tasks;
-                if (tasksEntity != null)
-                {
-                    return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
-                }
                 return null;
             }
-            return null;
+            var tasksEntity = userEntity.Tasks;
+            if (tasksEntity is null)
+            {
+                return null;
+            }
+            return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
         }
 
         public async Task<UserDTO> DeleteUser(int userId)
@@ -76,13 +76,13 @@ namespace BAHelper.BLL.Services
             var userEntity = await _context
                 .Users
                 .FirstOrDefaultAsync(user => user.Id == userId);
-            if(userEntity != null)
+            if(userEntity is null)
             {
-                _context.Users.Remove(userEntity);
-                _context.SaveChanges();
-                return _mapper.Map<UserDTO>(userEntity);
+                return null;
             }
-            return null;
+            _context.Users.Remove(userEntity);
+            _context.SaveChanges();
+            return _mapper.Map<UserDTO>(userEntity);
         }
 
         public async Task<UserDTO> GetUserById(int userId)

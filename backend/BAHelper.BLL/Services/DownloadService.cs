@@ -25,43 +25,36 @@ namespace BAHelper.BLL.Services
         {
             await _wordService.CreateWordFile(documentId);
             var foundDocument = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == documentId);
-            if (foundDocument == null)
+            if (foundDocument is null)
             {
                 return null;
             }
-            else
+
+            string fileName = foundDocument.Name + ".docx";
+            if (string.IsNullOrEmpty(fileName) || fileName == null)
             {
-                string fileName = foundDocument.Name + ".docx";
-                if (string.IsNullOrEmpty(fileName) || fileName == null)
-                {
-                    return null;
-                }
-
-                // get the filePath
-
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(),
-                    "LocalFiles", fileName);
-
-                // create a memorystream
-                var memoryStream = new MemoryStream();
-
-                using (var stream = new FileStream(filePath, FileMode.Open))
-                {
-                    await stream.CopyToAsync(memoryStream);
-                }
-                // set the position to return the file from
-                memoryStream.Position = 0;
-
-                // Get the MIMEType for the File
-                var mimeType = (string file) =>
-                {
-                    var mimeTypes = MimeTypes.GetMimeTypes();
-                    var extension = Path.GetExtension(file).ToLowerInvariant();
-                    return mimeTypes[extension];
-                };
-                DownloadFileModel result = new DownloadFileModel(memoryStream, mimeType(filePath), Path.GetFileName(filePath));
-                return result;
+                return null;
             }
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+                "LocalFiles", fileName);
+
+            var memoryStream = new MemoryStream();
+
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Position = 0;
+
+            var mimeType = (string file) =>
+            {
+                var mimeTypes = MimeTypes.GetMimeTypes();
+                var extension = Path.GetExtension(file).ToLowerInvariant();
+                return mimeTypes[extension];
+            };
+            DownloadFileModel result = new DownloadFileModel(memoryStream, mimeType(filePath), Path.GetFileName(filePath));
+            return result;
         }
     }
 }

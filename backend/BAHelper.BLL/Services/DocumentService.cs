@@ -114,22 +114,6 @@ namespace BAHelper.BLL.Services
             return createdUserStory;
         }
 
-        public async Task<DocumentDTO> AddProjectAim(int documentId, string projectAim)
-        {
-            var document = _context.Documents.FirstOrDefaultAsync(document => document.Id == documentId);
-            if (document.Result == null)
-            {
-                return null;
-            }
-            else
-            {
-                document.Result.ProjectAim = projectAim;
-            }
-            await _context.SaveChangesAsync();
-            var updatedDocument = _context.Documents.FirstOrDefaultAsync(document=> document.Id == documentId).Result;
-            return _mapper.Map<DocumentDTO>(updatedDocument);
-        }
-
         public async Task<List<DocumentDTO>> GetAllUsersDocumentsById(int userId)
         {
             var documentsEntities = await _context
@@ -137,15 +121,12 @@ namespace BAHelper.BLL.Services
                 .Include(doc => doc.Glossary)
                 .Where(document => document.UserId == userId)
                 .ToListAsync();
-            if (documentsEntities == null)
+            if (documentsEntities is null)
             {
                 return null;
             }
-            else
-            {
-                var documentsDTO = _mapper.Map<List<DocumentDTO>>(documentsEntities);
-                return documentsDTO;
-            }
+
+            return _mapper.Map<List<DocumentDTO>>(documentsEntities);
         }
         public async Task<DocumentDTO> UpdateDocument(UpdateDocumentDTO updatedDocument, int userId)
         {

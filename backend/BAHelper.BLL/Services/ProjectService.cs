@@ -64,26 +64,31 @@ namespace BAHelper.BLL.Services
 
         public async Task<ProjectDTO> UpdateProject(UpdateProjectDTO updatedProject)
         {
-            var projectEntity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == updatedProject.Id);
-            if (projectEntity != null)
+            var projectEntity = await _context
+                .Projects
+                .FirstOrDefaultAsync(p => p.Id == updatedProject.Id);
+            if (projectEntity is null)
             {
-                projectEntity.ProjectName = updatedProject.ProjectName;
-                projectEntity.Deadline = updatedProject.Deadline;
-                _context.Update(projectEntity);
-                await _context.SaveChangesAsync();
-                return _mapper.Map<ProjectDTO>(projectEntity);
+                return null;
             }
-            return null;
+            projectEntity.ProjectName = updatedProject.ProjectName;
+            projectEntity.Deadline = updatedProject.Deadline;
+            _context.Update(projectEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ProjectDTO>(projectEntity);
         }
 
         public async Task<List<ProjectDTO>> GetAllUsersOwnProject(int userId)
         {
-            var projectsEntity = await _context.Projects.Where(project => project.AuthorId == userId).ToListAsync();
-            if (projectsEntity != null)
+            var projectsEntity = await _context
+                .Projects
+                .Where(project => project.AuthorId == userId)
+                .ToListAsync();
+            if (projectsEntity is null)
             {
-                return _mapper.Map<List<ProjectDTO>>(projectsEntity);
+                return null;
             }
-            return null;
+            return _mapper.Map<List<ProjectDTO>>(projectsEntity);
         }
 
         public async Task<List<ProjectDTO>> GetAllUsersProjects(int userId)
@@ -106,13 +111,18 @@ namespace BAHelper.BLL.Services
 
         public async Task<List<ProjectTaskDTO>> GetAllProjectTasks(int projectId)
         {
-            var projectEntity = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
-            if (projectEntity != null)
+            var projectEntity = await _context
+                .Projects
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+            if (projectEntity is null)
             {
-                var projectTasks = await _context.Tasks.Where(t => t.ProjectId == projectEntity.Id).ToListAsync();
-                return _mapper.Map<List<ProjectTaskDTO>>(projectTasks);
+                return null;
             }
-            return null;
+            var projectTasks = await _context
+                .Tasks
+                .Where(t => t.ProjectId == projectEntity.Id)
+                .ToListAsync();
+            return _mapper.Map<List<ProjectTaskDTO>>(projectTasks);
         }
 
         public async Task<ProjectDTO> AddUserToProject(int projectId, string email, int userId)
@@ -121,10 +131,15 @@ namespace BAHelper.BLL.Services
                 .Projects
                 .Include(project => project.Users)
                 .FirstOrDefaultAsync(project => project.Id == projectId);
-            if (projectEntity is null || projectEntity.AuthorId != userId)
+            if (projectEntity is null)
             {
                 return null;
             }
+            if (projectEntity.AuthorId != userId)
+            {
+                return null;
+            }
+
             var userEntity = await _context
                 .Users
                 .FirstOrDefaultAsync(user => user.Email == email);
@@ -161,15 +176,8 @@ namespace BAHelper.BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteProject(int projectId, string token)
+        public async Task DeleteProject(int projectId, int userId)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var userId = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "id")?.Value;
-            if (userId == null) 
-            {
-                return;
-            }
             var projectEntity = await _context
                 .Projects
                 .FirstOrDefaultAsync(project => project.Id == projectId);
@@ -177,7 +185,7 @@ namespace BAHelper.BLL.Services
             {
                 return;
             }
-            if (projectEntity.AuthorId != Convert.ToInt32(userId))
+            if (projectEntity.AuthorId != userId)
             {
                 return;
             }

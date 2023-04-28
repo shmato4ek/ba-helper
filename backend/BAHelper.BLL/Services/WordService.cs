@@ -33,7 +33,7 @@ namespace BAHelper.BLL.Services
         public async Task<DocumentDTO> CreateWordFile(int documentId)
         {
             var documentEntity = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == documentId);
-            if (documentEntity == null)
+            if (documentEntity is null)
             {
                 return null;
             }
