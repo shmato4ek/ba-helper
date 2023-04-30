@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Project;
 using BAHelper.Common.DTOs.ProjectTask;
@@ -69,7 +70,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(p => p.Id == updatedProject.Id);
             if (projectEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(Project), updatedProject.Id);
             }
             projectEntity.ProjectName = updatedProject.ProjectName;
             projectEntity.Deadline = updatedProject.Deadline;
@@ -84,10 +85,7 @@ namespace BAHelper.BLL.Services
                 .Projects
                 .Where(project => project.AuthorId == userId)
                 .ToListAsync();
-            if (projectsEntity is null)
-            {
-                return null;
-            }
+
             return _mapper.Map<List<ProjectDTO>>(projectsEntity);
         }
 
@@ -98,7 +96,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Id == userId);
             if (userEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(User), userId);
             }
             var projectsEntity = await _context
                 .Projects
@@ -116,7 +114,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(p => p.Id == projectId);
             if (projectEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(Project), projectId);
             }
             var projectTasks = await _context
                 .Tasks
@@ -133,11 +131,11 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(project => project.Id == projectId);
             if (projectEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(Project), projectId);
             }
             if (projectEntity.AuthorId != userId)
             {
-                return null;
+                throw new Exception("No access to project.");
             }
 
             var userEntity = await _context
@@ -145,7 +143,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Email == email);
             if (userEntity is null)
             {
-                return null;
+                throw new UserNotFoundException(email);
             }
             if (projectEntity.Users == null)
             {
@@ -163,12 +161,12 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(project => project.Id == projectId);
             if (projectEntity is null)
             {
-                return;
+                throw new NotFoundException(nameof(Project), projectId);
             }
 
             if (projectEntity.AuthorId != userId)
             {
-                return;
+                throw new Exception("No access to project.");
             }
 
             projectEntity.IsDeleted = true;
@@ -183,11 +181,11 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(project => project.Id == projectId);
             if (projectEntity == null)
             {
-                return;
+                throw new NotFoundException(nameof(Project), projectId);
             }
             if (projectEntity.AuthorId != userId)
             {
-                return;
+                throw new Exception("No access to project.");
             }
 
             _context.Projects.Remove(projectEntity);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
@@ -54,7 +55,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(doc => doc.Id == documentEntity.Id);
             if (createdDocument is null)
             {
-                return null;
+                throw new NotFoundException(nameof(DAL.Entities.Document));
             }
             createdDocument.UserStories = userStoriesEntity;
             createdDocument.Glossary = glossaryEntity;
@@ -71,7 +72,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(doc => doc.Id == documentId);
             if (documentEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(DAL.Entities.Document), documentId);
             }
             var userStoryEntity = new UserStory { Name = newUserStory.Name, DocumentId = documentId };
             _context.UserStories.Add(userStoryEntity);
@@ -84,7 +85,7 @@ namespace BAHelper.BLL.Services
 
             if(createdUserStory is null)
             {
-                return null;
+                throw new NotFoundException(nameof(DAL.Entities.Document));
             }
 
             if (createdUserStory.AcceptanceCriterias == null)
@@ -121,10 +122,6 @@ namespace BAHelper.BLL.Services
                 .Include(doc => doc.Glossary)
                 .Where(document => document.UserId == userId)
                 .ToListAsync();
-            if (documentsEntities is null)
-            {
-                return null;
-            }
 
             return _mapper.Map<List<DocumentDTO>>(documentsEntities);
         }
@@ -137,11 +134,11 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(doc => doc.Id == updatedDocument.Id);
             if (documentEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(DAL.Entities.Document), updatedDocument.Id);
             }
             if (documentEntity.UserId != userId)
             {
-                return null;
+                throw new Exception("No access to file.");
             }
             documentEntity.Name = updatedDocument.Name;
             documentEntity.ProjectAim = updatedDocument.ProjectAim;
@@ -159,11 +156,11 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(doc => doc.Id == documentId);
             if (docEntity is null)
             {
-                return;
+                throw new NotFoundException(nameof(DAL.Entities.Document), documentId);
             }
             if (docEntity.UserId != userId)
             {
-                return;
+                throw new Exception("No access to file.");
             }
             docEntity.IsDeleted = true;
             _context.Documents.Update(docEntity);
@@ -177,7 +174,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(doc => doc.Id == documentId);
             if (docEntity is null)
             {
-                return;
+                throw new NotFoundException(nameof(DAL.Entities.Document), documentId);
             }
 
             var userEntity = await _context
@@ -185,11 +182,11 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Id == userId);
             if (userEntity is null)
             {
-                return;
+                throw new NotFoundException(nameof(User), userId);
             }
-            if (userEntity.Id != docEntity.Id)
+            if (userEntity.Id != docEntity.UserId)
             {
-                return;
+                throw new Exception("No access to file.");
             }
             _context.Documents.Remove(docEntity);
             await _context.SaveChangesAsync();

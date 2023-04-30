@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common;
 using BAHelper.Common.DTOs;
 using BAHelper.DAL.Context;
+using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,16 +26,18 @@ namespace BAHelper.BLL.Services
         public async Task<DownloadFileModel> DownloadDocument(int documentId)
         {
             await _wordService.CreateWordFile(documentId);
-            var foundDocument = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == documentId);
+            var foundDocument = await _context
+                .Documents
+                .FirstOrDefaultAsync(doc => doc.Id == documentId);
             if (foundDocument is null)
             {
-                return null;
+                throw new NotFoundException(nameof(Document), documentId);
             }
 
             string fileName = foundDocument.Name + ".docx";
             if (string.IsNullOrEmpty(fileName) || fileName == null)
             {
-                return null;
+                throw new NotFoundException(nameof(Document));
             }
 
             var filePath = Path.Combine(Directory.GetCurrentDirectory(),

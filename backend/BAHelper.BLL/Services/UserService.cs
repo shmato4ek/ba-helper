@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.MappingProfiles;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.ProjectTask;
@@ -37,7 +38,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Email == newUser.Email) != null;
             if (isUserExist)
             {
-                return null;
+                throw new ExistUserException(newUser.Email);
             }
             _context.Users.Add(userEntity);
             await _context.SaveChangesAsync();
@@ -61,13 +62,9 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Id == userId);
             if (userEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(User), userId);
             }
             var tasksEntity = userEntity.Tasks;
-            if (tasksEntity is null)
-            {
-                return null;
-            }
             return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
         }
 
@@ -78,7 +75,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Id == userId);
             if(userEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(User), userId);
             }
             _context.Users.Remove(userEntity);
             _context.SaveChanges();
@@ -90,6 +87,10 @@ namespace BAHelper.BLL.Services
             var userEntity = await _context
                 .Users
                 .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
             return _mapper.Map<UserDTO>(userEntity);
         }
     }

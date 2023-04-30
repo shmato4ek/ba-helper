@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.JWT;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Auth;
@@ -34,11 +35,11 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Email == userDto.Email);
             if (userEntity is null)
             {
-                return null;
+                throw new NotFoundException(nameof(User));
             }
             if (checkPass == true && !SecurityHelper.IsValidPassword(userEntity.Password, userDto.Password, userEntity.Salt))
             {
-                return null;
+                throw new InvalidUserNameOrPasswordException();
             }
 
             var token = await GenerateAccessToken(userEntity.Id, userEntity.Name, userEntity.Email);
