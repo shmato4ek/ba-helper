@@ -1,0 +1,7 @@
+{
+  "eslint.alwaysShowStatus": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "typescript.tsdk": "./test-backend/node_modules/typescript/lib"
+}
