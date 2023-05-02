@@ -39,20 +39,20 @@ namespace BAHelper.API.Controllers
         [HttpGet("user")]
         public async Task<ActionResult> GetAllUsersProjects()
         {
-            return Ok(await _projectService.GetAllUsersProjects(this.GetUserIdFromToken()));
+            return Ok(await _projectService.GetAllUsersProjects(5));
         }
 
-        [HttpGet("tasks")]
-        public async Task<ActionResult> GetAllProjectTasks(int projectId)
-        {
-            return Ok(await _projectService.GetAllProjectTasks(projectId, this.GetUserIdFromToken()));
-        }
+        //[HttpGet("tasks")]
+        //public async Task<ActionResult> GetAllProjectTasks(int projectId)
+        //{
+        //    return Ok(await _projectService.GetAllProjectTasks(projectId, 5));
+        //}
 
-        [HttpPut("add-user")]
-        public async Task<ActionResult> AddUserToProject(int projectId, string email)
-        {
-            return Ok(await _projectService.AddUserToProject(projectId, email, 5));
-        }
+        //[HttpPut("add-user")]
+        //public async Task<ActionResult> AddUserToProject(int projectId, string email)
+        //{
+        //    return Ok(await _projectService.AddUserToProject(projectId, email, 5));
+        //}
 
         [HttpPut]
         public async Task<ActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)

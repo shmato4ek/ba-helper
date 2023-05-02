@@ -72,6 +72,7 @@ namespace BAHelper.BLL.Services
             projectTaskEntity.Deadine = updatedProjectTask.DeadLine;
             projectTaskEntity.TaskName = updatedProjectTask.TaskName;
             projectTaskEntity.Description = updatedProjectTask.Description;
+            projectEntity.Hours = updatedProjectTask.Hours;
             _context.Update(projectTaskEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectTaskDTO>(projectTaskEntity);

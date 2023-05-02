@@ -26,17 +26,17 @@ namespace BAHelper.API.Controllers
             return Ok(await _userService.CreateUser(userDTO));
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetAllUsers()
-        {
-            return Ok(await _userService.GetAllUsers());
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> GetAllUsers()
+        //{
+        //    return Ok(await _userService.GetAllUsers());
+        //}
 
-        [HttpGet("tasks")]
-        public async Task<ActionResult> GetAllUsersTasks()
-        {
-            return Ok(await _userService.GetAllUsersTasks(this.GetUserIdFromToken()));
-        }
+        //[HttpGet("tasks")]
+        //public async Task<ActionResult> GetAllUsersTasks()
+        //{
+        //    return Ok(await _userService.GetAllUsersTasks(this.GetUserIdFromToken()));
+        //}
 
         [HttpDelete]
         public async Task<ActionResult> DeleteUser()
