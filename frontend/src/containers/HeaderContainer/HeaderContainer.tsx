@@ -10,7 +10,7 @@ const HeaderContainer = () => {
 
   useEffect(()=> {
     // 
-  }, [dispatch, state.actions.getMyself.success]);
+  }, [dispatch, state.actions.getMe.success]);
 
   return (
     <Header/>

@@ -12,3 +12,9 @@ export { ReactComponent as TextFileIcon } from './text-file.svg';
 export { ReactComponent as DiagramIcon } from './diagram.svg';
 export { ReactComponent as RaciIcon } from './raci.svg';
 export { ReactComponent as AddFileIcon } from './add-file.svg';
+
+export { ReactComponent as FileIcon } from './file.svg';
+export { ReactComponent as CalendarIcon } from './calendar.svg';
+export { ReactComponent as PeopleIcon } from './people.svg';
+export { ReactComponent as ProfileWhiteIcon } from './profile-white.svg';
+

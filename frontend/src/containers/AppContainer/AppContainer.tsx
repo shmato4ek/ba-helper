@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
 const Footer = styled.footer`
   padding: 20px;
   grid-area: footer;
-  background-color: #EEEEEE;
+  background-color: #cbe9c8;
 `;
 
 const MainGrid = styled.div`
@@ -41,17 +41,17 @@ const AppContainer = () => {
   useEffect(()=> {
     InterceptorService.init(config);
 
-    if (state.actions.getMyself.success === null) {
+    if (state.actions.getMe.success === null) {
       dispatch<AppAction>({ type: 'GET_ME' });
     }
-  }, [dispatch, state.actions.getMyself.success]);
+  }, [dispatch, state.actions.getMe.success]);
 
-  if(state.actions.getMyself.success === null) {
+  if(state.actions.getMe.success === null) {
     return <div>Loading</div>
   }
 
   if(
-    state.myself === null
+    state.me === null
     && location.pathname !== '/' && location.pathname !== '/login'
     ) {
     return <Navigate to='/login' />

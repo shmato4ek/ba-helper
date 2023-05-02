@@ -25,8 +25,17 @@ export const globals = {
       document: '/api/document',
     },
     project: {
+      _: '/api/project',
       user: '/api/project/user',
+      userOwn: '/api/project/user/own',
     },
+    task: {
+      _: '/api/task',
+      assign: '/api/task/assign',
+      state: '/api/task/state',
+      subtask: '/api/task/subtask',
+      subtaskState: '/api/task/subtask/state',
+    }
   },
   fePaths: {
     services: 'services',

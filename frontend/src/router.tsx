@@ -5,6 +5,7 @@ import AppContainer from "./containers/AppContainer/AppContainer"
 import ProjectsPage from "./containers/pages/ProjectsPage/ProjectsPage";
 import FrontPage from "./containers/pages/FrontPage/FrontPage";
 import LoginPage from "./containers/pages/LoginPage/LoginPage";
+import ProjectPage from "./containers/pages/ProjectPage/ProjectPage";
 
 export default createBrowserRouter(
   createRoutesFromElements(
@@ -13,6 +14,7 @@ export default createBrowserRouter(
       <Route path="services" element={<ServicesPage />} />
       <Route path="my-projects" element={<ProjectsPage />} />
       <Route path="owned-projects" element={<ProjectsPage />} />
+      <Route path="projects/:projectId" element={<ProjectPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFound />}/>
     </Route>

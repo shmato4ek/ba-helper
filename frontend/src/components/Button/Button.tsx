@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  styleType?: 'simple' | 'none';
+  styleType?: 'simple' | 'corner' | 'none';
   buttonType: 'button' | 'reset' | 'submit';
   onClick?: () => any;
   children: string | React.ReactNode;
@@ -15,12 +15,15 @@ const InnerContent = styled.div`
   line-height: 38px;
   letter-spacing: 0.065em;
   text-align: left;
+  text-decoration: none;
 `;
 
 const SimpleButtonStyled = styled.button`
   background-color: #008F31;
   padding: 10px;
   color: #fff;
+  font-weight: bold;
+  border-radius: 5px;
 
   &:hover {
     cursor: pointer;
@@ -28,6 +31,19 @@ const SimpleButtonStyled = styled.button`
 `;
 
 const NoneButtonStyled = styled.button`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const CornerButtonStyled = styled.button`
+  padding: 10px;
+  color: #215526;
+  background: #fff;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  border-radius: 5px;
+
   &:hover {
     cursor: pointer;
   }
@@ -49,6 +65,15 @@ const Button: FunctionComponent<Props> = ({
         >
           <InnerContent>{children}</InnerContent>
         </NoneButtonStyled>
+      );
+    case 'corner':
+      return (
+        <CornerButtonStyled
+          type={buttonType}
+          onClick={onClick}
+        >
+          <InnerContent>{children}</InnerContent>
+        </CornerButtonStyled>
       );
     case 'simple':
       return (

@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
-import { BisMetriscDto, ProjectDto, ProjectDtoFields } from '../../store/types';
+import { ProjectDto, ProjectDtoFields } from '../../store/types';
 import styled from 'styled-components';
-import Icon from '../Icon/Icon';
-import Button from '../Button/Button';
 import { DateTime } from 'luxon';
+import { Link } from 'react-router-dom';
 
 const ProjectsStyled = styled.div`
   padding: 30px 100px;
-  background-color: #EEEEEE;
+  background-color: #fff;
 `;
 
 const Table = styled.table`
@@ -36,34 +35,23 @@ const TD = styled.td`
 `;
 
 const TR = styled.tr`
-  background-color: #f2f2f2;
+  background-color: #fff;
 
   height: 10px;
 `;
 
 type Props = {
   projects: ProjectDto[];
+  optionalFields: ProjectDtoFields[];
 }
 
 const projectFieldInfo = {
   [ProjectDtoFields.hours]: 'Кількість годин',
-  [ProjectDtoFields.status]: 'Статус',
-  [ProjectDtoFields.approver]: 'Затверджувач',
+  [ProjectDtoFields.author]: 'Затверджувач',
+  [ProjectDtoFields.taskCount]: 'Кількість завдань',
 }
 
 const Projects: FC<Props> = (params) => {
-  
-  const optionalFields: ProjectDtoFields[] = [];
-
-  if(params.projects.length !== 0) {
-    if(params.projects[0].approver)
-      optionalFields.push(ProjectDtoFields.approver)
-    if(params.projects[0].hours)
-      optionalFields.push(ProjectDtoFields.hours)
-    if(params.projects[0].status)
-      optionalFields.push(ProjectDtoFields.status)
-  }
-
   return (
     <ProjectsStyled>
       <Table>
@@ -71,21 +59,36 @@ const Projects: FC<Props> = (params) => {
           <TR>
             <TH>Назва</TH>
             <TH>Дедлайн</TH>
-            {optionalFields.map(x => <TH key={x}>{projectFieldInfo[x as keyof typeof projectFieldInfo]}</TH>)}
+            {params.optionalFields.map(x => <TH key={x}>{projectFieldInfo[x as keyof typeof projectFieldInfo]}</TH>)}
           </TR>
         </thead>
         <tbody>
           {params.projects.map(project => {
             return (
               <TR key={project.id}>
-                <TD>{project.projectName}</TD>
-                <TD>{DateTime.fromJSDate(project.deadline).toFormat('MMM yyyy')}</TD>
-                {optionalFields.map(x => <TD key={x}>{project[x as keyof typeof projectFieldInfo]}</TD>)}
+                <TD>
+                  <Link to={`/projects/${project.id}`}>
+                    {project.projectName}
+                  </Link>  
+                </TD>
+                <TD>{DateTime.fromISO(project.deadline).toFormat('dd.MM.yyyy')}</TD>
+                {params.optionalFields.map(x => {
+                  let fieldData;
+                  if(x === 'author') {
+                    fieldData = project.author.name;
+                  } else if(x === 'taskCount') {
+                    fieldData = project.tasks.length;
+                  } else {
+                    fieldData = project[x as keyof ProjectDto]
+                  }
+
+                  return <TD key={x}>{fieldData as any}</TD>
+                })}
               </TR>
             )
           })}
         </tbody>
-      </Table> 
+      </Table>
     </ProjectsStyled>
   );
 };

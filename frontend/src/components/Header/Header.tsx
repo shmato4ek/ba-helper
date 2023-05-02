@@ -1,7 +1,6 @@
 
 
 import React, { FC } from 'react';
-import { BisMetriscDto } from '../../store/types';
 import Icon from '../Icon/Icon';
 import styled from 'styled-components';
 import Button from '../Button/Button';
@@ -20,10 +19,31 @@ const HeaderStyled = styled.header`
   height: 120px;
   padding: 20px;
   border-bottom: 5px solid #0FB800;
-  background-color: #EEEEEE;
+  background-color: #ffffff;
 `;
 
 type Props = {
+}
+
+export const HeaderLink: FC<{
+  link: string;
+  children: JSX.Element[] | JSX.Element | string;
+}> = ({
+  link,
+  children
+}) => {
+  return <Link to={link} style={{
+    textDecoration: 'none',
+    color: 'black',
+    fontFamily: 'Roboto',
+    fontSize: '32px',
+    fontWeight: 800,
+    lineHeight: '38px',
+    letterSpacing: '0.065em',
+    textAlign: 'left',
+  }}>
+    {children}
+  </Link>
 }
 
 const Header: FC<Props> = (params) => {
@@ -32,21 +52,14 @@ const Header: FC<Props> = (params) => {
       <Link to='/'>
         <Icon type='logo' />
       </Link>
-
       <Button buttonType='button' styleType='none'>
-        <Link to='services'>
-          Сервіси
-        </Link>
+        <HeaderLink link='services'>Сервіси</HeaderLink>
       </Button> 
       <Button buttonType='button' styleType='none'>
-        <Link to='my-projects'>
-          Поточні Проекти
-        </Link>
+        <HeaderLink link='my-projects'>Поточні Проекти</HeaderLink>
       </Button> 
       <Button buttonType='button' styleType='none'>
-        <Link to='owned-projects'>
-          Керівникам
-        </Link>
+        <HeaderLink link='owned-projects'>Керівникам</HeaderLink>
       </Button>
       <ProfileContainer/>
     </HeaderStyled>

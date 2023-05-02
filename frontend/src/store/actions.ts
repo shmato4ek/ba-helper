@@ -1,6 +1,5 @@
 import { ErrorCodes } from '../error';
-import { BisFunctionDto } from './bis-function.types';
-import { BisMetriscDto, LoginDto, Myself, RegisterDto, UserDto } from './types';
+import { LoginDto, Me, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, RegisterDto, SubtaskDto, TaskDto, UserDto } from './types';
 
 /* Action Types */
 export const actionTypes = {
@@ -24,13 +23,65 @@ export const actionTypes = {
   LOG_OUT_ENDUSER_SUCCESS: 'LOG_OUT_ENDUSER_SUCCESS' as 'LOG_OUT_ENDUSER_SUCCESS',
   LOG_OUT_ENDUSER_FAILURE: 'LOG_OUT_ENDUSER_FAILURE' as 'LOG_OUT_ENDUSER_FAILURE',
 
+  // GET /api/project/user/own
+  GET_PROJECTS_OWN: 'GET_PROJECTS_OWN' as 'GET_PROJECTS_OWN',
+  GET_PROJECTS_OWN_SUCCESS: 'GET_PROJECTS_OWN_SUCCESS' as 'GET_PROJECTS_OWN_SUCCESS',
+  GET_PROJECTS_OWN_FAILURE: 'GET_PROJECTS_OWN_FAILURE' as 'GET_PROJECTS_OWN_FAILURE',
+
+  // GET /api/project/user
+  GET_PROJECTS: 'GET_PROJECTS' as 'GET_PROJECTS',
+  GET_PROJECTS_SUCCESS: 'GET_PROJECTS_SUCCESS' as 'GET_PROJECTS_SUCCESS',
+  GET_PROJECTS_FAILURE: 'GET_PROJECTS_FAILURE' as 'GET_PROJECTS_FAILURE',
+
+  // GET /api/project/:id
+  GET_PROJECT: 'GET_PROJECT' as 'GET_PROJECT',
+  GET_PROJECT_SUCCESS: 'GET_PROJECT_SUCCESS' as 'GET_PROJECT_SUCCESS',
+  GET_PROJECT_FAILURE: 'GET_PROJECT_FAILURE' as 'GET_PROJECT_FAILURE',
+
+  // POST /api/project
   POST_PROJECT: 'POST_PROJECT' as 'POST_PROJECT',
   POST_PROJECT_SUCCESS: 'POST_PROJECT_SUCCESS' as 'POST_PROJECT_SUCCESS',
   POST_PROJECT_FAILURE: 'POST_PROJECT_FAILURE' as 'POST_PROJECT_FAILURE',
 
+  // PUT /api/project
   PUT_PROJECT: 'PUT_PROJECT' as 'PUT_PROJECT',
   PUT_PROJECT_SUCCESS: 'PUT_PROJECT_SUCCESS' as 'PUT_PROJECT_SUCCESS',
   PUT_PROJECT_FAILURE: 'PUT_PROJECT_FAILURE' as 'PUT_PROJECT_FAILURE',
+
+  // POST /api/task
+  POST_TASK: 'POST_TASK' as 'POST_TASK',
+  POST_TASK_SUCCESS: 'POST_TASK_SUCCESS' as 'POST_TASK_SUCCESS',
+  POST_TASK_FAILURE: 'POST_TASK_FAILURE' as 'POST_TASK_FAILURE',
+
+  // PUT /api/task
+  PUT_TASK: 'PUT_TASK' as 'PUT_TASK',
+  PUT_TASK_SUCCESS: 'PUT_TASK_SUCCESS' as 'PUT_TASK_SUCCESS',
+  PUT_TASK_FAILURE: 'PUT_TASK_FAILURE' as 'PUT_TASK_FAILURE',
+
+  // PUT /api/task/assign
+  PUT_TASK_ASSIGN: 'PUT_TASK_ASSIGN' as 'PUT_TASK_ASSIGN',
+  PUT_TASK_ASSIGN_SUCCESS: 'PUT_TASK_ASSIGN_SUCCESS' as 'PUT_TASK_ASSIGN_SUCCESS',
+  PUT_TASK_ASSIGN_FAILURE: 'PUT_TASK_ASSIGN_FAILURE' as 'PUT_TASK_ASSIGN_FAILURE',
+
+  // PUT /api/task/state
+  PUT_TASK_STATE: 'PUT_TASK_STATE' as 'PUT_TASK_STATE',
+  PUT_TASK_STATE_SUCCESS: 'PUT_TASK_STATE_SUCCESS' as 'PUT_TASK_STATE_SUCCESS',
+  PUT_TASK_STATE_FAILURE: 'PUT_TASK_STATE_FAILURE' as 'PUT_TASK_STATE_FAILURE',
+
+  // POST /api/task/subtask
+  POST_SUBTASK: 'POST_SUBTASK' as 'POST_SUBTASK',
+  POST_SUBTASK_SUCCESS: 'POST_SUBTASK_SUCCESS' as 'POST_SUBTASK_SUCCESS',
+  POST_SUBTASK_FAILURE: 'POST_SUBTASK_FAILURE' as 'POST_SUBTASK_FAILURE',
+
+  // PUT /api/task/subtask
+  PUT_SUBTASK: 'PUT_SUBTASK' as 'PUT_SUBTASK',
+  PUT_SUBTASK_SUCCESS: 'PUT_SUBTASK_SUCCESS' as 'PUT_SUBTASK_SUCCESS',
+  PUT_SUBTASK_FAILURE: 'PUT_SUBTASK_FAILURE' as 'PUT_SUBTASK_FAILURE',
+
+  // PUT /api/task/subtask/state
+  PUT_SUBTASK_STATE: 'PUT_SUBTASK_STATE' as 'PUT_SUBTASK_STATE',
+  PUT_SUBTASK_STATE_SUCCESS: 'PUT_SUBTASK_STATE_SUCCESS' as 'PUT_SUBTASK_STATE_SUCCESS',
+  PUT_SUBTASK_STATE_FAILURE: 'PUT_SUBTASK_STATE_FAILURE' as 'PUT_SUBTASK_STATE_FAILURE',
 
   /** ui actions */
   SET_PROVIDER_INITIAL_VALUES: 'SET_PROVIDER_INITIAL_VALUES' as 'SET_PROVIDER_INITIAL_VALUES',
@@ -40,28 +91,29 @@ export const actionTypes = {
 };
 
 /* Actions */
+export interface ErrorPayload {
+  payload: { errors: string[]; };
+}
+
 export interface LoggedIn {
   type: typeof actionTypes.LOGGED_IN;
 }
 
 //
 
-export interface GetMyself {
+export interface GetMe {
   type: typeof actionTypes.GET_ME;
 }
 
-export interface GetMyselfSuccess {
+export interface GetMeSuccess {
   type: typeof actionTypes.GET_ME_SUCCESS;
   payload: {
-    myself: Myself;
+    me: Me;
   };
 }
 
-export interface GetMyselfFailure {
+export interface GetMeFailure extends ErrorPayload {
   type: typeof actionTypes.GET_ME_FAILURE;
-  payload: {
-    errors: ErrorCodes[];
-  };
 }
 
 export interface Login {
@@ -74,11 +126,8 @@ export interface LoginSuccess {
   payload: UserDto;
 }
 
-export interface LoginFailure {
+export interface LoginFailure extends ErrorPayload {
   type: typeof actionTypes.LOGIN_FAILURE;
-  payload: {
-    errors: ErrorCodes[];
-  };
 }
 
 export interface Register {
@@ -91,11 +140,8 @@ export interface RegisterSuccess {
   payload: UserDto;
 }
 
-export interface RegisterFailure {
+export interface RegisterFailure extends ErrorPayload {
   type: typeof actionTypes.REGISTER_FAILURE;
-  payload: {
-    errors: ErrorCodes[];
-  };
 }
 
 export interface LogOut {
@@ -106,49 +152,219 @@ export interface LogOutSuccess {
   type: typeof actionTypes.LOG_OUT_ENDUSER_SUCCESS;
 }
 
-export interface LogOutFailure {
+export interface LogOutFailure extends ErrorPayload {
   type: typeof actionTypes.LOG_OUT_ENDUSER_FAILURE;
-  payload: {
-    errors: ErrorCodes[];
-  };
+}
+
+export interface GetProjects {
+  type: typeof actionTypes.GET_PROJECTS;
+}
+
+export interface GetProjectsSuccess {
+  type: typeof actionTypes.GET_PROJECTS_SUCCESS;
+  payload: ProjectDto[];
+}
+
+export interface GetProjectsFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_PROJECTS_FAILURE;
+}
+
+export interface GetProjectsOwn {
+  type: typeof actionTypes.GET_PROJECTS_OWN;
+}
+
+export interface GetProjectsOwnSuccess {
+  type: typeof actionTypes.GET_PROJECTS_OWN_SUCCESS;
+  payload: ProjectDto[];
+}
+
+export interface GetProjectsOwnFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_PROJECTS_OWN_FAILURE;
+}
+
+export interface GetProject {
+  type: typeof actionTypes.GET_PROJECT;
+  payload: { id: number; }
+}
+
+export interface GetProjectSuccess {
+  type: typeof actionTypes.GET_PROJECT_SUCCESS;
+  payload: ProjectDto;
+}
+
+export interface GetProjectFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_PROJECT_FAILURE;
 }
 
 export interface PostProject {
-  type: typeof actionTypes.LOG_OUT_ENDUSER;
+  type: typeof actionTypes.POST_PROJECT;
+  payload: PostProjectDto;
 }
 
 export interface PostProjectSuccess {
-  type: typeof actionTypes.LOG_OUT_ENDUSER_SUCCESS;
+  type: typeof actionTypes.POST_PROJECT_SUCCESS;
+  payload: ProjectDto;
 }
 
-export interface PostProjectFailure {
-  type: typeof actionTypes.LOG_OUT_ENDUSER_FAILURE;
-  payload: {
-    errors: ErrorCodes[];
-  };
+export interface PostProjectFailure extends ErrorPayload {
+  type: typeof actionTypes.POST_PROJECT_FAILURE;
+}
+
+export interface PutProject {
+  type: typeof actionTypes.PUT_PROJECT;
+  payload: PutProjectDto;
+}
+
+export interface PutProjectSuccess {
+  type: typeof actionTypes.PUT_PROJECT_SUCCESS;
+  payload: ProjectDto;
+}
+
+export interface PutProjectFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_PROJECT_FAILURE;
+}
+
+export interface PostTask {
+  type: typeof actionTypes.POST_TASK;
+  payload: PostTaskDto;
+}
+
+export interface PostTaskSuccess {
+  type: typeof actionTypes.POST_TASK_SUCCESS;
+  payload: TaskDto;
+}
+
+export interface PostTaskFailure extends ErrorPayload {
+  type: typeof actionTypes.POST_TASK_FAILURE;
+}
+
+export interface PutTask {
+  type: typeof actionTypes.PUT_TASK;
+  payload: PutTaskDto;
+}
+
+export interface PutTaskSuccess {
+  type: typeof actionTypes.PUT_TASK_SUCCESS;
+  payload: TaskDto;
+}
+
+export interface PutTaskFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_TASK_FAILURE;
+}
+
+export interface PutTaskAssign {
+  type: typeof actionTypes.PUT_TASK_ASSIGN;
+  payload: PutTaskAssignDto;
+}
+
+export interface PutTaskAssignSuccess {
+  type: typeof actionTypes.PUT_TASK_ASSIGN_SUCCESS;
+  payload: TaskDto;
+}
+
+export interface PutTaskAssignFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_TASK_ASSIGN_FAILURE;
+}
+
+export interface PutTaskState {
+  type: typeof actionTypes.PUT_TASK_STATE;
+  payload: PutTaskStateDto;
+}
+
+export interface PutTaskStateSuccess {
+  type: typeof actionTypes.PUT_TASK_STATE_SUCCESS;
+  payload: TaskDto;
+}
+
+export interface PutTaskStateFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_TASK_STATE_FAILURE;
+}
+
+export interface PostSubtask {
+  type: typeof actionTypes.POST_SUBTASK;
+  payload: PostSubtaskDto;
+}
+
+export interface PostSubtaskSuccess {
+  type: typeof actionTypes.POST_SUBTASK_SUCCESS;
+  payload: SubtaskDto;
+}
+
+export interface PostSubtaskFailure extends ErrorPayload {
+  type: typeof actionTypes.POST_SUBTASK_FAILURE;
+}
+
+export interface PutSubtask {
+  type: typeof actionTypes.PUT_SUBTASK;
+  payload: PutSubtaskDto;
+}
+
+export interface PutSubtaskSuccess {
+  type: typeof actionTypes.PUT_SUBTASK_SUCCESS;
+  payload: SubtaskDto;
+}
+
+export interface PutSubtaskFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_SUBTASK_FAILURE;
+}
+
+export interface PutSubtaskState {
+  type: typeof actionTypes.PUT_SUBTASK_STATE;
+  payload: PutSubtaskStateDto;
+}
+
+export interface PutSubtaskStateSuccess {
+  type: typeof actionTypes.PUT_SUBTASK_STATE_SUCCESS;
+  payload: SubtaskDto;
+}
+
+export interface PutSubtaskStateFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_SUBTASK_STATE_FAILURE;
 }
 
 /** UI actions */
-
-
-
 export type FailureAppActionTypes =
-  typeof actionTypes.GET_ME_FAILURE |
-  typeof actionTypes.REGISTER_FAILURE |
-  typeof actionTypes.LOGIN_FAILURE
+  | typeof actionTypes.GET_ME_FAILURE
+  | typeof actionTypes.REGISTER_FAILURE
+  | typeof actionTypes.LOGIN_FAILURE
+  | typeof actionTypes.GET_PROJECTS_FAILURE
+  | typeof actionTypes.GET_PROJECTS_OWN_FAILURE
+  | typeof actionTypes.GET_PROJECT_FAILURE
+  | typeof actionTypes.POST_PROJECT_FAILURE
+  | typeof actionTypes.PUT_PROJECT_FAILURE
+  | typeof actionTypes.POST_TASK_FAILURE
+  | typeof actionTypes.PUT_TASK_FAILURE
+  | typeof actionTypes.PUT_TASK_ASSIGN_FAILURE
+  | typeof actionTypes.PUT_TASK_STATE_FAILURE
+  | typeof actionTypes.POST_SUBTASK_FAILURE
+  | typeof actionTypes.PUT_SUBTASK_FAILURE
+  | typeof actionTypes.PUT_SUBTASK_STATE_FAILURE
   ;
 
 export type FailureAppAction =
-  | GetMyselfFailure
+  | GetMeFailure
   | LoginFailure
   | RegisterFailure
-  | LogOutFailure;
+  | LogOutFailure
+  | GetProjectsFailure
+  | GetProjectsOwnFailure
+  | GetProjectFailure
+  | PostProjectFailure
+  | PutProjectFailure
+  | PostTaskFailure
+  | PutTaskFailure
+  | PutTaskAssignFailure
+  | PutTaskStateFailure
+  | PostSubtaskFailure
+  | PutSubtaskFailure
+  | PutSubtaskStateFailure
+  ;
 
 export type AppAction =
   | LoggedIn
-  | GetMyself
-  | GetMyselfSuccess
-  | GetMyselfFailure
+  | GetMe
+  | GetMeSuccess
+  | GetMeFailure
   | Login
   | LoginSuccess
   | LoginFailure
@@ -157,4 +373,41 @@ export type AppAction =
   | RegisterFailure
   | LogOut
   | LogOutSuccess
-  | LogOutFailure;
+  | LogOutFailure
+  | GetProjects
+  | GetProjectsSuccess
+  | GetProjectsFailure
+  | GetProjectsOwn
+  | GetProjectsOwnSuccess
+  | GetProjectsOwnFailure
+  | GetProject
+  | GetProjectSuccess
+  | GetProjectFailure
+  | PostProject
+  | PostProjectSuccess
+  | PostProjectFailure
+  | PutProject
+  | PutProjectSuccess
+  | PutProjectFailure
+  | PostTask
+  | PostTaskSuccess
+  | PostTaskFailure
+  | PutTask
+  | PutTaskSuccess
+  | PutTaskFailure
+  | PutTaskAssign
+  | PutTaskAssignSuccess
+  | PutTaskAssignFailure
+  | PutTaskState
+  | PutTaskStateSuccess
+  | PutTaskStateFailure
+  | PostSubtask
+  | PostSubtaskSuccess
+  | PostSubtaskFailure
+  | PutSubtask
+  | PutSubtaskSuccess
+  | PutSubtaskFailure
+  | PutSubtaskState
+  | PutSubtaskStateSuccess
+  | PutSubtaskStateFailure
+  ;

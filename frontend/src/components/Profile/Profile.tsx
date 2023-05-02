@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
-import { BisMetriscDto } from '../../store/types';
 import styled from 'styled-components';
 import Icon from '../Icon/Icon';
 import Button from '../Button/Button';
 
 const ProfileDiv = styled.div`
   border-bottom: 3px #0FB800;
-  background-color: #EEEEEE;
+  background-color: #ffffff;
 
   text-align: center;
   width: 100%;

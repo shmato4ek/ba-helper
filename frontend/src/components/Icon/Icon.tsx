@@ -1,8 +1,9 @@
 import React from 'react';
 import {
   AddFileIcon,
+  CalendarIcon,
   DiagramIcon,
-  EyeIcon, LogoIcon, ProfileIcon, RaciIcon, TextFileIcon,
+  EyeIcon, FileIcon, LogoIcon, PeopleIcon, ProfileIcon, ProfileWhiteIcon, RaciIcon, TextFileIcon,
 } from '../../assets/icons';
 
 interface Props {
@@ -16,6 +17,10 @@ interface Props {
   | 'diagram'
   | 'raci'
   | 'add-file'
+  | 'file'
+  | 'calendar'
+  | 'people'
+  | 'profile-white'
   | 'triangle';
   style?: React.CSSProperties;
   onClick?: () => any;
@@ -37,6 +42,14 @@ const Icon = ({ type, style, onClick }: Props) => {
       return <RaciIcon style={style} onClick={onClick} />;
     case 'add-file':
       return <AddFileIcon style={style} onClick={onClick} />;
+    case 'file':
+      return <FileIcon style={style} onClick={onClick} />;
+    case 'calendar':
+      return <CalendarIcon style={style} onClick={onClick} />;
+    case 'people':
+      return <PeopleIcon style={style} onClick={onClick} />;
+    case 'profile-white':
+      return <ProfileWhiteIcon style={style} onClick={onClick} />;
     default:
       return <></>;
   }

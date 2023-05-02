@@ -1,11 +1,9 @@
 
 
 import React, { FC } from 'react';
-import { BisMetriscDto } from '../../../store/types';
 import Icon from '../../../components/Icon/Icon';
 import styled from 'styled-components';
 import Button from '../../../components/Button/Button';
-import ProfileContainer from '../../ProfileContainer/ProfileContainer';
 import Font from '../../../components/Font/Font';
 
 const FrontPageStyled = styled.div`
