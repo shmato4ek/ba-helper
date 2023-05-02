@@ -17,7 +17,7 @@ namespace BAHelper.Common.DTOs.ProjectTask
         public string TaskName { get; set; }
         public string Description { get; set; }
         public double Hours { get; set; }
-        public List<UserDTO> Users { get; set; }
+        public List<UserInfoDTO> Users { get; set; }
         public List<SubtaskDTO> Subtasks { get; set; }
         public TaskState TaskState { get; set; } = TaskState.Pending;
     }

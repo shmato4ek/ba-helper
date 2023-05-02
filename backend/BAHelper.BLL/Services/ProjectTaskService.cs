@@ -106,8 +106,6 @@ namespace BAHelper.BLL.Services
             }
 
             subtaskEntity.Name = updatedSubtask.Name;
-            subtaskEntity.Deadline = updatedSubtask.Deadline;
-            subtaskEntity.Description = updatedSubtask.Description;
             _context.Subtasks.Update(subtaskEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<SubtaskDTO>(subtaskEntity);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Project;
@@ -8,6 +9,7 @@ using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Bcpg.OpenPgp;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,6 +34,7 @@ namespace BAHelper.BLL.Services
             projectEntity.ProjectName = newProject.ProjectName;
             projectEntity.Deadline = newProject.Deadline;
             projectEntity.AuthorId = userId;
+            projectEntity.Description = newProject.Description;
             projectEntity.Hours = 0;
             projectEntity.IsDeleted = false;
             _context.Projects.Add(projectEntity);
@@ -52,7 +55,52 @@ namespace BAHelper.BLL.Services
             {
                 await _projectTaskService.AddProjectTask(task, projectEntity.Id, userId);
             }
-            return _mapper.Map<ProjectInfoDTO>(projectEntity);
+            var projectTasksEntity = await _context
+                .Tasks
+                .Where(task => task.Id == projectEntity.Id)
+                .Include(task => task.Users)
+                .Include(task => task.Subtasks)
+                .ToListAsync();
+            var createdProject = await _context
+                .Projects
+                .Include(project => project.Users)
+                .FirstOrDefaultAsync(project => project.Id == projectEntity.Id);
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            var createdProjectDto = _mapper.Map<ProjectInfoDTO>(createdProject);
+            createdProjectDto.AuthorName = userEntity.Name;
+            createdProjectDto.Tasks = _mapper.Map<List<ProjectTaskInfoDTO>>(projectTasksEntity);
+            return createdProjectDto;
+        }
+
+        public async Task<ProjectInfoDTO> GetProjectById(int projectId, int userId)
+        {
+            var projectEntity = await _context
+                .Projects
+                .Include(project => project.Users)
+                .FirstOrDefaultAsync(project => project.Id == projectId);
+            if (projectEntity is null)
+            {
+                throw new NotFoundException(nameof(Project), projectId);
+            }
+            var tasksEntity = await _context
+                .Tasks
+                .Where(task => task.ProjectId == projectId)
+                .Include(task => task.Users)
+                .Include(task => task.Subtasks)
+                .ToListAsync();
+            var projectDto = _mapper.Map<ProjectInfoDTO>(projectEntity);
+            if (projectDto.AuthorId == userId)
+            {
+                projectDto.CanEdit = true;
+            }
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == projectEntity.AuthorId);
+            projectDto.AuthorName = userEntity.Name;
+            projectDto.Tasks = _mapper.Map<List<ProjectTaskInfoDTO>>(tasksEntity);
+            return projectDto;
         }
 
         private async Task<bool> UserEmailCheck(string email)
@@ -63,7 +111,7 @@ namespace BAHelper.BLL.Services
             return foundUser != null;
         }
 
-        public async Task<ProjectDTO> UpdateProject(UpdateProjectDTO updatedProject)
+        public async Task<ProjectDTO> UpdateProject(UpdateProjectDTO updatedProject, int userId)
         {
             var projectEntity = await _context
                 .Projects
@@ -72,21 +120,48 @@ namespace BAHelper.BLL.Services
             {
                 throw new NotFoundException(nameof(Project), updatedProject.Id);
             }
+            if (userId != projectEntity.AuthorId)
+            {
+                throw new Exception("No access to project.");
+            }
             projectEntity.ProjectName = updatedProject.ProjectName;
             projectEntity.Deadline = updatedProject.Deadline;
+            projectEntity.Description = updatedProject.Description;
+            var unregisteredUsers = new List<string>();
+            foreach (var email in updatedProject.Users)
+            {
+                if (await UserEmailCheck(email))
+                {
+                    await AddUserToProject(projectEntity.Id, email, userId);
+                }
+                else
+                {
+                    unregisteredUsers.Add(email);
+                }
+            }
             _context.Update(projectEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDTO>(projectEntity);
         }
 
-        public async Task<List<ProjectDTO>> GetAllUsersOwnProject(int userId)
+        public async Task<List<ProjectInfoDTO>> GetAllUsersOwnProject(int userId)
         {
             var projectsEntity = await _context
                 .Projects
                 .Where(project => project.AuthorId == userId)
+                .Include(project => project.Users)
+                .Include(project => project.Tasks)
                 .ToListAsync();
 
-            return _mapper.Map<List<ProjectDTO>>(projectsEntity);
+            var projectsDto = _mapper.Map<List<ProjectInfoDTO>>(projectsEntity);
+            foreach (var project in projectsDto)
+            {
+                if (project.AuthorId == userId)
+                {
+                    project.CanEdit = true;
+                }
+            }
+            return projectsDto;
         }
 
         public async Task<List<ProjectDTO>> GetAllUsersProjects(int userId)
@@ -107,7 +182,7 @@ namespace BAHelper.BLL.Services
             return _mapper.Map<List<ProjectDTO>>(projectsEntity);
         }
 
-        public async Task<List<ProjectTaskDTO>> GetAllProjectTasks(int projectId)
+        public async Task<List<ProjectTaskDTO>> GetAllProjectTasks(int projectId, int userId)
         {
             var projectEntity = await _context
                 .Projects
@@ -150,7 +225,8 @@ namespace BAHelper.BLL.Services
                 projectEntity.Users = new List<User>();
             }
             projectEntity.Users.Add(userEntity);
-            _context.SaveChanges();
+            _context.Projects.Update(projectEntity);
+            await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDTO>(projectEntity);
         }
 

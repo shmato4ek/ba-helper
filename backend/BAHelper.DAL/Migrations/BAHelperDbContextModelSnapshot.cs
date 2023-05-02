@@ -127,6 +127,10 @@ namespace BAHelper.DAL.Migrations
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<double>("Hours")
                         .HasColumnType("double precision");
 
@@ -217,13 +221,6 @@ namespace BAHelper.DAL.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()

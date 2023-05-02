@@ -21,13 +21,19 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProject([FromBody] NewProjectDTO newProject)
         {
-            return Ok(await _projectService.CreateProject(newProject, this.GetUserIdFromToken()));
+            return Ok(await _projectService.CreateProject(newProject, 5));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetProjectById(int projectId)
+        {
+            return Ok(await _projectService.GetProjectById(projectId, 5));
         }
 
         [HttpGet("user/own")]
         public async Task<ActionResult> GetAllUsersOwnProject()
         {
-            return Ok(await _projectService.GetAllUsersOwnProject(this.GetUserIdFromToken()));
+            return Ok(await _projectService.GetAllUsersOwnProject(5));
         }
 
         [HttpGet("user")]
@@ -39,19 +45,19 @@ namespace BAHelper.API.Controllers
         [HttpGet("tasks")]
         public async Task<ActionResult> GetAllProjectTasks(int projectId)
         {
-            return Ok(await _projectService.GetAllProjectTasks(projectId));
+            return Ok(await _projectService.GetAllProjectTasks(projectId, this.GetUserIdFromToken()));
         }
 
         [HttpPut("add-user")]
         public async Task<ActionResult> AddUserToProject(int projectId, string email)
         {
-            return Ok(await _projectService.AddUserToProject(projectId, email, this.GetUserIdFromToken()));
+            return Ok(await _projectService.AddUserToProject(projectId, email, 5));
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)
         {
-            return Ok(await _projectService.UpdateProject(updatedProject));
+            return Ok(await _projectService.UpdateProject(updatedProject, 5));
         }
 
         [HttpPut("archive")]
