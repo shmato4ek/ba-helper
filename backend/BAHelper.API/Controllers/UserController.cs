@@ -50,5 +50,11 @@ namespace BAHelper.API.Controllers
         {
             return Ok(await _userService.GetUserById(this.GetUserIdFromToken()));
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser([FromBody] UpdateUserDTO updatedUser)
+        {
+            return Ok(await _userService.UpdateUser(updatedUser, this.GetUserIdFromToken()));
+        }
     }
 }

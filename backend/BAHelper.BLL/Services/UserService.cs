@@ -93,5 +93,29 @@ namespace BAHelper.BLL.Services
             }
             return _mapper.Map<UserDTO>(userEntity);
         }
+
+        public async Task<UserInfoDTO> UpdateUser(UpdateUserDTO updatedUser, int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
+            if (updatedUser.ChangePassword == true)
+            {
+                if (!SecurityHelper.IsValidPassword(userEntity.Password, updatedUser.OldPassword, userEntity.Salt))
+                {
+                    throw new InvalidUserNameOrPasswordException();
+                }
+                userEntity.Password = updatedUser.NewPassword;
+            }
+            userEntity.Name = updatedUser.Name;
+            userEntity.Email = updatedUser.Email;
+            _context.Users.Update(userEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserInfoDTO>(userEntity);
+        }
     }
 }

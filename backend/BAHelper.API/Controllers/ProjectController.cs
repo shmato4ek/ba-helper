@@ -21,25 +21,25 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProject([FromBody] NewProjectDTO newProject)
         {
-            return Ok(await _projectService.CreateProject(newProject, 5));
+            return Ok(await _projectService.CreateProject(newProject, this.GetUserIdFromToken()));
         }
 
         [HttpGet]
         public async Task<ActionResult> GetProjectById(int projectId)
         {
-            return Ok(await _projectService.GetProjectById(projectId, 5));
+            return Ok(await _projectService.GetProjectById(projectId, this.GetUserIdFromToken()));
         }
 
         [HttpGet("user/own")]
         public async Task<ActionResult> GetAllUsersOwnProject()
         {
-            return Ok(await _projectService.GetAllUsersOwnProject(5));
+            return Ok(await _projectService.GetAllUsersOwnProject(this.GetUserIdFromToken()));
         }
 
         [HttpGet("user")]
         public async Task<ActionResult> GetAllUsersProjects()
         {
-            return Ok(await _projectService.GetAllUsersProjects(5));
+            return Ok(await _projectService.GetAllUsersProjects(this.GetUserIdFromToken()));
         }
 
         //[HttpGet("tasks")]
@@ -57,7 +57,7 @@ namespace BAHelper.API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)
         {
-            return Ok(await _projectService.UpdateProject(updatedProject, 5));
+            return Ok(await _projectService.UpdateProject(updatedProject, this.GetUserIdFromToken()));
         }
 
         [HttpPut("archive")]
