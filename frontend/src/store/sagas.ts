@@ -151,7 +151,7 @@ function* postProject(postProject: PostProject) {
     const response: {
       data: any
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`, postProject.payload);
+      return axios.post(`${globals.endpoint}${globals.paths.project._}`, postProject.payload);
     });
 
     yield put<AppAction>({
@@ -165,12 +165,13 @@ function* postProject(postProject: PostProject) {
 
 function* putProject(putProject: PutProject) {
   try {
-    console.log('Put project action: ' + putProject);
+    console.log('Put project action');
+    console.log(JSON.stringify(putProject, null, 2));
 
     const response: {
       data: any
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`, putProject.payload);
+      return axios.put(`${globals.endpoint}${globals.paths.project._}`, putProject.payload);
     });
 
     yield put<AppAction>({

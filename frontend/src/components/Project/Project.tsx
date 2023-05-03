@@ -1,15 +1,19 @@
+import { ErrorMessage, Formik, FormikProps } from 'formik';
 import { DateTime } from 'luxon';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
+import { EditProjectDto, ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import { AlignCenter, VerticalGrid, VerticalMargins, Wrapper } from '../Utils/Utils';
-
-type Props = {
-  project: ProjectDto;
-}
+import { PutProjectDto } from '../../store/types'
+import FormDatepicker from '../Form/FormDatepicker/FormDatepicker';
+import FormStringField from '../Form/FormStringField/FormStringField';
+import FormTextareaField from '../Form/FormTextareaField/FormTextareaField';
+import FormError from '../Form/FormError/FormError';
+import TaskContainer from '../../containers/TaskContainer/TaskContainer';
+import SubtaskContainer from '../../containers/SubtaskContainer/SubtaskContainer';
 
 export const Header = styled.h1`
   margin-bottom: 30px;
@@ -21,7 +25,18 @@ export const HorizontalGrid = styled.div`
   grid-auto-flow: column;
 
   grid-template-columns: 400px 400px;
+
+  align-items: center;
 `;
+
+export const FieldGrid = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+
+  grid-gap: 10px;
+`
 
 export const Table = styled.table`
   width: 100%;
@@ -67,67 +82,123 @@ const Footer = styled.footer`
   font-size: 32px;
 `;
 
+type Props = {
+  project: ProjectDto;
+  putProject: EditProjectDto;
+
+  onValidate: (values: EditProjectDto) => any;
+  onSubmit: (values: EditProjectDto) => void;
+
+  isEditMode: boolean;
+  onEditModeSwitch: () => void;
+}
+
 const Project: FC<Props> = (params) => {
   const totalHours = params.project.tasks.reduce((acc, el) => acc + el.hours, 0)
   return (
     <GridWrapper>
-      <Wrapper>
-        <Header>{params.project.projectName}</Header>
-        <VerticalMargins>
-          <VerticalGrid>
-            <HorizontalGrid>
-                <div><Icon type='profile-white'/> <b>Автор:</b> {params.project.author.name}</div>
-                <div><Icon type='people'/><b>Залучені користувачі:</b> {params.project.users.map(x=>x.name).join(`, `)}</div>
-            </HorizontalGrid>
-            <HorizontalGrid>
-              <div><Icon type='calendar'/><b>Дедлайн:</b> {DateTime.fromISO(params.project.deadline).toFormat('dd.MM.yyyy')}</div>
-              <div><Icon type='file'/><b>Опис:</b> {params.project.description}</div>
-            </HorizontalGrid>
-          </VerticalGrid>
-        </VerticalMargins>
-        <Header>Завдання</Header>
-        <Table>
-          <thead>
-            <TR>
-              <TH>Назва</TH>
-              <TH>Дедлайн</TH>
-              <TH>Кількість годин</TH>
-              <TH>Виконавець</TH>
-              <TH>Статус</TH>
-            </TR>
-          </thead>
-          <tbody>
-            {params.project.tasks.map(task => {
-              return (
-                <>
-                  <TR key={`task/${task.id}`}>
-                    <TD>
-                      {task.taskName}
-                    </TD>
-                    <TD>{DateTime.fromISO(task.deadline).toFormat('dd.MM.yyyy')}</TD>
-                    <TD>{task.hours}</TD>
-                    <TD>{task.users[0].name}</TD>
-                    <TD>{taskStateToText(task.taskState)}</TD>
+      <Formik
+        initialValues={params.putProject}
+        enableReinitialize={true}
+        validate={params.onValidate}
+        onSubmit={params.onSubmit}
+      >
+        {({ handleSubmit }: FormikProps<EditProjectDto>) => (
+          <>
+            <Wrapper>
+              <Header>
+                {params.isEditMode
+                  ?  <>
+                      <FormStringField placeholder="Ім'я проекту" name={'projectName'} label="" />
+                      <FormError name='projectName' />
+                    </>
+                  : <>{params.project.projectName}</>
+                }
+              </Header>
+              <VerticalMargins>
+                <VerticalGrid>
+                  <HorizontalGrid>
+                    <FieldGrid><Icon type='profile-white'/> <b>Автор:</b> {params.project.authorName}</FieldGrid>
+                    <FieldGrid>
+                      <Icon type='file'/><b>Залучені користувачі:</b>
+                      {params.isEditMode
+                        ?  <>
+                            <FormTextareaField placeholder='Список імейлів' name={'users'} label="" />
+                            <FormError name='users' />
+                          </>
+                        : <>{params.project.users.map(x=>x.name).join(`, `)}</>
+                      }
+                    </FieldGrid>
+                  </HorizontalGrid>
+                  <HorizontalGrid>
+                    <FieldGrid>
+                      <Icon type='calendar'/><b>Дедлайн:</b>
+                      {params.isEditMode
+                        ?  <>
+                            <FormDatepicker name={'deadline'} label="" />
+                            <FormError name='deadline' />
+                          </>
+                        : <>{DateTime.fromISO(params.project.deadline).toFormat('dd.MM.yyyy')}</>
+                      }
+                    </FieldGrid>
+                    <FieldGrid>
+                      <Icon type='file'/><b>Опис:</b>
+                      {params.isEditMode
+                        ? <>
+                            <FormTextareaField placeholder='Опис' name={'description'} label="" />
+                            <FormError name='description' />
+                          </>
+                        : <>{params.project.description}</>
+                      }
+                    </FieldGrid>
+                  </HorizontalGrid>
+                  <AlignCenter>
+                    {!params.isEditMode
+                    ? <Button buttonType='button' styleType='simple' onClick={() => params.onEditModeSwitch()}>Редагувати</Button>
+                    : <Button buttonType='submit' styleType='simple' onClick={() => {
+                      handleSubmit()
+                      params.onEditModeSwitch();
+                    }}>Зберегти</Button>}
+                  </AlignCenter>
+                </VerticalGrid>
+              </VerticalMargins>
+              <Header>Завдання</Header>
+              <Table>
+                <thead>
+                  <TR>
+                    <TH>Назва</TH>
+                    <TH>Дедлайн</TH>
+                    <TH>Кількість годин</TH>
+                    <TH>Виконавець</TH>
+                    <TH>Статус</TH>
                   </TR>
-                  {task.subtasks.map(subtask => {
-                    return <TR key={`subtask/${subtask.id}`}>
-                      <TD>&emsp;{subtask.name}</TD>
-                      <TD></TD>
-                      <TD></TD>
-                      <TD></TD>
-                      <TD>{taskStateToText(task.taskState)}</TD>
-                    </TR>
+                </thead>
+                <tbody>
+                  {params.project.tasks.map(task => {
+                    return (
+                      <>
+                        <TaskContainer
+                          task={task}
+                          key={`task/${task.id}`}
+                        />
+                        {task.subtasks.map(subtask => {
+                          return <SubtaskContainer
+                            subtask={subtask}
+                            key={`subtask/${subtask.id}`}
+                          />
+                        })}
+                      </>
+                    )
                   })}
-                </>
-              )
-            })}
-          </tbody>
-        </Table>
-      </Wrapper>
-      <Footer>
-        <b>Загальна кількість годин: {totalHours}</b>
-        <Button buttonType='button' styleType='corner'>Редагувати</Button>
-      </Footer>
+                </tbody>
+              </Table>
+            </Wrapper>
+            <Footer>
+              <b>Загальна кількість годин: {totalHours}</b>
+            </Footer>
+          </>
+        )}
+      </Formik>
     </GridWrapper>
   );
 };
@@ -135,3 +206,6 @@ const Project: FC<Props> = (params) => {
 // TODO: check that hours are counted properly
 
 export default Project;
+
+
+

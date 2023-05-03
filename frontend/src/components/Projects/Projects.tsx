@@ -47,7 +47,7 @@ type Props = {
 
 const projectFieldInfo = {
   [ProjectDtoFields.hours]: 'Кількість годин',
-  [ProjectDtoFields.author]: 'Затверджувач',
+  [ProjectDtoFields.authorName]: 'Затверджувач',
   [ProjectDtoFields.taskCount]: 'Кількість завдань',
 }
 
@@ -74,8 +74,8 @@ const Projects: FC<Props> = (params) => {
                 <TD>{DateTime.fromISO(project.deadline).toFormat('dd.MM.yyyy')}</TD>
                 {params.optionalFields.map(x => {
                   let fieldData;
-                  if(x === 'author') {
-                    fieldData = project.author.name;
+                  if(x === 'authorName') {
+                    fieldData = project.authorName;
                   } else if(x === 'taskCount') {
                     fieldData = project.tasks.length;
                   } else {

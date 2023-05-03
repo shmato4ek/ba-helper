@@ -21,7 +21,7 @@ type Props = {
 const Profile: FC<Props> = (params) => {
   return (
     <ProfileDiv>
-      <Icon type='profile' style= {{width: 50, height: 50, paddingRight: 10 }}  />
+      <Icon type='profile' style={{width: 50, height: 50, paddingRight: 10 }}  />
       <Button buttonType='button'>Увійти</Button> 
     </ProfileDiv>
   );

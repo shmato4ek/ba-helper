@@ -3,9 +3,22 @@ import React, { FunctionComponent } from 'react';
 import DatePicker from 'react-datepicker';
 import FormError from '../FormError/FormError';
 
-import styles from './FormDatepicker.module.scss';
-
 import 'react-datepicker/dist/react-datepicker.css';
+import styled from 'styled-components';
+import { DateTime } from 'luxon';
+
+const Container = styled.div`
+  flex: 1 0 0px;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+`;
+
+const FieldLabel = styled.p`  
+
+`;
 
 interface Props {
   name: string;
@@ -16,14 +29,12 @@ const FormDatepicker: FunctionComponent<Props> = ({
   name,
   label,
 }: Props) => (
-  <div className={styles.container}>
-    {label && <p className={styles.field_label}>{label}</p>}
+  <Container>
     <Field name={name}>
       {({ field, form }: FieldProps<Date>) => (
-        <div className={styles.field_container}>
+        <div>
+          {label && <FieldLabel>{label}</FieldLabel>}
           <DatePicker
-            showTimeInput
-            showTwoColumnMonthYearPicker
             name={name}
             selected={field.value}
             onChange={(date: any) => form.setFieldValue(name, date)}
@@ -36,7 +47,7 @@ const FormDatepicker: FunctionComponent<Props> = ({
       component={FormError as React.FunctionComponent<{}>}
       name={name}
     />
-  </div>
+  </Container>
 );
 
 FormDatepicker.defaultProps = {

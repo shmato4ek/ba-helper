@@ -14,7 +14,7 @@ export enum ProjectDtoFields {
   deadline = 'deadline',
   hours = 'hours',
   taskCount = 'taskCount',
-  author = 'author',
+  authorName = 'authorName',
 }
 
 
@@ -25,7 +25,7 @@ export interface ProjectDto {
   id: number;
   deadline: string;
   // authorid: number; // Hide since it's not needed
-  author: UserDto;
+  authorName: string;
   description: string; // Post MVP
   projectName: string;
   hours: number;
@@ -34,16 +34,20 @@ export interface ProjectDto {
   users: UserDto[];
 }
 export interface PostProjectDto {
-  deadline: Date;
+  deadline: string;
   projectName: string;
   description: string;
   users: string[]; // list of emails
 }
 
+
 export interface PutProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description' | 'users'> {
   id: number;
 }
 
+export interface EditProjectDto extends Pick<PutProjectDto, 'deadline' | 'projectName' | 'description'> {
+  users: string;
+}
 
 /**
  * @description - Task
@@ -68,6 +72,10 @@ export interface PostTaskDto {
 
 export interface PutTaskDto extends Pick<PostTaskDto, 'deadline' | 'taskName' | 'hours'> {
   id: number;
+}
+
+export interface EditTaskDto extends Pick<PutTaskDto, 'deadline' | 'taskName' | 'hours'> {
+
 }
 
 export interface PutTaskAssignDto {
@@ -101,6 +109,8 @@ export interface PutSubtaskDto extends Pick<PostSubtaskDto, 'name'> {
   id: number;
 }
 
+export interface EditSubtaskDto extends Pick<PostSubtaskDto, 'name'> { }
+
 export interface PutSubtaskStateDto {
   subtaskId: number;
   taskState: TaskState;
@@ -129,6 +139,13 @@ export enum TaskState {
   Done,
   Approve,
 };
+
+export const taskStates: TaskState[] = [
+  0,
+  1,
+  2,
+  3,
+]
 
 export const taskStateToText = (taskState: TaskState) => {
   switch (taskState) {
@@ -172,3 +189,7 @@ export enum ServiceRoutes {
   OWNED_PROJECTS = '/owned-projects',
   MY_PROJECTS = '/my-projects',
 }
+
+export type CreateErrorObject<T extends { [key: string]: any }> = {
+  [actionName in keyof T]?: string | string[];
+};

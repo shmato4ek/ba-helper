@@ -9,7 +9,6 @@ interface Props {
 }
 
 const InnerContent = styled.div`
-  font-family: Roboto;
   font-size: 32px;
   font-weight: 400;
   line-height: 38px;

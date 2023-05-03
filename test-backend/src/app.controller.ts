@@ -1,9 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
   InternalServerErrorException,
   Param,
   Post,
+  Put,
   Request,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -55,6 +57,19 @@ export class AppController {
     return [AlphaProject, BetaProject];
   }
 
+  @Put('/project')
+  putProjectById(@Body() params: PutProjectDto): ProjectDto {
+    console.log('/project/:id');
+    console.log(params);
+
+    AlphaProject.deadline = params.deadline;
+    AlphaProject.projectName = params.projectName;
+    AlphaProject.description = params.description;
+    AlphaProject.users = AllUsers.filter((x) => params.users.includes(x.email));
+
+    return AlphaProject;
+  }
+
   @Get('/project/:id')
   getProjectById(@Param('id') id: string): ProjectDto {
     console.log('/project/:id');
@@ -96,6 +111,8 @@ export const BetaUser: UserDto = {
   projects: [],
   tasks: [],
 };
+
+export const AllUsers = [AlphaUser, BetaUser];
 
 export const AlphaTask1: TaskDto = {
   id: 1,

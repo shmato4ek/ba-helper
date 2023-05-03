@@ -50,35 +50,21 @@ const FormStringField: FunctionComponent<Props> = ({
   }
 
   return (
-    <div>
-      {label && <p>{label}</p>}
-      <Field name={name}>
-        {({ field }: FieldProps) => (
-          <div>
-            <input
-              type={type}
-              name={name}
-              placeholder={placeholder}
-              // className={`${styles.field} ${!editable && styles.uneditable}`}
-              // For nullable values in db, so that react won't yell at us for using null value in html input
-              value={field.value ?? ''}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              readOnly={!editable}
-            />
-            {isHideIconShown && (
-              <div>
-                <Icon type="eye" onClick={() => setIsHidden(!isHidden)} />
-              </div>
-            )}
-          </div>
-        )}
-      </Field>
-      <ErrorMessage
-        component={FormError as React.FunctionComponent<{}>}
-        name={name}
-      />
-    </div>
+    <Field name={name}>
+      {({ field }: FieldProps) => (
+        <input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          // className={`${styles.field} ${!editable && styles.uneditable}`}
+          // For nullable values in db, so that react won't yell at us for using null value in html input
+          value={field.value ?? ''}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
+          readOnly={!editable}
+        />
+      )}
+    </Field>
   );
 };
 

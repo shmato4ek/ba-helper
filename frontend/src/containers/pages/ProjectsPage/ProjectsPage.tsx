@@ -46,7 +46,7 @@ const ProjectsPage = () => {
   return (
     <Projects
       projects={projects}
-      optionalFields={[ProjectDtoFields.author, ProjectDtoFields.hours]}
+      optionalFields={[ProjectDtoFields.authorName, ProjectDtoFields.hours]}
     />
   );
 };

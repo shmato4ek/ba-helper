@@ -68,24 +68,19 @@ const LoginPage: FC<Props> = (params) => {
   const dispatch = useDispatch();
 
   const onLoginValidate = useCallback((values: RegisterDto) => {
-    try {
-      let errors: { [key in keyof RegisterDto]?: string } = {};
+    let errors: { [key in keyof RegisterDto]?: string } = {};
 
-      errors.email = joi.string().email({ tlds: { allow: false } }).required().validate(values.email).error?.message;
-      errors.password = joi.string().min(6).max(255).required().validate(values.password).error?.message;
-      errors.fullName = joi.string().max(255).required().validate(values.fullName).error?.message;
+    errors.email = joi.string().email({ tlds: { allow: false } }).required().validate(values.email).error?.message;
+    errors.password = joi.string().min(6).max(255).required().validate(values.password).error?.message;
+    errors.fullName = joi.string().max(255).required().validate(values.fullName).error?.message;
 
-      if (isLoginMode === false) {
-        errors.confirmPassword = joi.string().min(6).max(255).required().validate(values.password).error?.message;
-      }
-
-      errors = _.pickBy(errors, _.identity);
-
-      return errors;
-    } catch (error) {
-      console.log('@error');
-      console.log(error);
+    if (isLoginMode === false) {
+      errors.confirmPassword = joi.string().min(6).max(255).required().validate(values.password).error?.message;
     }
+
+    errors = _.pickBy(errors, _.identity);
+
+    return errors;
   }, [isLoginMode]);
 
   const onLoginSubmit = useCallback(
