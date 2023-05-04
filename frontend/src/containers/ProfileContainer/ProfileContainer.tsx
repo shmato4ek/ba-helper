@@ -1,14 +1,20 @@
 
 
 import React, { FC } from 'react';
-import Profile from '../../components/Profile/Profile';
+import { useSelector } from 'react-redux';
+import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
+import { AppState } from '../../store/reducer';
 
 type Props = {
 }
 
 const ProfileContainer: FC<Props> = (params) => {
+  const me = useSelector((state: AppState) => state.me);
+
   return (
-    <Profile/>
+    <ProfileIcon
+      me={me}
+    />
   );
 };
 

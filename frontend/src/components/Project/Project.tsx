@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { EditProjectDto, ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
+import { EditPutProjectDto, ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import { AlignCenter, VerticalGrid, VerticalMargins, Wrapper } from '../Utils/Utils';
@@ -84,10 +84,10 @@ const Footer = styled.footer`
 
 type Props = {
   project: ProjectDto;
-  putProject: EditProjectDto;
+  putProject: EditPutProjectDto;
 
-  onValidate: (values: EditProjectDto) => any;
-  onSubmit: (values: EditProjectDto) => void;
+  onValidate: (values: EditPutProjectDto) => any;
+  onSubmit: (values: EditPutProjectDto) => void;
 
   isEditMode: boolean;
   onEditModeSwitch: () => void;
@@ -103,7 +103,7 @@ const Project: FC<Props> = (params) => {
         validate={params.onValidate}
         onSubmit={params.onSubmit}
       >
-        {({ handleSubmit }: FormikProps<EditProjectDto>) => (
+        {({ handleSubmit }: FormikProps<EditPutProjectDto>) => (
           <>
             <Wrapper>
               <Header>

@@ -61,6 +61,9 @@ const Header: FC<Props> = (params) => {
       <Button buttonType='button' styleType='none'>
         <HeaderLink link='owned-projects'>Керівникам</HeaderLink>
       </Button>
+      <Button buttonType='button' styleType='none'>
+        <HeaderLink link='documents'>Документи</HeaderLink>
+      </Button>
       <ProfileContainer/>
     </HeaderStyled>
   );

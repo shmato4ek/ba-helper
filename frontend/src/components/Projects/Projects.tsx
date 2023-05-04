@@ -3,13 +3,15 @@ import { ProjectDto, ProjectDtoFields } from '../../store/types';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
 import { Link } from 'react-router-dom';
+import Button from '../Button/Button';
+import { AlignCenter } from '../Utils/Utils';
 
-const ProjectsStyled = styled.div`
+export const ProjectsStyled = styled.div`
   padding: 30px 100px;
   background-color: #fff;
 `;
 
-const Table = styled.table`
+export const Table = styled.table`
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
 
@@ -17,10 +19,12 @@ const Table = styled.table`
 
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 
+  margin-bottom: 20px;
+
   overflow: scroll;
 `;
 
-const TH = styled.th`
+export const TH = styled.th`
   border: 1px solid #ddd;
   text-align: left;
   border-bottom: 1px solid #296A2F;
@@ -28,13 +32,13 @@ const TH = styled.th`
   padding: 12px;
 `;
 
-const TD = styled.td`
+export const TD = styled.td`
   padding: 12px;
 
   border-bottom: 1px solid #296A2F;
 `;
 
-const TR = styled.tr`
+export const TR = styled.tr`
   background-color: #fff;
 
   height: 10px;
@@ -89,6 +93,17 @@ const Projects: FC<Props> = (params) => {
           })}
         </tbody>
       </Table>
+      <AlignCenter>
+        <Button buttonType='button' styleType='simple'>
+          <Link
+            to="/projects/new"
+            style={{
+              textDecoration: 'none',
+              color: 'white',
+            }}
+          >Створити</Link>
+        </Button>
+      </AlignCenter>
     </ProjectsStyled>
   );
 };

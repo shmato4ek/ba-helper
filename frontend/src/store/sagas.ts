@@ -3,8 +3,10 @@ import { put, call, takeLeading } from 'redux-saga/effects';
 import { ErrorCodes } from '../error';
 import { globals } from '../services/is';
 import {
-  actionTypes, AppAction, FailureAppAction, FailureAppActionTypes, GetProject, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState,
+  actionTypes, AppAction, DeleteUser, FailureAppAction, FailureAppActionTypes, GetProject, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState, PutUser,
 } from './actions';
+import { PutUserDto } from './types';
+import { LocalStorageService } from '../services/local-storage';
 
 function* errorHandler(
   error: any,
@@ -56,6 +58,23 @@ function* getMe() {
   }
 }
 
+function* login() {
+  try {
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`);
+    });
+
+    yield put<AppAction>({
+      type: 'LOGIN_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'LOGIN_FAILURE');
+  }
+}
+
 function* register() {
   try {
     const response: {
@@ -73,20 +92,38 @@ function* register() {
   }
 }
 
-function* login() {
+function* putUser(putUser: PutUser) {
   try {
     const response: {
       data: any
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`);
+      return axios.put(`${globals.endpoint}${globals.paths.user._}`, putUser.payload);
     });
 
     yield put<AppAction>({
-      type: 'LOGIN_SUCCESS',
+      type: 'PUT_USER_SUCCESS',
       payload: response.data
     });
   } catch (error) {
-    yield call(errorHandler, error, 'LOGIN_FAILURE');
+    yield call(errorHandler, error, 'PUT_USER_FAILURE');
+  }
+}
+
+function* deleteUser(deleteUser: DeleteUser) {
+  try {
+    yield call(() => {
+      return axios.delete(`${globals.endpoint}${globals.paths.user._}`);
+    });
+
+    LocalStorageService.clearState();
+
+    yield put<AppAction>({
+      type: 'DELETE_USER_SUCCESS',
+    });
+
+    deleteUser.navigate('/')
+  } catch (error) {
+    yield call(errorHandler, error, 'DELETE_USER_FAILURE');
   }
 }
 
@@ -158,6 +195,8 @@ function* postProject(postProject: PostProject) {
       type: 'POST_PROJECT_SUCCESS',
       payload: response.data
     });
+
+    postProject.navigate(`/projects/${response.data.id}`);
   } catch (error) {
     yield call(errorHandler, error, 'POST_PROJECT_FAILURE');
   }
@@ -316,10 +355,71 @@ function* putSubtaskState(putSubtaskState: PutSubtaskState) {
   }
 }
 
+function* getDocuments() {
+  try {
+    console.log('Get documents state action');
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.get(`${globals.endpoint}${globals.paths.document.user}`);
+    });
+
+    yield put<AppAction>({
+      type: 'GET_DOCUMENTS_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'GET_DOCUMENTS_FAILURE');
+  }
+}
+
+function* postDocument(postDocument: PostDocument) {
+  try {
+    console.log('Post document state action');
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.post(`${globals.endpoint}${globals.paths.document._}`, postDocument.payload);
+    });
+
+    yield put<AppAction>({
+      type: 'POST_DOCUMENT_SUCCESS',
+      payload: response.data
+    });
+
+    postDocument.navigate(`/documents`);
+  } catch (error) {
+    yield call(errorHandler, error, 'POST_DOCUMENT_FAILURE');
+  }
+}
+
+function* documentDownload() {
+  try {
+    console.log('Document download state action');
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.get(`${globals.endpoint}${globals.paths.download._}`);
+    });
+
+    yield put<AppAction>({
+      type: 'DOCUMENT_DOWNLOAD_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'DOCUMENT_DOWNLOAD_FAILURE');
+  }
+}
+
 export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.GET_ME, getMe);
-  yield takeLeading(actionTypes.REGISTER, register);
   yield takeLeading(actionTypes.LOGIN, login);
+  yield takeLeading(actionTypes.REGISTER, register);
+  yield takeLeading(actionTypes.PUT_USER, putUser);
+  yield takeLeading(actionTypes.DELETE_USER, deleteUser);
   yield takeLeading(actionTypes.GET_PROJECT, getProject);
   yield takeLeading(actionTypes.GET_PROJECTS, getProjects);
   yield takeLeading(actionTypes.GET_PROJECTS_OWN, getProjectsOwn);
@@ -332,4 +432,7 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.POST_SUBTASK, postSubtask);
   yield takeLeading(actionTypes.PUT_SUBTASK, putSubtask);
   yield takeLeading(actionTypes.PUT_SUBTASK_STATE, putSubtaskState);
+  yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
+  yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
+  yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);
 };

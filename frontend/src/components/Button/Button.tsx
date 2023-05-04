@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  styleType?: 'simple' | 'corner' | 'none';
+  styleType?: 'simple' | 'corner' | 'none' | 'gray';
   buttonType: 'button' | 'reset' | 'submit';
   onClick?: () => any;
   children: string | React.ReactNode;
@@ -11,7 +11,7 @@ interface Props {
 const InnerContent = styled.div`
   font-size: 32px;
   font-weight: 400;
-  line-height: 38px;
+  line-height: 24px;
   letter-spacing: 0.065em;
   text-align: left;
   text-decoration: none;
@@ -40,6 +40,18 @@ const CornerButtonStyled = styled.button`
   color: #215526;
   background: #fff;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  border-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const GrayButtonStyled = styled.button`
+  background-color: #707070;
+  padding: 10px;
+  color: #fff;
   font-weight: bold;
   border-radius: 5px;
 
@@ -82,6 +94,15 @@ const Button: FunctionComponent<Props> = ({
         >
           <InnerContent>{children}</InnerContent>
         </SimpleButtonStyled>
+      );
+    case 'gray':
+      return (
+        <GrayButtonStyled
+          type={buttonType}
+          onClick={onClick}
+        >
+          <InnerContent>{children}</InnerContent>
+        </GrayButtonStyled>
       );
 
     default:

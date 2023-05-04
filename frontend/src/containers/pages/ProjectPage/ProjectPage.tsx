@@ -6,11 +6,10 @@ import { useParams } from 'react-router';
 import Project from '../../../components/Project/Project';
 import NotFound from '../../../components/NotFound/NotFound';
 import { AppAction, PutProject } from '../../../store/actions';
-import { CreateErrorObject, EditProjectDto, PutProjectDto } from '../../../store/types';
+import { CreateErrorObject, EditPutProjectDto, PutProjectDto } from '../../../store/types';
 import * as yup from 'yup'
 import { validateStraight } from '../../../yup';
 import * as _ from 'lodash'
-
 
 const ProjectPage = () => {
   const dispatch = useDispatch();
@@ -28,11 +27,11 @@ const ProjectPage = () => {
     }
   }, [dispatch, projectId, getProjectAction, currentProject]);
 
-  const onValidate = useCallback((values: EditProjectDto) => {
+  const onValidate = useCallback((values: EditPutProjectDto) => {
     console.log('Project Page values validate');
     console.log(JSON.stringify(values, null, 2));
 
-    let formErrors: CreateErrorObject<EditProjectDto> = {};
+    let formErrors: CreateErrorObject<EditPutProjectDto> = {};
 
     formErrors.users = '';
     const usersEmailList = values.users.split(',').map(x => x.trim())
@@ -51,7 +50,7 @@ const ProjectPage = () => {
     return formErrors;
   }, []);
 
-  const onSubmit = useCallback((values: EditProjectDto) => {
+  const onSubmit = useCallback((values: EditPutProjectDto) => {
     if(!currentProject) return;
 
     const putProjectDto: PutProjectDto = {

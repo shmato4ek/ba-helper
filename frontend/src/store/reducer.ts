@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { actionTypes, AppAction } from './actions';
-import { Me, ProjectDto, TaskDto } from './types';
+import { DocumentDto, Me, ProjectDto, TaskDto } from './types';
 import { BisFunctionDto } from './bis-function.types';
 import { AlphaProject, BetaProject } from '../mock';
 
@@ -48,6 +48,16 @@ export const RootReducerInitialState = {
       loading: false as boolean,
       errors: null as string[] | null,
       success: null as boolean | null, // is there been at least one successful register
+    },
+
+    putUser: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    deleteUser: {
+      loading: false as boolean,
+      errors: null as string[] | null,
     },
 
     logout: {
@@ -114,6 +124,16 @@ export const RootReducerInitialState = {
       loading: false as boolean,
       errors: null as string[] | null,
     },
+
+    getDocuments: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    postDocument: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
   },
 
   /**
@@ -124,6 +144,7 @@ export const RootReducerInitialState = {
   projects: null as ProjectDto[] | null,
   projectsOwn: null as ProjectDto[] | null,
   currentProject: null as ProjectDto | null,
+  documents: null as DocumentDto[] | null,
 };
 
 export type AppState = typeof RootReducerInitialState;
@@ -162,6 +183,38 @@ export const RootReducer = produce(
         console.log('actionTypes.LOGIN_FAILURE')
         draft.actions.login.errors = action.payload.errors;
         draft.actions.login.loading = false;
+        break;
+
+      case actionTypes.PUT_USER:
+        console.log('actionTypes.PUT_USER')
+        draft.actions.putUser.errors = null;
+        draft.actions.putUser.loading = true;
+        break;
+      case actionTypes.PUT_USER_SUCCESS:
+        console.log('actionTypes.PUT_USER_SUCCESS')
+        draft.actions.putUser.errors = null;
+        draft.actions.putUser.loading = false;
+        break;
+      case actionTypes.PUT_USER_FAILURE:
+        console.log('actionTypes.PUT_USER_FAILURE')
+        draft.actions.putUser.errors = action.payload.errors;
+        draft.actions.putUser.loading = false;
+        break;
+
+      case actionTypes.DELETE_USER:
+        console.log('actionTypes.DELETE_USER')
+        draft.actions.deleteUser.errors = null;
+        draft.actions.deleteUser.loading = true;
+        break;
+      case actionTypes.DELETE_USER_SUCCESS:
+        console.log('actionTypes.DELETE_USER_SUCCESS')
+        draft.actions.deleteUser.errors = null;
+        draft.actions.deleteUser.loading = false;
+        break;
+      case actionTypes.DELETE_USER_FAILURE:
+        console.log('actionTypes.DELETE_USER_FAILURE')
+        draft.actions.deleteUser.errors = action.payload.errors;
+        draft.actions.deleteUser.loading = false;
         break;
 
       case actionTypes.REGISTER:
@@ -392,6 +445,39 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_SUBTASK_STATE_FAILURE')
         draft.actions.putSubtaskState.errors = action.payload.errors;
         draft.actions.putSubtaskState.loading = false;
+        break;
+
+      case actionTypes.GET_DOCUMENTS:
+        console.log('actionTypes.GET_DOCUMENTS')
+        draft.actions.getDocuments.errors = null;
+        draft.actions.getDocuments.loading = true;
+        break;
+      case actionTypes.GET_DOCUMENTS_SUCCESS:
+        console.log('actionTypes.GET_DOCUMENTS_SUCCESS')
+        draft.documents = action.payload;
+        draft.actions.getDocuments.errors = null;
+        draft.actions.getDocuments.loading = false;
+        break;
+      case actionTypes.GET_DOCUMENTS_FAILURE:
+        console.log('actionTypes.GET_DOCUMENTS_FAILURE')
+        draft.actions.getDocuments.errors = action.payload.errors;
+        draft.actions.getDocuments.loading = false;
+        break;
+
+      case actionTypes.POST_DOCUMENT:
+        console.log('actionTypes.POST_DOCUMENT')
+        draft.actions.postDocument.errors = null;
+        draft.actions.postDocument.loading = true;
+        break;
+      case actionTypes.POST_DOCUMENT_SUCCESS:
+        console.log('actionTypes.POST_DOCUMENT_SUCCESS')
+        draft.actions.postDocument.errors = null;
+        draft.actions.postDocument.loading = false;
+        break;
+      case actionTypes.POST_DOCUMENT_FAILURE:
+        console.log('actionTypes.POST_DOCUMENT_FAILURE')
+        draft.actions.postDocument.errors = action.payload.errors;
+        draft.actions.postDocument.loading = false;
         break;
 
       /* UI actions */

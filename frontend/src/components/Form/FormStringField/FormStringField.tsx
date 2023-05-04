@@ -29,7 +29,7 @@ interface Props {
   | 'week';
   placeholder: string;
   label?: string;
-  isHideIconShown?: boolean;
+  isHidden?: boolean;
   editable?: boolean;
 }
 
@@ -38,24 +38,20 @@ const FormStringField: FunctionComponent<Props> = ({
   type: argType,
   placeholder,
   label,
-  isHideIconShown,
+  isHidden,
   editable,
 }: Props) => {
-  const [isHidden, setIsHidden] = useState(true);
-
-  let type: string = argType || 'text';
-  if (isHideIconShown && (type === 'text' || type === 'password')) {
-    if (isHidden) type = 'password';
-    else type = 'text';
-  }
-
   return (
     <Field name={name}>
       {({ field }: FieldProps) => (
         <input
-          type={type}
+          type={isHidden ? 'password' : 'text'}
           name={name}
           placeholder={placeholder}
+          style={{
+            padding: 5,
+            borderRadius: 4,
+          }}
           // className={`${styles.field} ${!editable && styles.uneditable}`}
           // For nullable values in db, so that react won't yell at us for using null value in html input
           value={field.value ?? ''}
@@ -71,7 +67,6 @@ const FormStringField: FunctionComponent<Props> = ({
 FormStringField.defaultProps = {
   type: 'text',
   label: undefined,
-  isHideIconShown: false,
   editable: true,
 };
 

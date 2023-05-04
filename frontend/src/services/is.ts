@@ -21,8 +21,12 @@ export const globals = {
       login: '/api/auth/login',
       me: '/api/auth/me',
     },
+    user: {
+      _: '/api/user'
+    },
     document: {
-      document: '/api/document',
+      _: '/api/document',
+      user: '/api/document/user',
     },
     project: {
       _: '/api/project',
@@ -35,6 +39,9 @@ export const globals = {
       state: '/api/task/state',
       subtask: '/api/task/subtask',
       subtaskState: '/api/task/subtask/state',
+    },
+    download: {
+      _: '/api/download'
     }
   },
   fePaths: {

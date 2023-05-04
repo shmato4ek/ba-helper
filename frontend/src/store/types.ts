@@ -40,12 +40,23 @@ export interface PostProjectDto {
   users: string[]; // list of emails
 }
 
+/**
+ * @description
+ *    - temporary object to store UI edit state before sending well-formated PUT request
+ */
+export interface EditPostProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description'> {
+  users: string;
+}
 
 export interface PutProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description' | 'users'> {
   id: number;
 }
 
-export interface EditProjectDto extends Pick<PutProjectDto, 'deadline' | 'projectName' | 'description'> {
+/**
+ * @description
+ *    - temporary object to store UI edit state before sending well-formated PUT request
+ */
+export interface EditPutProjectDto extends Pick<PutProjectDto, 'deadline' | 'projectName' | 'description'> {
   users: string;
 }
 
@@ -133,6 +144,17 @@ export interface UserDto {
   documents: Document[];
 }
 
+export interface PutUserDto {
+  name: string;
+  email: string;
+  oldPassword: string;
+  password: string;
+}
+
+export interface EditPutUserDto extends Pick<PutUserDto, 'name' | 'email' | 'password' | 'oldPassword'> {
+  passwordConfirm: string;
+}
+
 export enum TaskState {
   Pending,
   InProgress,
@@ -146,6 +168,53 @@ export const taskStates: TaskState[] = [
   2,
   3,
 ]
+
+export interface DocumentDto {
+  id: number;
+  userId: number;
+  name: string;
+  projectAim: string;
+  isDeleted: boolean;
+  glossaries: Glossary[];
+  userStories: UserStory[]
+}
+
+export interface Glossary {
+  id: number;
+  documentId: number;
+  term: string;
+  definition: string;
+}
+
+export interface UserStory {
+  id: number;
+  documentId: number;
+  name: string;
+  userStoryFormulas: USFormula[];
+  acceptanceCriterias: USAcceptanceCriteria[];
+}
+
+export interface USFormula {
+  id: number;
+  userStoryId: number;
+  text: string;
+}
+
+export interface USAcceptanceCriteria {
+  id: number;
+  userStoryId: number;
+  text: string;
+}
+
+export interface PostDoucmentDto extends Pick<DocumentDto, 'name' | 'projectAim'> {
+  glossaries: Pick<Glossary, 'term' | 'definition'>
+  userStories: {
+    name: string;
+    userStoryFormulas: Pick<USFormula, 'text'>[];
+    acceptanceCriterias: Pick<USAcceptanceCriteria, 'text'>[];
+  }[]
+}
+
 
 export const taskStateToText = (taskState: TaskState) => {
   switch (taskState) {

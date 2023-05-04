@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router-dom';
 
 const Layout = () => {
     return (
-        <>
+      <>
         <header>
             <Link to="/">Home</Link>
             <Link to="/posts">Blog</Link>
@@ -16,7 +16,7 @@ const Layout = () => {
         </main>
 
         <footer className="container">2021</footer>
-        </>
+      </>
     )
 }
 

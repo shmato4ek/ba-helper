@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  InternalServerErrorException,
-  Param,
-  Post,
-  Put,
-  Request,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Get, InternalServerErrorException, Param, Post, Put, Request, UnauthorizedException } from '@nestjs/common';
 import { Request as ERequest } from 'express';
 import { AppService } from './app.service';
 
@@ -16,10 +6,12 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  private projects = [AlphaProject, BetaProject];
+
   private readonly meDto = {
     id: 1,
     email: 'ruslan@gmail.com',
-    name: 'string',
+    name: 'Ruslan Plastun',
   };
 
   @Post('/auth/register')
@@ -47,6 +39,11 @@ export class AppController {
     throw new UnauthorizedException('Not authorized');
   }
 
+  @Get('/document/user')
+  getDocumentsUser(): DocumentDto[] {
+    return Documents;
+  }
+
   @Get('/project/user')
   getProjectUser(): ProjectDto[] {
     return [AlphaProject, BetaProject];
@@ -57,9 +54,31 @@ export class AppController {
     return [AlphaProject, BetaProject];
   }
 
+  @Post('/project')
+  postProject(@Body() params: PostProjectDto): ProjectDto {
+    console.log('POST /project');
+    console.log(params);
+
+    const newProject: ProjectDto = {
+      id: 3,
+      projectName: params.projectName,
+      description: params.description,
+      authorName: 'BetaUser',
+      hours: 0,
+      isDeleted: false,
+      tasks: [],
+      users: [],
+      deadline: params.deadline,
+    };
+
+    this.projects.push(newProject);
+
+    return newProject;
+  }
+
   @Put('/project')
   putProjectById(@Body() params: PutProjectDto): ProjectDto {
-    console.log('/project/:id');
+    console.log('PUT /project');
     console.log(params);
 
     AlphaProject.deadline = params.deadline;
@@ -75,9 +94,7 @@ export class AppController {
     console.log('/project/:id');
     console.log(id);
 
-    const foundProject = [AlphaProject, BetaProject].find(
-      (x) => x.id === Number(id),
-    );
+    const foundProject = [AlphaProject, BetaProject].find((x) => x.id === Number(id));
 
     if (!foundProject) {
       throw new InternalServerErrorException('Project not found');
@@ -153,7 +170,7 @@ export const AlphaProject: ProjectDto = {
   id: 1,
   projectName: 'Проект 1',
   description: 'Тестовий опис проекту 1',
-  author: AlphaUser,
+  authorName: 'AlphaUser',
   hours: 30,
   isDeleted: false,
   tasks: [AlphaTask1, AlphaTask2],
@@ -165,13 +182,25 @@ export const BetaProject: ProjectDto = {
   id: 2,
   projectName: 'Проект 2',
   description: 'Тестовий опис проекту 2',
-  author: BetaUser,
+  authorName: 'BetaUser',
   hours: 11,
   isDeleted: false,
   tasks: [],
   users: [],
   deadline: new Date(),
 };
+
+export const Documents: DocumentDto[] = [
+  {
+    id: 1,
+    isDeleted: false,
+    name: 'Document 1',
+    projectAim: 'Projetc Aim 1',
+    userId: 1,
+    glossaries: [],
+    userStories: [],
+  },
+];
 
 /**
  * @description - Project
@@ -180,7 +209,7 @@ export interface ProjectDto {
   id: number;
   deadline: Date;
   // authorid: number; // Hide since it's not needed
-  author: UserDto;
+  authorName: string;
   description: string; // Post MVP
   projectName: string;
   hours: number;
@@ -195,11 +224,7 @@ export interface PostProjectDto {
   users: string[]; // list of emails
 }
 
-export interface PutProjectDto
-  extends Pick<
-    PostProjectDto,
-    'deadline' | 'projectName' | 'description' | 'users'
-  > {
+export interface PutProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description' | 'users'> {
   id: number;
 }
 
@@ -224,8 +249,7 @@ export interface PostTaskDto {
   hours: number;
 }
 
-export interface PutTaskDto
-  extends Pick<PostTaskDto, 'deadline' | 'taskName' | 'hours'> {
+export interface PutTaskDto extends Pick<PostTaskDto, 'deadline' | 'taskName' | 'hours'> {
   id: number;
 }
 
@@ -263,6 +287,52 @@ export interface PutSubtaskDto extends Pick<PostSubtaskDto, 'name'> {
 export interface PutSubtaskStateDto {
   subtaskId: number;
   taskState: TaskState;
+}
+
+export interface DocumentDto {
+  id: number;
+  userId: number;
+  name: string;
+  projectAim: string;
+  isDeleted: boolean;
+  glossaries: Glossary[];
+  userStories: UserStory[];
+}
+
+export interface Glossary {
+  id: number;
+  documentId: number;
+  term: string;
+  definition: string;
+}
+
+export interface UserStory {
+  id: number;
+  documentId: number;
+  name: string;
+  userStoryFormulas: USFormula[];
+  acceptanceCriterias: USAcceptanceCriteria[];
+}
+
+export interface USFormula {
+  id: number;
+  userStoryId: number;
+  text: string;
+}
+
+export interface USAcceptanceCriteria {
+  id: number;
+  userStoryId: number;
+  text: string;
+}
+
+export interface PostDoucmentDto extends Pick<DocumentDto, 'name' | 'projectAim'> {
+  glossaries: Pick<Glossary, 'term' | 'definition'>;
+  userStories: {
+    name: string;
+    userStoryFormulas: Pick<USFormula, 'text'>[];
+    acceptanceCriterias: Pick<USAcceptanceCriteria, 'text'>[];
+  }[];
 }
 
 /**

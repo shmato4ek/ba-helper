@@ -1,5 +1,5 @@
-import { ErrorCodes } from '../error';
-import { LoginDto, Me, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, RegisterDto, SubtaskDto, TaskDto, UserDto } from './types';
+import { NavigateFunction } from 'react-router';
+import { DocumentDto, LoginDto, Me, PostDoucmentDto as PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, SubtaskDto, TaskDto, UserDto } from './types';
 
 /* Action Types */
 export const actionTypes = {
@@ -18,6 +18,16 @@ export const actionTypes = {
   REGISTER: 'REGISTER' as 'REGISTER',
   REGISTER_SUCCESS: 'REGISTER_SUCCESS' as 'REGISTER_SUCCESS',
   REGISTER_FAILURE: 'REGISTER_FAILURE' as 'REGISTER_FAILURE',
+
+  // PUT /api/user
+  PUT_USER: 'PUT_USER' as 'PUT_USER',
+  PUT_USER_SUCCESS: 'PUT_USER_SUCCESS' as 'PUT_USER_SUCCESS',
+  PUT_USER_FAILURE: 'PUT_USER_FAILURE' as 'PUT_USER_FAILURE',
+
+  // DELETE /api/user
+  DELETE_USER: 'DELETE_USER' as 'DELETE_USER',
+  DELETE_USER_SUCCESS: 'DELETE_USER_SUCCESS' as 'DELETE_USER_SUCCESS',
+  DELETE_USER_FAILURE: 'DELETE_USER_FAILURE' as 'DELETE_USER_FAILURE',
 
   LOG_OUT_ENDUSER: 'LOG_OUT_ENDUSER' as 'LOG_OUT_ENDUSER',
   LOG_OUT_ENDUSER_SUCCESS: 'LOG_OUT_ENDUSER_SUCCESS' as 'LOG_OUT_ENDUSER_SUCCESS',
@@ -83,6 +93,21 @@ export const actionTypes = {
   PUT_SUBTASK_STATE_SUCCESS: 'PUT_SUBTASK_STATE_SUCCESS' as 'PUT_SUBTASK_STATE_SUCCESS',
   PUT_SUBTASK_STATE_FAILURE: 'PUT_SUBTASK_STATE_FAILURE' as 'PUT_SUBTASK_STATE_FAILURE',
 
+  // GET /api/document/user
+  GET_DOCUMENTS: 'GET_DOCUMENTS' as 'GET_DOCUMENTS',
+  GET_DOCUMENTS_SUCCESS: 'GET_DOCUMENTS_SUCCESS' as 'GET_DOCUMENTS_SUCCESS',
+  GET_DOCUMENTS_FAILURE: 'GET_DOCUMENTS_FAILURE' as 'GET_DOCUMENTS_FAILURE',
+
+  // POST /api/document
+  POST_DOCUMENT: 'POST_DOCUMENT' as 'POST_DOCUMENT',
+  POST_DOCUMENT_SUCCESS: 'POST_DOCUMENT_SUCCESS' as 'POST_DOCUMENT_SUCCESS',
+  POST_DOCUMENT_FAILURE: 'POST_DOCUMENT_FAILURE' as 'POST_DOCUMENT_FAILURE',
+
+  // GET /api/download
+  DOCUMENT_DOWNLOAD: 'DOCUMENT_DOWNLOAD' as 'DOCUMENT_DOWNLOAD',
+  DOCUMENT_DOWNLOAD_SUCCESS: 'DOCUMENT_DOWNLOAD_SUCCESS' as 'DOCUMENT_DOWNLOAD_SUCCESS',
+  DOCUMENT_DOWNLOAD_FAILURE: 'DOCUMENT_DOWNLOAD_FAILURE' as 'DOCUMENT_DOWNLOAD_FAILURE',
+
   /** ui actions */
   SET_PROVIDER_INITIAL_VALUES: 'SET_PROVIDER_INITIAL_VALUES' as 'SET_PROVIDER_INITIAL_VALUES',
   SET_PROVIDER_VALUES: 'SET_PROVIDER_VALUES' as 'SET_PROVIDER_VALUES',
@@ -128,6 +153,33 @@ export interface LoginSuccess {
 
 export interface LoginFailure extends ErrorPayload {
   type: typeof actionTypes.LOGIN_FAILURE;
+}
+
+export interface PutUser {
+  type: typeof actionTypes.PUT_USER;
+  payload: PutUserDto;
+}
+
+export interface PutUserSuccess {
+  type: typeof actionTypes.PUT_USER_SUCCESS;
+  payload: UserDto;
+}
+
+export interface PutUserFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_USER_FAILURE;
+}
+
+export interface DeleteUser {
+  type: typeof actionTypes.DELETE_USER;
+  navigate: NavigateFunction;
+}
+
+export interface DeleteUserSuccess {
+  type: typeof actionTypes.DELETE_USER_SUCCESS;
+}
+
+export interface DeleteUserFailure extends ErrorPayload {
+  type: typeof actionTypes.DELETE_USER_FAILURE;
 }
 
 export interface Register {
@@ -199,6 +251,7 @@ export interface GetProjectFailure extends ErrorPayload {
 export interface PostProject {
   type: typeof actionTypes.POST_PROJECT;
   payload: PostProjectDto;
+  navigate: NavigateFunction;
 }
 
 export interface PostProjectSuccess {
@@ -322,10 +375,54 @@ export interface PutSubtaskStateFailure extends ErrorPayload {
   type: typeof actionTypes.PUT_SUBTASK_STATE_FAILURE;
 }
 
+export interface GetDocuments {
+  type: typeof actionTypes.GET_DOCUMENTS;
+}
+
+export interface GetDocumentsSuccess {
+  type: typeof actionTypes.GET_DOCUMENTS_SUCCESS;
+  payload: DocumentDto[];
+}
+
+export interface GetDocumentsFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_DOCUMENTS_FAILURE;
+}
+
+export interface PostDocument {
+  type: typeof actionTypes.POST_DOCUMENT;
+  payload: PostDocumentDto;
+  navigate: NavigateFunction;
+}
+
+export interface PostDocumentSuccess {
+  type: typeof actionTypes.POST_DOCUMENT_SUCCESS;
+  payload: DocumentDto;
+}
+
+export interface PostDocumentFailure extends ErrorPayload {
+  type: typeof actionTypes.POST_DOCUMENT_FAILURE;
+}
+
+export interface DocumentDownload {
+  type: typeof actionTypes.DOCUMENT_DOWNLOAD;
+  payload: number;
+}
+
+export interface DocumentDownloadSuccess {
+  type: typeof actionTypes.DOCUMENT_DOWNLOAD_SUCCESS;
+  payload: string;
+}
+
+export interface DocumentDownloadFailure extends ErrorPayload {
+  type: typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE;
+}
+
 /** UI actions */
 export type FailureAppActionTypes =
   | typeof actionTypes.GET_ME_FAILURE
   | typeof actionTypes.REGISTER_FAILURE
+  | typeof actionTypes.PUT_USER_FAILURE
+  | typeof actionTypes.DELETE_USER_FAILURE
   | typeof actionTypes.LOGIN_FAILURE
   | typeof actionTypes.GET_PROJECTS_FAILURE
   | typeof actionTypes.GET_PROJECTS_OWN_FAILURE
@@ -339,12 +436,17 @@ export type FailureAppActionTypes =
   | typeof actionTypes.POST_SUBTASK_FAILURE
   | typeof actionTypes.PUT_SUBTASK_FAILURE
   | typeof actionTypes.PUT_SUBTASK_STATE_FAILURE
+  | typeof actionTypes.GET_DOCUMENTS_FAILURE
+  | typeof actionTypes.POST_DOCUMENT_FAILURE
+  | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
   ;
 
 export type FailureAppAction =
   | GetMeFailure
   | LoginFailure
   | RegisterFailure
+  | PutUserFailure
+  | DeleteUserFailure
   | LogOutFailure
   | GetProjectsFailure
   | GetProjectsOwnFailure
@@ -358,6 +460,9 @@ export type FailureAppAction =
   | PostSubtaskFailure
   | PutSubtaskFailure
   | PutSubtaskStateFailure
+  | GetDocumentsFailure
+  | PostDocumentFailure
+  | DocumentDownloadFailure
   ;
 
 export type AppAction =
@@ -371,6 +476,12 @@ export type AppAction =
   | Register
   | RegisterSuccess
   | RegisterFailure
+  | PutUser
+  | PutUserSuccess
+  | PutUserFailure
+  | DeleteUser
+  | DeleteUserSuccess
+  | DeleteUserFailure
   | LogOut
   | LogOutSuccess
   | LogOutFailure
@@ -410,4 +521,13 @@ export type AppAction =
   | PutSubtaskState
   | PutSubtaskStateSuccess
   | PutSubtaskStateFailure
+  | GetDocuments
+  | GetDocumentsSuccess
+  | GetDocumentsFailure
+  | PostDocument
+  | PostDocumentSuccess
+  | PostDocumentFailure
+  | DocumentDownload
+  | DocumentDownloadSuccess
+  | DocumentDownloadFailure
   ;
