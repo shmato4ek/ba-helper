@@ -20,9 +20,7 @@
           "ServiceStack": "6.6.0",
           "Spire.Doc": "11.1.4",
           "System.IdentityModel.Tokens.Jwt": "6.29.0",
-          "System.Net.Http": "4.3.4",
-          "Microsoft.Vbe.Interop": "15.0.0.0",
-          "OFFICE": "15.0.0.0"
+          "System.Net.Http": "4.3.4"
         },
         "runtime": {
           "BAHelper.BLL.dll": {}
@@ -926,22 +924,6 @@
         "runtime": {
           "BAHelper.DAL.dll": {}
         }
-      },
-      "Microsoft.Vbe.Interop/15.0.0.0": {
-        "runtime": {
-          "Microsoft.Vbe.Interop.dll": {
-            "assemblyVersion": "15.0.0.0",
-            "fileVersion": "15.0.4561.1000"
-          }
-        }
-      },
-      "OFFICE/15.0.0.0": {
-        "runtime": {
-          "OFFICE.DLL": {
-            "assemblyVersion": "15.0.0.0",
-            "fileVersion": "15.0.4613.1000"
-          }
-        }
       }
     }
   },
@@ -1658,16 +1640,6 @@
     },
     "BAHelper.DAL/1.0.0": {
       "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Microsoft.Vbe.Interop/15.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "OFFICE/15.0.0.0": {
-      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

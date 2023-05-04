@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BAHelper.BLL.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Extensions
 {
@@ -10,7 +11,7 @@ namespace BAHelper.API.Extensions
 
             if (string.IsNullOrEmpty(claimsUserId))
             {
-                //throw new InvalidTokenException("access");
+                throw new InvalidTokenException("access");
             }
 
             return int.Parse(claimsUserId);

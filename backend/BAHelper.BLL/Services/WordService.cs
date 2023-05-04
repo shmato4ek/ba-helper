@@ -4,7 +4,6 @@ using BAHelper.Common;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.DAL.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Office.Core;
 using MimeKit;
 using Npgsql.Internal.TypeHandlers.LTreeHandlers;
 using Spire.Doc;
