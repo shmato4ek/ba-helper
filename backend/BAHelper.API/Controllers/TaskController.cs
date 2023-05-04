@@ -29,7 +29,7 @@ namespace BAHelper.API.Controllers
         [HttpPut("assign")]
         public async Task<ActionResult> AddUsersToTask(int taskId, string email)
         {
-            return Ok(await _projectTaskService.AddUserToTask(taskId, email, 5));
+            return Ok(await _projectTaskService.AddUserToTask(taskId, email, this.GetUserIdFromToken()));
         }
 
         [HttpPut]
