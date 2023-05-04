@@ -26,7 +26,7 @@ jobs:
         run: dotnet build backend/BAHelper.API/BAHelper.API.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o out "BAHelper.API"
+        run: dotnet publish -c Release -o out "backend/BAHelper.API/BAHelper.API.csproj"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
