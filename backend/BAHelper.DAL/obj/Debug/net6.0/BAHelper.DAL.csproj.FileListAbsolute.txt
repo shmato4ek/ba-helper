@@ -1,0 +1,17 @@
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\bin\Debug\net6.0\BAHelper.DAL.deps.json
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\bin\Debug\net6.0\BAHelper.DAL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\bin\Debug\net6.0\BAHelper.DAL.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.csproj.AssemblyReference.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.AssemblyInfoInputs.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.AssemblyInfo.cs
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.csproj.CoreCompileInputs.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\refint\BAHelper.DAL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\ref\BAHelper.DAL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\bin\Debug\net6.0\BAHelper.DAL.runtimeconfig.json
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.genruntimeconfig.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\bin\Debug\net6.0\BAHelper.Common.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\bin\Debug\net6.0\BAHelper.Common.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.DAL\obj\Debug\net6.0\BAHelper.DAL.csproj.CopyComplete

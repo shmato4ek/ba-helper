@@ -1,0 +1,17 @@
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.BLL.deps.json
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.BLL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.BLL.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.Common.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.Common.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.csproj.AssemblyReference.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.AssemblyInfoInputs.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.AssemblyInfo.cs
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.csproj.CoreCompileInputs.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.csproj.CopyComplete
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\refint\BAHelper.BLL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\BAHelper.BLL.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\obj\Debug\net6.0\ref\BAHelper.BLL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.DAL.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.BLL\bin\Debug\net6.0\BAHelper.DAL.pdb
