@@ -4,7 +4,7 @@ import {
   CalendarIcon,
   DiagramIcon,
   EditPencilIcon,
-  EyeIcon, FileIcon, LogoIcon, PeopleIcon, ProfileIcon, ProfileWhiteIcon, RaciIcon, SaveIcon, TextFileIcon,
+  EyeIcon, FileIcon, GreenPlusIcon, LogoIcon, PeopleIcon, ProfileIcon, ProfileWhiteIcon, RaciIcon, SaveIcon, TextFileIcon,
 } from '../../assets/icons';
 
 interface Props {
@@ -24,6 +24,7 @@ interface Props {
   | 'profile-white'
   | 'edit-pencil'
   | 'save'
+  | 'green-plus'
   | 'triangle';
   style?: React.CSSProperties;
   onClick?: () => any;
@@ -57,6 +58,8 @@ const Icon = ({ type, style, onClick }: Props) => {
       return <SaveIcon style={style} onClick={onClick} />;
     case 'edit-pencil':
       return <EditPencilIcon style={style} onClick={onClick} />;
+    case 'green-plus':
+      return <GreenPlusIcon style={style} onClick={onClick} />;
     default:
       return <></>;
   }

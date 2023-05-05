@@ -1,5 +1,5 @@
 import { NavigateFunction } from 'react-router';
-import { DocumentDto, LoginDto, Me, PostDoucmentDto as PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, SubtaskDto, TaskDto, UserDto } from './types';
+import { DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, SubtaskDto, TaskDto, UserDto } from './types';
 
 /* Action Types */
 export const actionTypes = {

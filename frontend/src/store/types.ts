@@ -4,19 +4,16 @@
  * on frontend. Are different from view data types, that are transformed version
  * of these data types, user for showing data
  */
-export interface Me extends UserDto {
-
-}
+export interface Me extends UserDto {}
 
 export enum ProjectDtoFields {
-  id = 'id',
-  projectName = 'projectName',
-  deadline = 'deadline',
-  hours = 'hours',
-  taskCount = 'taskCount',
-  authorName = 'authorName',
+  id = "id",
+  projectName = "projectName",
+  deadline = "deadline",
+  hours = "hours",
+  taskCount = "taskCount",
+  authorName = "authorName",
 }
-
 
 /**
  * @description - Project
@@ -44,11 +41,16 @@ export interface PostProjectDto {
  * @description
  *    - temporary object to store UI edit state before sending well-formated PUT request
  */
-export interface EditPostProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description'> {
+export interface EditPostProjectDto
+  extends Pick<PostProjectDto, "deadline" | "projectName" | "description"> {
   users: string;
 }
 
-export interface PutProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description' | 'users'> {
+export interface PutProjectDto
+  extends Pick<
+    PostProjectDto,
+    "deadline" | "projectName" | "description" | "users"
+  > {
   id: number;
 }
 
@@ -56,7 +58,8 @@ export interface PutProjectDto extends Pick<PostProjectDto, 'deadline' | 'projec
  * @description
  *    - temporary object to store UI edit state before sending well-formated PUT request
  */
-export interface EditPutProjectDto extends Pick<PutProjectDto, 'deadline' | 'projectName' | 'description'> {
+export interface EditPutProjectDto
+  extends Pick<PutProjectDto, "deadline" | "projectName" | "description"> {
   users: string;
 }
 
@@ -81,13 +84,13 @@ export interface PostTaskDto {
   hours: number;
 }
 
-export interface PutTaskDto extends Pick<PostTaskDto, 'deadline' | 'taskName' | 'hours'> {
+export interface PutTaskDto
+  extends Pick<PostTaskDto, "deadline" | "taskName" | "hours"> {
   id: number;
 }
 
-export interface EditTaskDto extends Pick<PutTaskDto, 'deadline' | 'taskName' | 'hours'> {
-
-}
+export interface EditTaskDto
+  extends Pick<PutTaskDto, "deadline" | "taskName" | "hours"> {}
 
 export interface PutTaskAssignDto {
   taskId: number;
@@ -116,17 +119,16 @@ export interface PostSubtaskDto {
   // taskState: TaskState; post-mvp
 }
 
-export interface PutSubtaskDto extends Pick<PostSubtaskDto, 'name'> {
+export interface PutSubtaskDto extends Pick<PostSubtaskDto, "name"> {
   id: number;
 }
 
-export interface EditSubtaskDto extends Pick<PostSubtaskDto, 'name'> { }
+export interface EditSubtaskDto extends Pick<PostSubtaskDto, "name"> {}
 
 export interface PutSubtaskStateDto {
   subtaskId: number;
   taskState: TaskState;
 }
-
 
 /**
  * @description - Document
@@ -151,7 +153,8 @@ export interface PutUserDto {
   password: string;
 }
 
-export interface EditPutUserDto extends Pick<PutUserDto, 'name' | 'email' | 'password' | 'oldPassword'> {
+export interface EditPutUserDto
+  extends Pick<PutUserDto, "name" | "email" | "password" | "oldPassword"> {
   passwordConfirm: string;
 }
 
@@ -160,14 +163,9 @@ export enum TaskState {
   InProgress,
   Done,
   Approve,
-};
+}
 
-export const taskStates: TaskState[] = [
-  0,
-  1,
-  2,
-  3,
-]
+export const taskStates: TaskState[] = [0, 1, 2, 3];
 
 export interface DocumentDto {
   id: number;
@@ -176,7 +174,7 @@ export interface DocumentDto {
   projectAim: string;
   isDeleted: boolean;
   glossaries: Glossary[];
-  userStories: UserStory[]
+  userStories: UserStory[];
 }
 
 export interface Glossary {
@@ -186,6 +184,8 @@ export interface Glossary {
   definition: string;
 }
 
+export interface PutGlossary extends Pick<Glossary, "term" | "definition"> {}
+
 export interface UserStory {
   id: number;
   documentId: number;
@@ -194,10 +194,32 @@ export interface UserStory {
   acceptanceCriterias: USAcceptanceCriteria[];
 }
 
+export interface PutUserStory {
+  name: string;
+  userStoryFormulas: PutUSFormula[];
+  acceptanceCriterias: PutUSAcceptanceCriteria[];
+}
+
+export const getInitPutUserStory = () => ({
+  name: "",
+  acceptanceCriterias: [{ text: "" }],
+  userStoryFormulas: [{ text: "" }],
+})
+
 export interface USFormula {
   id: number;
   userStoryId: number;
   text: string;
+}
+
+export const getInitUSFormula = () => ({ text: "" })
+
+export interface PutUSFormula extends Pick<USFormula, "text"> {}
+
+export interface EditPutUSFormula {
+  as: string;
+  iWantTo: string;
+  soThat: string;
 }
 
 export interface USAcceptanceCriteria {
@@ -206,27 +228,42 @@ export interface USAcceptanceCriteria {
   text: string;
 }
 
-export interface PostDoucmentDto extends Pick<DocumentDto, 'name' | 'projectAim'> {
-  glossaries: Pick<Glossary, 'term' | 'definition'>
-  userStories: {
-    name: string;
-    userStoryFormulas: Pick<USFormula, 'text'>[];
-    acceptanceCriterias: Pick<USAcceptanceCriteria, 'text'>[];
-  }[]
+export const getInitUSAcceptanceCriteria = () => ({ text: "" })
+
+export interface PutUSAcceptanceCriteria
+  extends Pick<USAcceptanceCriteria, "text"> {}
+
+export interface EditPutUSAcceptanceCriteria {
+  given: string;
+  when: string;
+  then: string;
 }
 
+export interface PostDocumentDto
+  extends Pick<DocumentDto, "name" | "projectAim"> {
+  glossaries: Pick<Glossary, "term" | "definition">[];
+  userStories: {
+    name: string;
+    userStoryFormulas: Pick<USFormula, "text">[];
+    acceptanceCriterias: Pick<USAcceptanceCriteria, "text">[];
+  }[];
+}
 
 export const taskStateToText = (taskState: TaskState) => {
   switch (taskState) {
-    case TaskState.Approve: return 'Затверджено';
-    case TaskState.Done: return 'Виконано';
-    case TaskState.InProgress: return 'В процесі';
-    case TaskState.Pending: return 'В очікуванні';
-  
+    case TaskState.Approve:
+      return "Затверджено";
+    case TaskState.Done:
+      return "Виконано";
+    case TaskState.InProgress:
+      return "В процесі";
+    case TaskState.Pending:
+      return "В очікуванні";
+
     default:
       return taskState;
   }
-}
+};
 
 export interface RACIMatrixDto {
   executors: string[];
@@ -241,7 +278,6 @@ export enum RACIStatus {
   Informed,
 }
 
-
 export interface LoginDto {
   email: string;
   password: string;
@@ -255,8 +291,8 @@ export interface RegisterDto {
 }
 
 export enum ServiceRoutes {
-  OWNED_PROJECTS = '/owned-projects',
-  MY_PROJECTS = '/my-projects',
+  OWNED_PROJECTS = "/owned-projects",
+  MY_PROJECTS = "/my-projects",
 }
 
 export type CreateErrorObject<T extends { [key: string]: any }> = {

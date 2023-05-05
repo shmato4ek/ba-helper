@@ -152,9 +152,6 @@ function* getProjects() {
       return axios.get(`${globals.endpoint}${globals.paths.project.user}`);
     });
 
-    console.log('@response.data');
-    console.log(JSON.stringify(response.data, null, 2));
-
     yield put<AppAction>({
       type: 'GET_PROJECTS_SUCCESS',
       payload: response.data

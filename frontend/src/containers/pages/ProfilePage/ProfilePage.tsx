@@ -34,9 +34,6 @@ const ProfilePage = () => {
 
     formErrors = _.pickBy(formErrors, _.identity);
 
-    console.log('@formErrors');
-    console.log(JSON.stringify(formErrors, null, 2));
-
     return formErrors;
   }, []);
 

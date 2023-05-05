@@ -1,19 +1,14 @@
-import { ErrorMessage, Formik, FormikProps } from 'formik';
-import { DateTime } from 'luxon';
+import { Formik, FormikProps } from 'formik';
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { EditPostProjectDto, EditPutProjectDto, ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
+import { EditPostProjectDto } from '../../store/types';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import { AlignCenter, VerticalGrid, VerticalMargins, Wrapper } from '../Utils/Utils';
-import { PutProjectDto } from '../../store/types'
 import FormDatepicker from '../Form/FormDatepicker/FormDatepicker';
 import FormStringField from '../Form/FormStringField/FormStringField';
 import FormTextareaField from '../Form/FormTextareaField/FormTextareaField';
 import FormError from '../Form/FormError/FormError';
-import TaskContainer from '../../containers/TaskContainer/TaskContainer';
-import SubtaskContainer from '../../containers/SubtaskContainer/SubtaskContainer';
 
 export const Header = styled.h1`
   margin-bottom: 30px;

@@ -8,6 +8,7 @@ interface Props {
   name: string;
   placeholder: string;
   label?: string;
+  textAreaStyle?: React.CSSProperties | undefined
 }
 
 export const Container = styled.div`
@@ -30,15 +31,17 @@ const FormTextareaField: FunctionComponent<Props> = ({
   name,
   placeholder,
   label,
+  textAreaStyle
 }: Props) => (
   <Container>
     {label && <p>{label}</p>}
     <Field name={name}>
-      {({ field }: FieldProps) => (
+      {({ field, form }: FieldProps) => (
         <FieldContainer>
           <textarea
             name={name}
             placeholder={placeholder}
+            style={textAreaStyle}
             // className={styles.field}
             value={field.value}
             onChange={field.onChange}

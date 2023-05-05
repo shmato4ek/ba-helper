@@ -9,6 +9,7 @@ import ProjectPage from "./containers/pages/ProjectPage/ProjectPage";
 import PostProjectPage from "./containers/pages/PostProjectPage/PostProjectPage";
 import ProfilePage from "./containers/pages/ProfilePage/ProfilePage";
 import DocumentsPage from "./containers/pages/DocumentsPage/DocumentsPage";
+import PostDocumentPage from "./containers/pages/PostDocumentPage/PostDocumentPage";
 
 export default createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ export default createBrowserRouter(
       <Route path="projects/new" element={<PostProjectPage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="documents" element={<DocumentsPage />} />
+      <Route path="documents/new" element={<PostDocumentPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFound />}/>
     </Route>

@@ -21,3 +21,4 @@ export { ReactComponent as ProfileWhiteIcon } from './profile-white.svg';
 export { ReactComponent as EditPencilIcon } from './edit-pencil.svg';
 export { ReactComponent as SaveIcon } from './save.svg';
 
+export { ReactComponent as GreenPlusIcon } from './green-plus.svg';
