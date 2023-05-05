@@ -58,7 +58,7 @@ type Props = {
 
 const registerInitialValues: RegisterDto = {
   email: '',
-  fullName: '',
+  name: '',
   password: '',
   confirmPassword: '',
 };
@@ -72,7 +72,7 @@ const LoginPage: FC<Props> = (params) => {
 
     errors.email = joi.string().email({ tlds: { allow: false } }).required().validate(values.email).error?.message;
     errors.password = joi.string().min(6).max(255).required().validate(values.password).error?.message;
-    errors.fullName = joi.string().max(255).required().validate(values.fullName).error?.message;
+    errors.name = joi.string().max(255).required().validate(values.name).error?.message;
 
     if (isLoginMode === false) {
       errors.confirmPassword = joi.string().min(6).max(255).required().validate(values.password).error?.message;
@@ -104,7 +104,7 @@ const LoginPage: FC<Props> = (params) => {
             <Font type='h2'>{isLoginMode ? 'Login' : 'Register'}</Font>
             <FormStringField name={'email'} placeholder="Імейл" label="Імейл" />
             <FormStringField name={'password'} placeholder="Пароль" label="Пароль" />
-            <FormStringField name={'fullName'} placeholder="Повне Ім'я" label="Повне Ім'я" />
+            <FormStringField name={'name'} placeholder="Повне Ім'я" label="Повне Ім'я" />
             <FormStringField name={'confirmPassword'} placeholder="Підтвердіть Пароль" label="Підтвердіть Пароль" />
             {/* <Button buttonType='submit' styleType='simple'>{isLoginMode ? 'Login' : 'Register'}</Button> */}
             <button type='submit' onClick={() => handleSubmit()}>Submit</button>

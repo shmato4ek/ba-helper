@@ -285,7 +285,7 @@ export interface LoginDto {
 
 export interface RegisterDto {
   email: string;
-  fullName: string;
+  name: string;
   password: string;
   confirmPassword: string;
 }

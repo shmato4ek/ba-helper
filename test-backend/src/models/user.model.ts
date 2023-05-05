@@ -83,7 +83,7 @@ export default class User extends Model<User, Partial<User>> {
   email: string;
 
   @Column({ allowNull: false })
-  fullName: string;
+  name: string;
 
   @CreatedAt
   createdAt: Date;

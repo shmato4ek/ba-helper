@@ -17,8 +17,8 @@ export const globals = {
   },
   paths: {
     auth: {
-      register: '/api/auth/register',
-      login: '/api/auth/login',
+      register: '/api/register',
+      login: '/api/login',
       me: '/api/auth/me',
     },
     user: {

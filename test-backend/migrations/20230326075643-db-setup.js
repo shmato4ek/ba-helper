@@ -24,7 +24,7 @@ module.exports = {
           allowNull: false,
         },
 
-        fullName: {
+        name: {
           type: Sequelize.STRING(255),
           allowNull: false,
         },

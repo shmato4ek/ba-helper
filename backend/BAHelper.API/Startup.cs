@@ -1,10 +1,7 @@
 ﻿using BAHelper.API.Extensions;
 using BAHelper.DAL.Context;
-using Microsoft.AspNetCore.Builder;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
 
 namespace BAHelper.API
 {
@@ -42,6 +39,9 @@ namespace BAHelper.API
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                     options.RoutePrefix = string.Empty;
                 });
+                app.UseCors(builder =>
+                    builder.AllowAnyHeader()
+);
             }
 
             app.UseSwagger();

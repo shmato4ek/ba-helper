@@ -18,7 +18,7 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<AuthUserDTO>> Register([FromBody] NewUserDTO newUser)
+        public async Task<ActionResult<AuthUserDTO>> Register(NewUserDTO newUser)
         {
             var createdUser = await _userService.CreateUser(newUser);
             var token = await _authService.GenerateAccessToken(createdUser.Id, createdUser.Name, createdUser.Email);
