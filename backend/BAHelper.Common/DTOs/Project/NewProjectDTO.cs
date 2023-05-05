@@ -1,4 +1,5 @@
 ﻿using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace BAHelper.Common.DTOs.Project
     public class NewProjectDTO
     {
         public DateTime Deadline { get; set; }
-        public int UserId { get; set; }
-        public int Difficulty { get; set; }
         public string ProjectName { get; set; }
+        public string Description { get; set; }
+        public List<NewProjectTaskDTO> Tasks { get; set; }
+        public List<string> UsersEmails { get; set; }
     }
 }

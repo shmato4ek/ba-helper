@@ -1,4 +1,5 @@
-﻿using BAHelper.BLL.Services;
+﻿using BAHelper.API.Extensions;
+using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
 using Microsoft.AspNetCore.Http;
@@ -18,31 +19,35 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDocument(int userId, NewDocumentDto newDocumentDto)
+        public async Task<ActionResult> CreateDocument(NewDocumentDto newDocumentDto)
         {
-            DocumentDTO createdDocument = await _documentService.CreateDocument(userId, newDocumentDto);
-            return Ok(createdDocument);
+            return Ok(await _documentService.CreateDocument(this.GetUserIdFromToken(), newDocumentDto));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllDocuments(int userId)
+        [HttpGet("user")]
+        public async Task<ActionResult> GetAllDocuments()
         {
-            List<DocumentDTO> documents = await _documentService.GetAllUsersDocumentsById(userId);
-            return Ok(documents);
+            return Ok(await _documentService.GetAllUsersDocumentsById(this.GetUserIdFromToken()));
         }
 
-        [HttpPut("ProjectAim")]
-        public async Task<IActionResult> AddProjectAim(int documentId, string projectAim)
+        [HttpPut]
+        public async Task<ActionResult> UpdateDocument([FromBody] UpdateDocumentDTO updatedDocument)
         {
-            DocumentDTO updatedDocument = await _documentService.AddProjectAim(documentId, projectAim);
-            return Ok(updatedDocument);
+            return Ok(await _documentService.UpdateDocument(updatedDocument, this.GetUserIdFromToken()));
         }
 
-        [HttpPut("AddGlossary")]
-        public async Task<IActionResult> AddGlossary(NewGlossaryDTO newGlossary)
+        [HttpPut("archive")]
+        public async Task<ActionResult> MoveToArvhive(int documentId)
         {
-            DocumentDTO updatedDocument = await _documentService.AddGlossary(newGlossary);
-            return Ok(updatedDocument);
+            await _documentService.MoveToArchive(documentId, this.GetUserIdFromToken());
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteDocument(int documentId)
+        {
+            await _documentService.DeleteDocument(documentId, this.GetUserIdFromToken());
+            return NoContent();
         }
     }
 }

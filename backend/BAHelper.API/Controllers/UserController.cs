@@ -1,4 +1,5 @@
-﻿using BAHelper.BLL.Services;
+﻿using BAHelper.API.Extensions;
+using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
 using BAHelper.Common.DTOs.User;
@@ -20,16 +21,40 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(NewUserDTO userDTO)
+        public async Task<ActionResult> CreateUser(NewUserDTO userDTO)
         {
-            UserDTO createdUser = await _userService.CreateUser(userDTO);
-            return Ok(createdUser);
+            return Ok(await _userService.CreateUser(userDTO));
+        }
+
+        //[HttpGet]
+        //public async Task<ActionResult> GetAllUsers()
+        //{
+        //    return Ok(await _userService.GetAllUsers());
+        //}
+
+        //[HttpGet("tasks")]
+        //public async Task<ActionResult> GetAllUsersTasks()
+        //{
+        //    return Ok(await _userService.GetAllUsersTasks(this.GetUserIdFromToken()));
+        //}
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUser()
+        {
+            return Ok(await _userService.DeleteUser(this.GetUserIdFromToken()));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        [Route("FromToken")]
+        public async Task<IActionResult> GetUserFromToken()
         {
-            return Ok(await _userService.GetAllUsers());
+            return Ok(await _userService.GetUserById(this.GetUserIdFromToken()));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser([FromBody] UpdateUserDTO updatedUser)
+        {
+            return Ok(await _userService.UpdateUser(updatedUser, this.GetUserIdFromToken()));
         }
     }
 }

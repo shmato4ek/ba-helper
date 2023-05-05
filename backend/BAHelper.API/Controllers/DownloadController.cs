@@ -18,7 +18,7 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DownloadFile(int documentId)
+        public async Task<ActionResult> DownloadFile(int documentId)
         {
             var fileConfig = await _downloadService.DownloadDocument(documentId);
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);

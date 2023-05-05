@@ -24,7 +24,9 @@ namespace BAHelper.API
 
             services.RegisterAutoMapper();
             services.RegisterCustomServices();
+            services.AddCors();
             services.AddControllers();
+            services.ConfigureJwt(Configuration);
             services.AddSwaggerGen();
 
         }
@@ -55,7 +57,7 @@ namespace BAHelper.API
             app.UseRouting();
 
             app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

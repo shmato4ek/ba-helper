@@ -10,10 +10,12 @@ namespace BAHelper.DAL.Entities
     {
         public int Id { get; set; }
         public DateTime Deadline { get; set; }
-        public int UserId { get; set; }
-        public int Difficulty { get; set; }
+        public int AuthorId { get; set; }
         public string ProjectName { get; set; }
-        public Schedule Schedule { get; set; }
+        public string Description { get; set; }
+        public double Hours { get; set; }
+        public bool IsDeleted { get; set; } = false;
         public List<ProjectTask> Tasks { get; set; }
+        public List<User> Users { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace BAHelper.Common.DTOs.ScheduleDay
     {
         public int ScheduleId { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
-        public double HoursOfWeeks { get; set; }
+        public double HoursOfWork { get; set; }
+        public double AvailableHoursOfWork { get; set; }
     }
 }

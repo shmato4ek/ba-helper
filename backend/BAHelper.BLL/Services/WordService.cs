@@ -4,7 +4,6 @@ using BAHelper.Common;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.DAL.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Office.Core;
 using MimeKit;
 using Npgsql.Internal.TypeHandlers.LTreeHandlers;
 using Spire.Doc;
@@ -33,7 +32,7 @@ namespace BAHelper.BLL.Services
         public async Task<DocumentDTO> CreateWordFile(int documentId)
         {
             var documentEntity = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == documentId);
-            if (documentEntity == null)
+            if (documentEntity is null)
             {
                 return null;
             }
@@ -79,7 +78,9 @@ namespace BAHelper.BLL.Services
                     glossaryHeader.ApplyStyle(headerStyle.Name);
 
                     Paragraph glossaryParagraph = section.AddParagraph();
-                    var documentGlossary = await _context.Glossaries.Where(g => g.DocumentId == documentEntity.Id).ToListAsync();
+                    var documentGlossary = await _context.Glossaries
+                        .Where(g => g.DocumentId == documentEntity.Id)
+                        .ToListAsync();
                     if (documentGlossary != null)
                     {
                         List<string> glossaryTableHeaders = new List<string>();

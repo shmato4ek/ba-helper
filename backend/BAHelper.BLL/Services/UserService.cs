@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using BAHelper.BLL.Exceptions;
+using BAHelper.BLL.MappingProfiles;
 using BAHelper.BLL.Services.Abstract;
+using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.User;
+using BAHelper.Common.Security;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,17 +27,95 @@ namespace BAHelper.BLL.Services
         }
         public async Task<UserDTO> CreateUser(NewUserDTO newUser)
         {
-            var UserEntity = _mapper.Map<User>(newUser);
-            _context.Users.Add(UserEntity);
+            var userEntity = _mapper.Map<User>(newUser);
+
+            var salt = SecurityHelper.GetRandomBytes();
+            userEntity.Salt = Convert.ToBase64String(salt);
+            userEntity.Password = SecurityHelper.HashPassword(newUser.Password, salt);
+
+            var isUserExist = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Email == newUser.Email) != null;
+            if (isUserExist)
+            {
+                throw new ExistUserException(newUser.Email);
+            }
+            _context.Users.Add(userEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<UserDTO>(UserEntity);
+            return _mapper.Map<UserDTO>(userEntity);
         }
 
         public async Task<List<UserDTO>> GetAllUsers()
         {
-            var allUsers = await _context.Users.ToListAsync();
+            var allUsers = await _context
+                .Users
+                .ToListAsync();
             var allUsersDTO = _mapper.Map<List<UserDTO>>(allUsers);
             return allUsersDTO;
+        }
+
+        public async Task<List<ProjectTaskDTO>> GetAllUsersTasks(int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .Include(user => user.Tasks)
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
+            var tasksEntity = userEntity.Tasks;
+            return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
+        }
+
+        public async Task<UserDTO> DeleteUser(int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if(userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
+            _context.Users.Remove(userEntity);
+            _context.SaveChanges();
+            return _mapper.Map<UserDTO>(userEntity);
+        }
+
+        public async Task<UserDTO> GetUserById(int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
+            return _mapper.Map<UserDTO>(userEntity);
+        }
+
+        public async Task<UserInfoDTO> UpdateUser(UpdateUserDTO updatedUser, int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
+            if (updatedUser.ChangePassword == true)
+            {
+                if (!SecurityHelper.IsValidPassword(userEntity.Password, updatedUser.OldPassword, userEntity.Salt))
+                {
+                    throw new InvalidUserNameOrPasswordException();
+                }
+                userEntity.Password = updatedUser.NewPassword;
+            }
+            userEntity.Name = updatedUser.Name;
+            userEntity.Email = updatedUser.Email;
+            _context.Users.Update(userEntity);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserInfoDTO>(userEntity);
         }
     }
 }

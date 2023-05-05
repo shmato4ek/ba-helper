@@ -1,0 +1,12 @@
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\bin\Release\net6.0\BAHelper.Common.deps.json
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\bin\Release\net6.0\BAHelper.Common.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\bin\Release\net6.0\BAHelper.Common.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.csproj.AssemblyReference.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.AssemblyInfoInputs.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.AssemblyInfo.cs
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.csproj.CoreCompileInputs.cache
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\refint\BAHelper.Common.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\BAHelper.Common.pdb
+D:\BA Hepler\ba-helper\backend\BAHelper.Common\obj\Release\net6.0\ref\BAHelper.Common.dll

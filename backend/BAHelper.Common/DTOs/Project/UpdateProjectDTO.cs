@@ -11,7 +11,8 @@ namespace BAHelper.Common.DTOs.Project
     {
         public int Id { get; set; }
         public DateTime Deadline { get; set; }
-        public int Difficulty { get; set; }
         public string ProjectName { get; set; }
+        public string Description { get; set; }
+        public List<string> Users { get; set; }
     }
 }
