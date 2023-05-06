@@ -138,7 +138,7 @@ namespace BAHelper.BLL.Services
             }
             if (documentEntity.UserId != userId)
             {
-                throw new Exception("No access to file.");
+                throw new NoAccessException(userId);
             }
             documentEntity.Name = updatedDocument.Name;
             documentEntity.ProjectAim = updatedDocument.ProjectAim;
@@ -160,7 +160,7 @@ namespace BAHelper.BLL.Services
             }
             if (docEntity.UserId != userId)
             {
-                throw new Exception("No access to file.");
+                throw new NoAccessException(userId);
             }
             docEntity.IsDeleted = true;
             _context.Documents.Update(docEntity);
@@ -186,7 +186,7 @@ namespace BAHelper.BLL.Services
             }
             if (userEntity.Id != docEntity.UserId)
             {
-                throw new Exception("No access to file.");
+                throw new NoAccessException(userId);
             }
             _context.Documents.Remove(docEntity);
             await _context.SaveChangesAsync();

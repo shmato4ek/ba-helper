@@ -55,17 +55,18 @@ namespace BAHelper.BLL.Services
         {
             string refreshToken = _jwtFactory.GenerateRefreshToken();
 
-            _context.RefreshTokens.Add(new RefreshToken
-            {
-                Token = refreshToken,
-                UserId = id
-            });
+            //_context.RefreshTokens.Add(new RefreshToken
+            //{
+            //    Token = refreshToken,
+            //    UserId = id
+            //});
 
             await _context.SaveChangesAsync();
 
             string accessToken = await _jwtFactory.GenerateAccessToken(id, userName, userEmail);
 
-            return new TokenDTO(accessToken, refreshToken);
+            //return new TokenDTO(accessToken, refreshToken);
+            return new TokenDTO(accessToken);
         }
 
         public async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalAuthDto externalAuth)
