@@ -204,7 +204,11 @@ namespace BAHelper.BLL.Services
                 throw new ExistUserException(email);
             }
 
-            taskEntity.Users.Add(userEntity);
+            //Will be removed
+            //****
+            taskEntity.Users = new List<User>();
+
+            //taskEntity.Users.Add(userEntity);
             _context.Users.Update(userEntity);
             await _context.SaveChangesAsync();
 

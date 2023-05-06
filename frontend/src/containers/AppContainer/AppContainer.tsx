@@ -50,12 +50,12 @@ const AppContainer = () => {
     return <div>Loading</div>
   }
 
-  if(
-    state.me === null
-    && location.pathname !== '/' && location.pathname !== '/login'
-    ) {
-    return <Navigate to='/login' />
-  }
+  // if(
+  //   state.me === null
+  //   && location.pathname !== '/' && location.pathname !== '/login'
+  //   ) {
+  //   return <Navigate to='/login' />
+  // }
 
   return (
     <Page>
