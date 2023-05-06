@@ -12,7 +12,9 @@ import * as  _ from 'lodash';
 import { ValidationError } from 'joi';
 import { AppAction } from '../../../store/actions';
 import { useDispatch } from 'react-redux';
-import { RegisterDto } from '../../../store/types';
+import { EditRegisterDto, LoginDto, RegisterDto } from '../../../store/types';
+import { useNavigate } from 'react-router';
+import FormError from '../../../components/Form/FormError/FormError';
 
 const LoginPageStyled = styled.div`
   display: grid;
@@ -53,12 +55,20 @@ const CenterHorizontalDiv = styled.div`
   align-items: center;
 `;
 
+const FieldGrid = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+`
+
 type Props = {
 }
 
-const registerInitialValues: RegisterDto = {
+const registerInitialValues: EditRegisterDto = {
   email: '',
-  fullName: '',
+  name: '',
   password: '',
   confirmPassword: '',
 };
@@ -66,17 +76,25 @@ const registerInitialValues: RegisterDto = {
 const LoginPage: FC<Props> = (params) => {
   const [isLoginMode, setLoginMode] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const onLoginValidate = useCallback((values: RegisterDto) => {
-    let errors: { [key in keyof RegisterDto]?: string } = {};
+  const onLoginValidate = useCallback((values: EditRegisterDto) => {
+    let errors: { [key in keyof EditRegisterDto]?: string } = {};
 
     errors.email = joi.string().email({ tlds: { allow: false } }).required().validate(values.email).error?.message;
     errors.password = joi.string().min(6).max(255).required().validate(values.password).error?.message;
-    errors.fullName = joi.string().max(255).required().validate(values.fullName).error?.message;
-
-    if (isLoginMode === false) {
+    
+    if (!isLoginMode) {
+      errors.name = joi.string().max(255).required().validate(values.name).error?.message;
       errors.confirmPassword = joi.string().min(6).max(255).required().validate(values.password).error?.message;
+
+      if(values.password !== values.confirmPassword) {
+        errors.confirmPassword = 'Підтвердження пароля повинно бути однаковим з паролем'
+      }
     }
+
+    console.log('Login errors');
+    console.log(JSON.stringify(errors, null, 2));
 
     errors = _.pickBy(errors, _.identity);
 
@@ -84,13 +102,34 @@ const LoginPage: FC<Props> = (params) => {
   }, [isLoginMode]);
 
   const onLoginSubmit = useCallback(
-    (values: RegisterDto) => {
+    (values: EditRegisterDto) => {
       console.log('--- values ---');
       console.log(JSON.stringify(values, null, 2));
-      dispatch<AppAction>({
-        type: isLoginMode === true ? 'LOGIN' : 'REGISTER',
-        payload: values
-      });
+
+      if(isLoginMode) {
+        const loginDto: LoginDto = {
+          email: values.email,
+          password: values.password
+        }
+
+        dispatch<AppAction>({
+          type: 'LOGIN',
+          payload: loginDto,
+          navigate,
+        });
+      } else {
+        const registerDto: RegisterDto = {
+          email: values.email,
+          name: values.name,
+          password: values.password
+        }
+
+        dispatch<AppAction>({
+          type: 'REGISTER',
+          payload: registerDto,
+          navigate,
+        });
+      }
     },
     [dispatch, isLoginMode],
   );
@@ -99,15 +138,27 @@ const LoginPage: FC<Props> = (params) => {
     <LoginPageStyled>
       <Form>
         <Formik initialValues={registerInitialValues} validate={onLoginValidate} onSubmit={onLoginSubmit}>
-        {({ handleSubmit }: FormikProps<RegisterDto>) => (
+        {({ handleSubmit }: FormikProps<EditRegisterDto>) => (
           <CenterHorizontalDiv>
             <Font type='h2'>{isLoginMode ? 'Login' : 'Register'}</Font>
-            <FormStringField name={'email'} placeholder="Імейл" label="Імейл" />
-            <FormStringField name={'password'} placeholder="Пароль" label="Пароль" />
-            <FormStringField name={'fullName'} placeholder="Повне Ім'я" label="Повне Ім'я" />
-            <FormStringField name={'confirmPassword'} placeholder="Підтвердіть Пароль" label="Підтвердіть Пароль" />
-            {/* <Button buttonType='submit' styleType='simple'>{isLoginMode ? 'Login' : 'Register'}</Button> */}
-            <button type='submit' onClick={() => handleSubmit()}>Submit</button>
+            <FormStringField name={'email'} placeholder="Імейл" label="Імейл" textAreaStyle={{width: '100%', marginBottom: 10}} />
+            <FormError name='email'/>
+            <FormStringField name={'password'} placeholder="Пароль" label="Пароль" textAreaStyle={{width: '100%', marginBottom: 10}} isHidden/>
+            <FormError name='password'/>
+            {!isLoginMode &&
+              <>
+                <FormStringField name={'confirmPassword'} placeholder="Підтвердіть Пароль" label="Підтвердіть Пароль" textAreaStyle={{width: '100%', marginBottom: 10}} isHidden/>
+                <FormError name='confirmPassword'/>
+                <FormStringField name={'name'} placeholder="Повне Ім'я" label="Повне Ім'я" textAreaStyle={{width: '100%', marginBottom: 10}}/>
+                <FormError name='name'/>
+              </>
+            }
+            <FieldGrid>
+              <Button buttonType='submit' styleType='simple' onClick={() => handleSubmit()}>{isLoginMode ? 'Login' : 'Register'}</Button>
+            </FieldGrid>
+            <button type='button' onClick={() => setLoginMode(!isLoginMode)} style={{ fontSize: 18}}>
+              {isLoginMode ? 'Switch to Register' : 'Switch to Login'}
+            </button>
           </CenterHorizontalDiv>
         )}
         </Formik>

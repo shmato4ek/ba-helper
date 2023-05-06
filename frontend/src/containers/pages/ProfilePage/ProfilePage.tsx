@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
     let formErrors: CreateErrorObject<EditPutUserDto> = {};
 
-    formErrors.email = validateStraight(yup.string().email('Invalid Email').required('Required'), values.email);
+    formErrors.email = validateStraight(yup.string().email('Invalid Email').required("Обов'язково"), values.email);
     formErrors.password = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').required("Обов'язково"), values.password);
     formErrors.passwordConfirm = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').nullable(), values.passwordConfirm);
     formErrors.oldPassword = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').nullable(), values.oldPassword);

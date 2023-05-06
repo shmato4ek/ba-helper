@@ -50,6 +50,8 @@ const AppContainer = () => {
     return <div>Loading</div>
   }
 
+  // TODO: dont spam reqeuste on service page when error is occured
+
   if(
     state.me === null
     && location.pathname !== '/' && location.pathname !== '/login'

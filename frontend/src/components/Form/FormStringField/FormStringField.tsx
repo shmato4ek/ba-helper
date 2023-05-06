@@ -31,6 +31,7 @@ interface Props {
   label?: string;
   isHidden?: boolean;
   editable?: boolean;
+  textAreaStyle?: React.CSSProperties | undefined
 }
 
 const FormStringField: FunctionComponent<Props> = ({
@@ -40,6 +41,7 @@ const FormStringField: FunctionComponent<Props> = ({
   label,
   isHidden,
   editable,
+  textAreaStyle
 }: Props) => {
   return (
     <Field name={name}>
@@ -48,7 +50,9 @@ const FormStringField: FunctionComponent<Props> = ({
           type={isHidden ? 'password' : 'text'}
           name={name}
           placeholder={placeholder}
+
           style={{
+            ...textAreaStyle,
             padding: 5,
             borderRadius: 4,
           }}

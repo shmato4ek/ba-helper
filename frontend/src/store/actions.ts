@@ -144,11 +144,15 @@ export interface GetMeFailure extends ErrorPayload {
 export interface Login {
   type: typeof actionTypes.LOGIN;
   payload: LoginDto;
+  navigate: NavigateFunction;
 }
 
 export interface LoginSuccess {
   type: typeof actionTypes.LOGIN_SUCCESS;
-  payload: UserDto;
+  payload: {
+    user: UserDto;
+    token: { accessToken: string; }
+  };
 }
 
 export interface LoginFailure extends ErrorPayload {
@@ -185,11 +189,15 @@ export interface DeleteUserFailure extends ErrorPayload {
 export interface Register {
   type: typeof actionTypes.REGISTER;
   payload: RegisterDto;
+  navigate: NavigateFunction;
 }
 
 export interface RegisterSuccess {
   type: typeof actionTypes.REGISTER_SUCCESS;
-  payload: UserDto;
+  payload: {
+    user: UserDto;
+    token: { accessToken: string; }
+  };
 }
 
 export interface RegisterFailure extends ErrorPayload {

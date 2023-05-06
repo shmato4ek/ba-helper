@@ -176,6 +176,7 @@ export const RootReducer = produce(
         break;
       case actionTypes.LOGIN_SUCCESS:
         console.log('actionTypes.LOGIN_SUCCESS')
+        draft.me = action.payload.user;
         draft.actions.login.errors = null;
         draft.actions.login.loading = false;
         break;
@@ -224,7 +225,7 @@ export const RootReducer = produce(
         break;
       case actionTypes.REGISTER_SUCCESS:
         console.log('actionTypes.REGISTER_SUCCESS')
-        draft.me = action.payload;
+        draft.me = action.payload.user;
         draft.actions.register.errors = null;
         draft.actions.register.loading = false;
         break;

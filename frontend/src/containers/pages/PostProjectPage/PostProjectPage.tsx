@@ -33,7 +33,7 @@ const PostProjectPage = () => {
     }
 
     formErrors.deadline = validateStraight(yup.date().typeError('Введіть правильну дату').nullable(), values.deadline);
-    formErrors.description = validateStraight(yup.string().max(255, 'Опис повинен бути не більше 255 символів').required('Required'), values.description);
+    formErrors.description = validateStraight(yup.string().max(255, 'Опис повинен бути не більше 255 символів').required("Обов'язково"), values.description);
 
     formErrors = _.pickBy(formErrors, _.identity);
 
