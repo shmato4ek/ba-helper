@@ -3,6 +3,7 @@ using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.Subtask;
 using BAHelper.Common.Enums;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -12,6 +13,7 @@ namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors()]
     public class TaskController : ControllerBase
     {
         private readonly ProjectTaskService _projectTaskService;

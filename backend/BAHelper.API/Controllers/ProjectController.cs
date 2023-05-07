@@ -1,6 +1,7 @@
 ﻿using BAHelper.API.Extensions;
 using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Project;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -9,6 +10,7 @@ namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors()]
     public class ProjectController : ControllerBase
     {
         private readonly ProjectService _projectService;

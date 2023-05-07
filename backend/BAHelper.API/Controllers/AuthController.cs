@@ -1,12 +1,14 @@
-﻿using BAHelper.BLL.Services;
+﻿using BAHelper.API.Extensions;
+using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.User;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
 {
     [Route("api")]
     [ApiController]
+    [EnableCors()]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
@@ -35,6 +37,12 @@ namespace BAHelper.API.Controllers
         public async Task<ActionResult<AuthUserDTO>> Login([FromBody] LoginUserDTO userDTO)
         {
             return Ok(await _authService.Authorize(userDTO));
+        }
+
+        [HttpGet("auth/me")]
+        public async Task<ActionResult> GetUserByToken(string token)
+        {
+            return Ok(await _userService.GetUserById(this.GetUserIdFromToken()));
         }
     }
 }

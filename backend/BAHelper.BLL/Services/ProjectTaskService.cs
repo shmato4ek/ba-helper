@@ -33,7 +33,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to project.");
+                throw new NoAccessException(userId);
             }
             if (projectEntity.Tasks == null)
             {
@@ -66,7 +66,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
 
             projectTaskEntity.Deadine = updatedProjectTask.DeadLine;
@@ -103,7 +103,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
 
             subtaskEntity.Name = updatedSubtask.Name;
@@ -131,7 +131,7 @@ namespace BAHelper.BLL.Services
             }
             if(userId != projectEntity.AuthorId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }    
             var subtaskEntity = _mapper.Map<Subtask>(newSubtask);
             if (taskEntity.Subtasks == null)
@@ -191,7 +191,7 @@ namespace BAHelper.BLL.Services
 
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
 
             if (taskEntity.Users == null)
@@ -264,7 +264,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefault(user => user.Id == userId);
             if (userEntity is null)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
             taskEntity.TaskState = taskState;
             _context.Tasks.Update(taskEntity);
@@ -291,7 +291,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
             taskEntity.TaskState = TaskState.Approved;
             _context.Tasks.Update(taskEntity);
@@ -319,7 +319,7 @@ namespace BAHelper.BLL.Services
             var foundUser = taskEntity.Users.FirstOrDefault(user => user.Id == userId);
             if (foundUser is null)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
             subtaskEntity.TaskState = taskState;
             _context.Subtasks.Update(subtaskEntity);
@@ -352,7 +352,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
             subtaskEntity.TaskState = TaskState.Approved;
             _context.Subtasks.Update(subtaskEntity);
@@ -378,7 +378,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }
             projectEntity.Hours -= taskEntity.Hours;
             _context.Projects.Update(projectEntity);
@@ -412,7 +412,7 @@ namespace BAHelper.BLL.Services
 
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to task.");
+                throw new NoAccessException(userId);
             }    
             _context.Subtasks.Remove(subtaskEntity);
             await _context.SaveChangesAsync();

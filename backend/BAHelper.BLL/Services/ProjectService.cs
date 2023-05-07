@@ -124,7 +124,7 @@ namespace BAHelper.BLL.Services
             }
             if (userId != projectEntity.AuthorId)
             {
-                throw new Exception("No access to project.");
+                throw new NoAccessException(userId);
             }
             projectEntity.ProjectName = updatedProject.ProjectName;
             projectEntity.Deadline = updatedProject.Deadline;
@@ -257,7 +257,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to project.");
+                throw new NoAccessException(userId);
             }
 
             var userEntity = await _context
@@ -289,7 +289,7 @@ namespace BAHelper.BLL.Services
 
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to project.");
+                throw new NoAccessException(userId);
             }
 
             projectEntity.IsDeleted = true;
@@ -308,7 +308,7 @@ namespace BAHelper.BLL.Services
             }
             if (projectEntity.AuthorId != userId)
             {
-                throw new Exception("No access to project.");
+                throw new NoAccessException(userId);
             }
 
             _context.Projects.Remove(projectEntity);

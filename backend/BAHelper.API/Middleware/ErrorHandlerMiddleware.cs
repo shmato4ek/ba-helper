@@ -27,6 +27,7 @@ namespace BAHelper.API.Middleware
                     NotFoundException => (int)HttpStatusCode.NotFound,
                     UserNotFoundException => (int)HttpStatusCode.NotFound,
                     InvalidUserNameOrPasswordException => (int)HttpStatusCode.Unauthorized,
+                    NoAccessException => (int)HttpStatusCode.Unauthorized,
                     _=> (int)HttpStatusCode.InternalServerError
                 };
                 await context.Response.WriteAsync(error.Message);

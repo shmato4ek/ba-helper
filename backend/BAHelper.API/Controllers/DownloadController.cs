@@ -1,5 +1,6 @@
 ﻿using BAHelper.BLL.Services;
 using BAHelper.Common;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -8,6 +9,7 @@ namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors()]
     public class DownloadController : ControllerBase
     {
         private readonly DownloadService _downloadService;

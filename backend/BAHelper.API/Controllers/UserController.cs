@@ -3,6 +3,7 @@ using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
 using BAHelper.Common.DTOs.User;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors()]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;

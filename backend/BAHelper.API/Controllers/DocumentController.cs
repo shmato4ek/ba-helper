@@ -2,6 +2,7 @@
 using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Glossary;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
@@ -10,6 +11,7 @@ namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors()]
     public class DocumentController : ControllerBase
     {
         private readonly DocumentService _documentService;
