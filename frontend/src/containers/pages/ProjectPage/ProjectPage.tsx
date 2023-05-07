@@ -18,6 +18,9 @@ const ProjectPage = () => {
   const { projectId } = useParams();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
+  console.log('@currentProject');
+  console.log(JSON.stringify(currentProject, null, 2));
+
   useEffect(()=> {
     if(!getProjectAction.loading && !currentProject) {
       dispatch<AppAction>({ type: 'GET_PROJECT', payload: {
