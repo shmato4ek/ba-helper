@@ -96,7 +96,7 @@ const TaskContainer = ({
     taskName: task.taskName,
     hours: task.hours,
     taskState: task.taskState,
-    assignedUser: task.users[0].email
+    assignedUser: task.users.length ? task.users[0].email : ''
   };
 
   return (
