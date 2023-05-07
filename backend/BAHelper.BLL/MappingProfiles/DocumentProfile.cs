@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using BAHelper.Common.DTOs.Document;
 using BAHelper.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.MappingProfiles
 {
@@ -13,7 +8,8 @@ namespace BAHelper.BLL.MappingProfiles
     {
         public DocumentProfile()
         {
-            CreateMap<NewDocumentDto, Document>();
+            CreateMap<NewDocumentDto, Document>()
+            .ForMember(doc => doc.Glossary, opt => opt.MapFrom(src => src.Glossaries));
             CreateMap<Document, DocumentDTO>();
             CreateMap<DocumentDTO, Document>();
         }

@@ -1,25 +1,22 @@
-﻿using BAHelper.API.Extensions;
+﻿using BAHelper.BLL.JWT;
 using BAHelper.BLL.Services;
-using BAHelper.Common.DTOs.Document;
-using BAHelper.Common.DTOs.Glossary;
 using BAHelper.Common.DTOs.User;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors()]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
         private readonly DocumentService _documentService;
-        public UserController(UserService userService, DocumentService documentService)
+        private readonly JwtFactory _jwtFactory;
+        public UserController(UserService userService, DocumentService documentService, JwtFactory jwtFactory)
         {
             _userService = userService;
             _documentService = documentService;
+            _jwtFactory = jwtFactory;
         }
 
         [HttpPost]
@@ -43,20 +40,26 @@ namespace BAHelper.API.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteUser()
         {
-            return Ok(await _userService.DeleteUser(this.GetUserIdFromToken()));
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _userService.DeleteUser(userId));
         }
 
         [HttpGet]
         [Route("FromToken")]
         public async Task<IActionResult> GetUserFromToken()
         {
-            return Ok(await _userService.GetUserById(this.GetUserIdFromToken()));
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _userService.GetUserById(userId));
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateUser([FromBody] UpdateUserDTO updatedUser)
         {
-            return Ok(await _userService.UpdateUser(updatedUser, this.GetUserIdFromToken()));
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _userService.UpdateUser(updatedUser, userId));
         }
     }
 }

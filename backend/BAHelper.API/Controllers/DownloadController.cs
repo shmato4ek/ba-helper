@@ -9,7 +9,6 @@ namespace BAHelper.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors()]
     public class DownloadController : ControllerBase
     {
         private readonly DownloadService _downloadService;

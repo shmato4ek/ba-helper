@@ -46,13 +46,13 @@ namespace BAHelper.BLL.JWT
             return Convert.ToBase64String(SecurityHelper.GetRandomBytes());
         }
 
-        public string GetValueFromToken(string token, string value)
+        public int GetValueFromToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token);
             var tokenS = jsonToken as JwtSecurityToken;
-
-            return tokenS.Claims.First(claim => claim.Type == value)?.Value;
+            var userId = tokenS.Claims.First(claim => claim.Type == "id")?.Value;
+            return int.Parse(userId);
         }
 
         private static long ToUnixEpochDate(DateTime date)

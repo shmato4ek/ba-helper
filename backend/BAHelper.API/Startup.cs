@@ -1,4 +1,5 @@
 ﻿using BAHelper.API.Extensions;
+using BAHelper.API.Middleware;
 using BAHelper.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,19 +21,6 @@ namespace BAHelper.API
 
             services.RegisterAutoMapper();
             services.RegisterCustomServices();
-            services.AddCors(
-                options =>
-                {
-                    options.AddDefaultPolicy(
-                        policy => 
-                        {
-                            policy.WithOrigins("http://localhost:3000/")
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                        }
-                    );
-                }
-            );
             services.AddControllers();
             services.ConfigureJwt(Configuration);
             services.AddSwaggerGen();
@@ -41,26 +29,13 @@ namespace BAHelper.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-//             if (env.IsDevelopment())
-//             {
-//                 app.UseDeveloperExceptionPage();
-//                 app.UseSwagger();
-//                 app.UseSwaggerUI(options =>
-//                 {
-//                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-//                     options.RoutePrefix = string.Empty;
-//                 });
-//                 // app.UseCors(builder =>
-//                 //     builder.WithOrigins("http://localhost:3000").AllowAnyMethod()
-// //);
-//             }
-
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
-            app.UseCors(
-                // options => options.WithOrigins("http://localhost:3000").AllowAnyMethod()
-            );
 
             app.UseHttpsRedirection();
 
@@ -68,6 +43,8 @@ namespace BAHelper.API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

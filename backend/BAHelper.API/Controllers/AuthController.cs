@@ -1,22 +1,22 @@
-﻿using BAHelper.API.Extensions;
+﻿using BAHelper.BLL.JWT;
 using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.User;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
 {
     [Route("api")]
     [ApiController]
-    [EnableCors()]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
         private readonly UserService _userService;
-        public AuthController(AuthService authService, UserService userService)
+        private readonly JwtFactory _jwtFactory;
+        public AuthController(AuthService authService, UserService userService, JwtFactory jwtFactory)
         {
             _authService = authService;
             _userService = userService;
+            _jwtFactory = jwtFactory;
         }
 
         [HttpPost("Register")]
@@ -40,9 +40,11 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpGet("auth/me")]
-        public async Task<ActionResult> GetUserByToken(string token)
+        public async Task<ActionResult> GetUserByToken()
         {
-            return Ok(await _userService.GetUserById(this.GetUserIdFromToken()));
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _userService.GetUserById(userId));
         }
     }
 }

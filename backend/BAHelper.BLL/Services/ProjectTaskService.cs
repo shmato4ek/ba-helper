@@ -1,18 +1,12 @@
 ﻿using AutoMapper;
 using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
-using BAHelper.Common.DTOs.Project;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.Subtask;
 using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.Services
 {
@@ -21,15 +15,15 @@ namespace BAHelper.BLL.Services
         public ProjectTaskService(BAHelperDbContext context, IMapper mapper)
         :base(context, mapper) { }
 
-        public async Task<ProjectTaskDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int projectId, int userId)
+        public async Task<ProjectTaskDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int userId)
         {
             var projectEntity = await _context
                 .Projects
                 .Include(project => project.Tasks)
-                .FirstOrDefaultAsync(p => p.Id == projectId);
+                .FirstOrDefaultAsync(p => p.Id == newProjectTaskDto.ProjectId);
             if (projectEntity == null) 
             {
-                throw new NotFoundException(nameof(Project), projectId);
+                throw new NotFoundException(nameof(Project), newProjectTaskDto.ProjectId);
             }
             if (projectEntity.AuthorId != userId)
             {
@@ -40,7 +34,7 @@ namespace BAHelper.BLL.Services
                 projectEntity.Tasks = new List<ProjectTask>();
             }
             var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
-            projectTaskEntity.ProjectId = projectId;
+            projectTaskEntity.ProjectId = newProjectTaskDto.ProjectId;
             projectEntity.Hours += projectTaskEntity.Hours;
             projectEntity.Tasks.Add(projectTaskEntity);
             _context.Update(projectEntity);

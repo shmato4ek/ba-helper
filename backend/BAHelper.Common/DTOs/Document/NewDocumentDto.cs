@@ -12,7 +12,7 @@ namespace BAHelper.Common.DTOs.Document
     {
         public string Name { get; set; }
         public string? ProjectAim { get; set; }
-        public List<NewGlossaryDTO> Glossary { get; set; }
+        public List<NewGlossaryDTO> Glossaries { get; set; }
         public List<NewUserStoryDTO> UserStories { get; set; }
     }
 }

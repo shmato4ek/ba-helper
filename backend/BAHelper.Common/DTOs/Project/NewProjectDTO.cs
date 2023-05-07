@@ -13,7 +13,7 @@ namespace BAHelper.Common.DTOs.Project
         public DateTime Deadline { get; set; }
         public string ProjectName { get; set; }
         public string Description { get; set; }
-        public List<NewProjectTaskDTO> Tasks { get; set; }
-        public List<string> UsersEmails { get; set; }
+        //public List<NewProjectTaskDTO> Tasks { get; set; }
+        public List<string>? Users { get; set; }
     }
 }

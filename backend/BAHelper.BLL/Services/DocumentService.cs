@@ -36,7 +36,7 @@ namespace BAHelper.BLL.Services
             _context.Documents.Add(documentEntity);
             await _context.SaveChangesAsync();
 
-            var glossaryEntity = _mapper.Map<List<Glossary>>(newDocumentDto.Glossary);
+            var glossaryEntity = _mapper.Map<List<Glossary>>(newDocumentDto.Glossaries);
             foreach(var glossary in glossaryEntity)
             {
                 glossary.DocumentId = documentEntity.Id;
