@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup'
 import * as _ from 'lodash'
-import { CreateErrorObject, EditTaskDto, PutTaskDto, TaskDto, TaskState, taskStates, taskStateToText } from '../../store/types';
+import { CreateErrorObject, EditPutTaskDto, PutTaskDto, TaskDto, TaskState, taskStates, taskStateToText, UserDto } from '../../store/types';
 import { validateStraight } from '../../yup';
-import { PutTask, PutTaskState } from '../../store/actions';
-import { TD, TR } from '../../components/Project/Project';
+import { PutTask, PutTaskAssign, PutTaskState } from '../../store/actions';
+import { TD, TDWhite, TR } from '../../components/Project/Project';
 import { DateTime } from 'luxon';
 import { Formik, FormikProps } from 'formik';
 import { AlignCenter } from '../../components/Utils/Utils';
@@ -19,35 +19,37 @@ import FormDropdown from '../../components/Form/FormDropdown/FormDropdown';
 
 interface Props {
   task: TaskDto;
+  projectUsers: UserDto[];
 }
 
 const TaskContainer = ({
   task,
+  projectUsers,
 }: Props) => {
   const dispatch = useDispatch();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-  const onValidate = useCallback((values: EditTaskDto) => {
+  const onValidate = useCallback((values: EditPutTaskDto) => {
     console.log('Task Page values validate');
     console.log(JSON.stringify(values, null, 2));
 
-    let formErrors: CreateErrorObject<EditTaskDto> = {};
+    let formErrors: CreateErrorObject<EditPutTaskDto> = {};
 
     formErrors.hours = validateStraight(yup.number().typeError('Введіть правильне число').nullable(), values.hours);
     formErrors.deadline = validateStraight(yup.date().typeError('Введіть правильну дату').nullable(), values.deadline);
-    formErrors.taskName = validateStraight(yup.string().max(255, "Ім'я повинно бути не більше 255 символів").required('Required'), values.taskName);
+    formErrors.taskName = validateStraight(yup.string().max(255, "Ім'я повинно бути не більше 255 символів").required("Обов'язково"), values.taskName);
 
     formErrors = _.pickBy(formErrors, _.identity);
 
     return formErrors;
   }, []);
 
-  const onSubmit = useCallback((values: EditTaskDto) => {
+  const onSubmit = useCallback((values: EditPutTaskDto) => {
     const putTaskDto: PutTaskDto = {
       id: task.id,
       deadline: values.deadline,
       taskName: values.taskName,
-      hours: values.hours
+      hours: Number(values.hours)
     };
 
     console.log('Task values submit');
@@ -76,10 +78,25 @@ const TaskContainer = ({
     })
   }, [dispatch, task.id]);
 
-  const editTask: EditTaskDto = {
+  const onTaskAssign = useCallback((email: string) => {
+    console.log('Task assign');
+    console.log(JSON.stringify(email, null, 2));
+
+    dispatch<PutTaskAssign>({
+      type: 'PUT_TASK_ASSIGN',
+      payload: {
+        taskId: task.id,
+        email,
+      }
+    })
+  }, [dispatch, task.id]);
+
+  const editTask: EditPutTaskDto = {
     deadline: new Date(task.deadline) as any,
     taskName: task.taskName,
     hours: task.hours,
+    taskState: task.taskState,
+    assignedUser: task.users[0].email
   };
 
   return (
@@ -89,7 +106,7 @@ const TaskContainer = ({
       validate={onValidate}
       onSubmit={onSubmit}
     >
-    {({ handleSubmit }: FormikProps<EditTaskDto>) => (
+    {({ handleSubmit, values }: FormikProps<EditPutTaskDto>) => (
       <>
         <TR key={`task/${task.id}`}>
           <TD>
@@ -117,7 +134,14 @@ const TaskContainer = ({
               : <>{task.hours}</>}
           </TD>
           <TD>
-            {task.users[0].name}
+            <FormDropdown
+              name='assignedUser'
+              placeholder="Виконавець"
+              label=""
+              options={projectUsers.map(x => x.email)}
+              labels={projectUsers.map(x => x.name)}
+              onOptionChoose={onTaskAssign as any}
+            />
           </TD>
           <TD>
             <FormDropdown
@@ -128,10 +152,9 @@ const TaskContainer = ({
               labels={taskStates.map(x => taskStateToText(x))}
               onOptionChoose={onTaskStateChoose as any}
             />
-            <FormError name='taskState' />
           </TD>
           {
-          <AlignCenter>
+          <TDWhite>
             {isEditMode
               ? <Button buttonType='button' styleType='none' onClick={() => {
                   handleSubmit();
@@ -142,7 +165,7 @@ const TaskContainer = ({
               : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
                 <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
               </Button>}
-          </AlignCenter>
+          </TDWhite>
         }
         </TR>
       </>

@@ -3,7 +3,7 @@ import { put, call, takeLeading } from 'redux-saga/effects';
 import { ErrorCodes } from '../error';
 import { globals } from '../services/is';
 import {
-  actionTypes, AppAction, DeleteUser, FailureAppAction, FailureAppActionTypes, GetProject, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState, PutUser,
+  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, Login, LoginSuccess, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
 } from './actions';
 import { PutUserDto } from './types';
 import { LocalStorageService } from '../services/local-storage';
@@ -58,35 +58,44 @@ function* getMe() {
   }
 }
 
-function* login() {
+function* login(login: Login) {
   try {
+    console.log('@---');
     const response: {
-      data: any
+      data: LoginSuccess['payload']
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`);
+      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`, login);
     });
 
     yield put<AppAction>({
       type: 'LOGIN_SUCCESS',
       payload: response.data
     });
+
+    LocalStorageService.setState('x-auth-token', response.data.token.accessToken)
+
+    login.navigate(`/services`);
   } catch (error) {
     yield call(errorHandler, error, 'LOGIN_FAILURE');
   }
 }
 
-function* register() {
+function* register(register: Register) {
   try {
     const response: {
-      data: any
+      data: RegisterSuccess['payload']
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.auth.register}`);
+      return axios.post(`${globals.endpoint}${globals.paths.auth.register}`, register.payload);
     });
 
     yield put<AppAction>({
       type: 'REGISTER_SUCCESS',
       payload: response.data
     });
+
+    LocalStorageService.setState('x-auth-token', response.data.token.accessToken)
+
+    register.navigate(`/services`);
   } catch (error) {
     yield call(errorHandler, error, 'REGISTER_FAILURE');
   }
@@ -392,14 +401,16 @@ function* postDocument(postDocument: PostDocument) {
   }
 }
 
-function* documentDownload() {
+function* documentDownload(documentDownload: DocumentDownload) {
   try {
     console.log('Document download state action');
 
     const response: {
       data: any
     } = yield call(() => {
-      return axios.get(`${globals.endpoint}${globals.paths.download._}`);
+      return axios.get(`${globals.endpoint}${globals.paths.download._}`, {
+        data: documentDownload.payload
+      });
     });
 
     yield put<AppAction>({

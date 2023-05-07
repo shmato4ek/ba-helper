@@ -32,7 +32,7 @@ export class AppController {
 
   @Get('/auth/me')
   async me(@Request() request: ERequest) {
-    if (!request.headers['x-auth-token']) {
+    if (request.headers['x-auth-token']) {
       return this.meDto;
     }
 

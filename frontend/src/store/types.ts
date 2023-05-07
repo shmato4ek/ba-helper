@@ -84,13 +84,20 @@ export interface PostTaskDto {
   hours: number;
 }
 
+export interface EditPostTaskDto
+  extends Pick<PostTaskDto, "deadline" | "taskName" | "hours"> {
+}
+
 export interface PutTaskDto
   extends Pick<PostTaskDto, "deadline" | "taskName" | "hours"> {
   id: number;
 }
 
-export interface EditTaskDto
-  extends Pick<PutTaskDto, "deadline" | "taskName" | "hours"> {}
+export interface EditPutTaskDto
+  extends Pick<PutTaskDto, "deadline" | "taskName" | "hours"> {
+  taskState: TaskState;
+  assignedUser: string;
+}
 
 export interface PutTaskAssignDto {
   taskId: number;
@@ -284,6 +291,12 @@ export interface LoginDto {
 }
 
 export interface RegisterDto {
+  email: string;
+  name: string;
+  password: string;
+}
+
+export interface EditRegisterDto {
   email: string;
   name: string;
   password: string;

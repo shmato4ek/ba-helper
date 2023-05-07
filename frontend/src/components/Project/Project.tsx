@@ -14,6 +14,7 @@ import FormTextareaField from '../Form/FormTextareaField/FormTextareaField';
 import FormError from '../Form/FormError/FormError';
 import TaskContainer from '../../containers/TaskContainer/TaskContainer';
 import SubtaskContainer from '../../containers/SubtaskContainer/SubtaskContainer';
+import NewTaskContainer from '../../containers/NewTaskContainer/NewTaskContainer';
 
 export const Header = styled.h1`
   margin-bottom: 30px;
@@ -58,6 +59,12 @@ export const TD = styled.td`
 
   background-color: #C8EFCC;
   border-bottom: 1px solid black;
+`;
+
+export const TDWhite = styled.td`
+  padding: 12px;
+
+  background-color: #fff;
 `;
 
 export const TR = styled.tr`
@@ -178,6 +185,7 @@ const Project: FC<Props> = (params) => {
                     return (
                       <>
                         <TaskContainer
+                          projectUsers={params.project.users}
                           task={task}
                           key={`task/${task.id}`}
                         />
@@ -190,6 +198,7 @@ const Project: FC<Props> = (params) => {
                       </>
                     )
                   })}
+                  <NewTaskContainer project={params.project}/>
                 </tbody>
               </Table>
             </Wrapper>

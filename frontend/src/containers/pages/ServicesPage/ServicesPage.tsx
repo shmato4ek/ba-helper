@@ -5,6 +5,7 @@ import Icon from '../../../components/Icon/Icon';
 import styled from 'styled-components';
 import Button from '../../../components/Button/Button';
 import Font from '../../../components/Font/Font';
+import { HeaderLink } from '../../../components/Header/Header'
 
 const FrontPageStyled = styled.div`
   display: grid;
@@ -72,11 +73,13 @@ const ServicesPage: FC<Props> = (params) => {
           <Button buttonType='button' styleType='none'>
             <GreenCard>
               <Icon type='add-file'/>
-              <div>Створити документацію</div>
+              <HeaderLink link='/documents/new'>
+                Створити документацію
+              </HeaderLink>
             </GreenCard>
           </Button>
 
-          <Button buttonType='button' styleType='none'>
+          {/* <Button buttonType='button' styleType='none'>
             <GreenCard>
               <Icon type='diagram'/>
               Створити діаграму
@@ -95,7 +98,7 @@ const ServicesPage: FC<Props> = (params) => {
               <Icon type='text-file'/>
               Створити план комунікації
             </GreenCard>
-          </Button>
+          </Button> */}
         </List>
       </Services>
     </FrontPageStyled>

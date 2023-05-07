@@ -6,7 +6,7 @@ import * as _ from 'lodash'
 import { CreateErrorObject, EditSubtaskDto, PutSubtaskDto, SubtaskDto, TaskState, taskStates, taskStateToText } from '../../store/types';
 import { validateStraight } from '../../yup';
 import { PutSubtask, PutSubtaskState } from '../../store/actions';
-import { TD, TR } from '../../components/Project/Project';
+import { TD, TDWhite, TR } from '../../components/Project/Project';
 import FormStringField from '../../components/Form/FormStringField/FormStringField';
 import FormError from '../../components/Form/FormError/FormError';
 import { Formik, FormikProps } from 'formik';
@@ -107,7 +107,7 @@ const SubtaskContainer = ({
             <FormError name='taskState' />
           </TD>
           {
-          <AlignCenter>
+          <TDWhite>
             {isEditMode
               ? <Button buttonType='button' styleType='none' onClick={() => {
                   handleSubmit();
@@ -118,7 +118,7 @@ const SubtaskContainer = ({
               : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
                 <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
               </Button>}
-          </AlignCenter>
+          </TDWhite>
         }
         </TR>
       </>

@@ -65,8 +65,8 @@ const PostDocumentPage = () => {
       const postDocumentDto: PostDocumentDto = {
         name: values.name,
         projectAim: values.projectAim,
-        glossaries: values.glossaries,
-        userStories: values.userStories,
+        glossaries: glossaries,
+        userStories: userStories,
       };
 
       console.log("Create Project Page values submit");
@@ -78,7 +78,7 @@ const PostDocumentPage = () => {
         navigate,
       });
     },
-    [dispatch, navigate]
+    [dispatch, navigate, glossaries, userStories]
   );
 
   const postDocument: PostDocumentDto = {
