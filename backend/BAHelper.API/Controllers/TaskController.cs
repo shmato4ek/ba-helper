@@ -72,7 +72,7 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPut("state")]
-        public async Task<ActionResult> ChangeTaskState(int taskId, TaskState taskState)
+        public async Task<ActionResult> ChangeTaskState([FromBody] int taskId, TaskState taskState)
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);

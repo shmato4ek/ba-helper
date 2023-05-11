@@ -408,10 +408,13 @@ function* documentDownload(documentDownload: DocumentDownload) {
     const response: {
       data: any
     } = yield call(() => {
-      return axios.get(`${globals.endpoint}${globals.paths.download._}`, {
+      return axios.get(`${globals.endpoint}${globals.paths.download._}/${documentDownload.payload}`, {
         data: documentDownload.payload
       });
     });
+    console.log('@response');
+    console.log(JSON.stringify(response.data, null, 2));
+
 
     yield put<AppAction>({
       type: 'DOCUMENT_DOWNLOAD_SUCCESS',

@@ -1,9 +1,5 @@
 ﻿using BAHelper.BLL.Services;
-using BAHelper.Common;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 
 namespace BAHelper.API.Controllers
 {
@@ -18,7 +14,7 @@ namespace BAHelper.API.Controllers
             _downloadService= downloadService;
         }
 
-        [HttpGet]
+        [HttpGet("{documentId:int}")]
         public async Task<ActionResult> DownloadFile(int documentId)
         {
             var fileConfig = await _downloadService.DownloadDocument(documentId);
