@@ -2,6 +2,7 @@
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common;
 using BAHelper.Common.DTOs.Document;
+using BAHelper.Common.Services;
 using BAHelper.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
@@ -165,6 +166,100 @@ namespace BAHelper.BLL.Services
                 }
 
             }
+        }
+
+        public async Task CreateRaciMatrixFile(RaciMatrix raciMatrix)
+        {
+            try
+            {
+                object filename = "RaciMatrix.docx";
+                Document document = new Document();
+                Section section = document.AddSection();
+
+                ParagraphStyle headerStyle = new ParagraphStyle(document);
+                headerStyle.Name = "Header style";
+                headerStyle.CharacterFormat.FontSize = 14;
+                document.Styles.Add(headerStyle);
+
+                Paragraph raciMatrixHeader = section.AddParagraph();
+                raciMatrixHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                raciMatrixHeader.AppendText(BuiltinStyle.Heading2.ToString());
+                string raciMatrixText = "RACI Matrix";
+                raciMatrixHeader.Text = raciMatrixText;
+                raciMatrixHeader.ApplyStyle(headerStyle.Name);
+
+                Paragraph raciParagraph = section.AddParagraph();
+                List<string> raciMatrixTableHeaders = new List<string>();
+                raciMatrixTableHeaders.Add("");
+                foreach(var executor in raciMatrix.Executors)
+                {
+                    raciMatrixTableHeaders.Add(executor);
+                }
+
+                Table raciTable = section.AddTable(true);
+                raciTable.ResetCells(raciMatrix.RACI.Count + 1, raciMatrixTableHeaders.Count);
+                TableRow FRow = raciTable.Rows[0];
+                FRow.IsHeader = true;
+                //for (int i = 0; i < raciMatrixTableHeaders.Count; i++)
+                //{
+                //    TextRange TR = raciParagraph.AppendText(raciMatrixTableHeaders[i]);
+                //    TR.CharacterFormat.FontSize = 11;
+                //    TR.CharacterFormat.Bold = true;
+                //}
+
+                //for (int r = 0; r < raciMatrix.RACI.Count; r++)
+                //{
+                //    TableRow DataRow = raciTable.Rows[r + 1];
+                //    for (int c = 0; c < raciMatrix.RACI[r].Count; c++)
+                //    {
+                //        Paragraph glossaryPar = DataRow.Cells[c].AddParagraph();
+                //        TextRange TR3 = glossaryPar.AppendText(raciMatrix.Tasks[i]);
+                //        TextRange TR2 = glossaryPar.AppendText(raciMatrix.RACI[r][c].ToString());
+                //        TR2.CharacterFormat.FontSize = 11;
+                //    }
+                //}
+
+                for (int i = 0; i < raciMatrixTableHeaders.Count; i++)
+                {
+                    Paragraph p = FRow.Cells[i].AddParagraph();
+                    FRow.Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                    p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                    TextRange TR = p.AppendText(raciMatrixTableHeaders[i]);
+                    TR.CharacterFormat.FontSize = 12;
+                    TR.CharacterFormat.Bold = true;
+                }
+
+                for (int r = 0; r < raciMatrix.RACI.Count; r++)
+                {
+                    TableRow DataRow = raciTable.Rows[r+1];
+                    DataRow.Height = 20;
+                    for (int c = 0; c < raciMatrix.RACI[r].Count+1; c++)
+                    {
+                        if (c == 0)
+                        {
+                            DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                            Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                            TextRange TR3 = p2.AppendText(raciMatrix.Tasks[r]);
+                            p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                            TR3.CharacterFormat.FontSize = 11;
+                        }
+                        else
+                        {
+                            DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                            Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                            TextRange TR2 = p2.AppendText(raciMatrix.RACI[r][c-1].ToString());
+                            p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                            TR2.CharacterFormat.FontSize = 11;
+                        }
+                    }
+                }
+                document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return;
         }
     }
 }

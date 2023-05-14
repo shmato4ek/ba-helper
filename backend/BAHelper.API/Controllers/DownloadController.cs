@@ -1,4 +1,5 @@
 ﻿using BAHelper.BLL.Services;
+using BAHelper.Common.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
@@ -21,5 +22,11 @@ namespace BAHelper.API.Controllers
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
         }
 
+        [HttpPost("RACI")]
+        public async Task<ActionResult> DownloadRaci(RaciMatrix raciMatrix)
+        {
+            var fileConfig = await _downloadService.DownloadRaci(raciMatrix);
+            return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
+        }
     }
 }
