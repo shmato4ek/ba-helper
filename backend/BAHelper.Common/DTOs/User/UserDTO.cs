@@ -14,6 +14,7 @@ namespace BAHelper.Common.DTOs.User
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public bool IsAgreedToNotification { get; set; }
         public List<ProjectDTO> Projects { get; set; }
         public List<ProjectTaskDTO> Tasks { get; set; }
         public List<DocumentDTO> Documents { get; set; }

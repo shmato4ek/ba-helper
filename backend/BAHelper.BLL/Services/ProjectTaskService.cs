@@ -12,8 +12,12 @@ namespace BAHelper.BLL.Services
 {
     public class ProjectTaskService : BaseService
     {
-        public ProjectTaskService(BAHelperDbContext context, IMapper mapper)
-        :base(context, mapper) { }
+        private readonly MailService _mailService;
+        public ProjectTaskService(BAHelperDbContext context, IMapper mapper, MailService mailService)
+        :base(context, mapper) 
+        {
+            _mailService = mailService;
+        }
 
         public async Task<ProjectTaskDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int userId)
         {
@@ -201,10 +205,19 @@ namespace BAHelper.BLL.Services
             //Will be removed
             //****
             taskEntity.Users = new List<User>();
-
+            taskEntity.Users.Add(userEntity);
             //taskEntity.Users.Add(userEntity);
-            _context.Users.Update(userEntity);
+            _context.Tasks.Update(taskEntity);
             await _context.SaveChangesAsync();
+
+            if (userEntity.IsAgreedToNotification)
+            {
+                var authorEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+                string message = $"{authorEntity.Name} asigned task ({taskEntity.TaskName}) of project ({projectEntity.ProjectName}) to you";
+                await _mailService.SendMail(userEntity.Email, "Added to task", message, userEntity.Name);
+            }
 
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
 

@@ -112,6 +112,7 @@ namespace BAHelper.BLL.Services
             }
             userEntity.Name = updatedUser.Name;
             userEntity.Email = updatedUser.Email;
+            userEntity.IsAgreedToNotification = updatedUser.IsAgreedToNotification;
             _context.Users.Update(userEntity);
             await _context.SaveChangesAsync();
             return _mapper.Map<UserInfoDTO>(userEntity);

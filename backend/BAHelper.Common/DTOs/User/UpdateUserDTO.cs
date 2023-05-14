@@ -12,6 +12,7 @@ namespace BAHelper.Common.DTOs.User
         public string Email { get; set; }
         public string OldPassword { get; set; }
         public string NewPassword { get; set; }
+        public bool IsAgreedToNotification { get; set; }
         public bool ChangePassword { get; set; } = false;
     }
 }
