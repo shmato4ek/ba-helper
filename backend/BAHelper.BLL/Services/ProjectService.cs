@@ -194,7 +194,43 @@ namespace BAHelper.BLL.Services
                     project.CanEdit = true;
                 }
             }
-            return projectsDto;
+            var ownProjects = new List<ProjectInfoDTO>();
+            foreach (var project in projectsDto) 
+            {
+                if (project.IsDeleted == false)
+                {
+                    ownProjects.Add(project);
+                }
+            }
+            return ownProjects;
+        }
+
+        public async Task<List<ProjectInfoDTO>> GetOwnArchivedProjects(int userId)
+        {
+            var projectsEntity = await _context
+                .Projects
+                .Where(project => project.AuthorId == userId)
+                .Include(project => project.Users)
+                .Include(project => project.Tasks)
+                .ToListAsync();
+
+            var projectsDto = _mapper.Map<List<ProjectInfoDTO>>(projectsEntity);
+            foreach (var project in projectsDto)
+            {
+                if (project.AuthorId == userId)
+                {
+                    project.CanEdit = true;
+                }
+            }
+            var ownProjects = new List<ProjectInfoDTO>();
+            foreach (var project in projectsDto)
+            {
+                if (project.IsDeleted == true)
+                {
+                    ownProjects.Add(project);
+                }
+            }
+            return ownProjects;
         }
 
         public async Task<List<ProjectInfoDTO>> GetAllUsersProjects(int userId)
@@ -220,8 +256,15 @@ namespace BAHelper.BLL.Services
                 var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == project.AuthorId);
                 project.AuthorName = user.Name;
             }
-
-            return projectsDto;
+            var usersProjects = new List<ProjectInfoDTO>();
+            foreach (var project in projectsDto)
+            {
+                if (project.IsDeleted == false)
+                {
+                    usersProjects.Add(project);
+                }
+            }
+            return usersProjects;
         }
 
         public async Task<List<ProjectTaskInfoDTO>> GetAllProjectTasks(int projectId, int userId)

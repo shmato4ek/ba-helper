@@ -42,6 +42,14 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectService.GetAllUsersOwnProject(userId));
         }
 
+        [HttpGet("user/own/archive")]
+        public async Task<ActionResult> GetAllUsersArchivedProjects()
+        {
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectService.GetOwnArchivedProjects(userId));
+        }
+
         [HttpGet("user")]
         public async Task<ActionResult> GetAllUsersProjects()
         {

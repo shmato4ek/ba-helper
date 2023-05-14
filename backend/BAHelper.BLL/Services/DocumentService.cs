@@ -123,8 +123,38 @@ namespace BAHelper.BLL.Services
                 .Where(document => document.UserId == userId)
                 .ToListAsync();
 
-            return _mapper.Map<List<DocumentDTO>>(documentsEntities);
+            var documentsDto = _mapper.Map<List<DocumentDTO>>(documentsEntities);
+            var ownDocuments = new List<DocumentDTO>();
+            foreach (var document in documentsDto)
+            {
+                if (!document.IsDeleted)
+                {
+                    ownDocuments.Add(document);
+                }
+            }
+            return ownDocuments;
         }
+
+        public async Task<List<DocumentDTO>> GetArcivedDocuments(int userId)
+        {
+            var documentsEntities = await _context
+                .Documents
+                .Include(doc => doc.Glossary)
+                .Where(document => document.UserId == userId)
+                .ToListAsync();
+
+            var documentsDto = _mapper.Map<List<DocumentDTO>>(documentsEntities);
+            var ownDocuments = new List<DocumentDTO>();
+            foreach (var document in documentsDto)
+            {
+                if (document.IsDeleted)
+                {
+                    ownDocuments.Add(document);
+                }
+            }
+            return ownDocuments;
+        }
+
         public async Task<DocumentDTO> UpdateDocument(UpdateDocumentDTO updatedDocument, int userId)
         {
             var documentEntity = await _context

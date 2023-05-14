@@ -33,6 +33,14 @@ namespace BAHelper.API.Controllers
             return Ok(await _documentService.GetAllUsersDocumentsById(userId));
         }
 
+        [HttpGet("user/archive")]
+        public async Task<ActionResult> GetArchivedDocuments()
+        {
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _documentService.GetArcivedDocuments(userId));
+        }
+
         [HttpPut]
         public async Task<ActionResult> UpdateDocument([FromBody] UpdateDocumentDTO updatedDocument)
         {
