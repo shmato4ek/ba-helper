@@ -68,7 +68,7 @@ namespace BAHelper.BLL.Services
             return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
         }
 
-        public async Task<UserDTO> DeleteUser(int userId)
+        public async Task DeleteUser(int userId)
         {
             var userEntity = await _context
                 .Users
@@ -78,8 +78,7 @@ namespace BAHelper.BLL.Services
                 throw new NotFoundException(nameof(User), userId);
             }
             _context.Users.Remove(userEntity);
-            _context.SaveChanges();
-            return _mapper.Map<UserDTO>(userEntity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<UserDTO> GetUserById(int userId)

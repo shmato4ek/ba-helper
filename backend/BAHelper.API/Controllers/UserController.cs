@@ -42,7 +42,8 @@ namespace BAHelper.API.Controllers
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _userService.DeleteUser(userId));
+            await _userService.DeleteUser(userId);
+            return NoContent();
         }
 
         [HttpGet]

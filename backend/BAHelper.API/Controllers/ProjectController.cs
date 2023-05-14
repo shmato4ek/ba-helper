@@ -22,8 +22,8 @@ namespace BAHelper.API.Controllers
         public async Task<ActionResult> CreateProject(NewProjectDTO newProject)
         {
             var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectService.CreateProject(newProject, userId));
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectService.CreateProject(newProject, 6));
         }
 
         [HttpGet("{projectId:int}")]

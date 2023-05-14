@@ -213,36 +213,6 @@ namespace BAHelper.DAL.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("BAHelper.DAL.Entities.Subtask", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int?>("ProjectTaskId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TaskState")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectTaskId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("Subtasks");
-                });
-
             modelBuilder.Entity("BAHelper.DAL.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -415,19 +385,36 @@ namespace BAHelper.DAL.Migrations
                     b.HasOne("BAHelper.DAL.Entities.Project", null)
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId1");
-                });
 
-            modelBuilder.Entity("BAHelper.DAL.Entities.Subtask", b =>
-                {
-                    b.HasOne("BAHelper.DAL.Entities.ProjectTask", null)
-                        .WithMany("Subtasks")
-                        .HasForeignKey("ProjectTaskId");
+                    b.OwnsMany("BAHelper.DAL.Entities.Subtask", "Subtasks", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
 
-                    b.HasOne("BAHelper.DAL.Entities.ProjectTask", null)
-                        .WithMany()
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<int>("TaskId")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("TaskState")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("TaskId");
+
+                            b1.ToTable("Subtasks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TaskId");
+                        });
+
+                    b.Navigation("Subtasks");
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.UserStory", b =>
@@ -496,11 +483,6 @@ namespace BAHelper.DAL.Migrations
             modelBuilder.Entity("BAHelper.DAL.Entities.Project", b =>
                 {
                     b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("BAHelper.DAL.Entities.ProjectTask", b =>
-                {
-                    b.Navigation("Subtasks");
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.User", b =>

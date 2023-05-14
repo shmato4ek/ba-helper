@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "BAHelper.BLL/1.0.0": {
         "dependencies": {
+          "Aspose.Words": "23.5.0",
           "AutoMapper": "12.0.1",
           "BAHelper.Common": "1.0.0",
           "BAHelper.DAL": "1.0.0",
@@ -17,6 +18,7 @@
           "Microsoft.Office.Interop.Word": "15.0.4797.1004",
           "MimeKit": "3.5.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.1",
+          "SendGrid": "9.28.1",
           "ServiceStack": "6.6.0",
           "Spire.Doc": "11.1.4",
           "System.IdentityModel.Tokens.Jwt": "6.29.0",
@@ -24,6 +26,25 @@
         },
         "runtime": {
           "BAHelper.BLL.dll": {}
+        }
+      },
+      "Aspose.Words/23.5.0": {
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.7.0",
+          "SkiaSharp": "2.80.1",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Text.Encoding.CodePages": "6.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/Aspose.Words.Pdf2Word.dll": {
+            "assemblyVersion": "23.5.0.0",
+            "fileVersion": "23.5.0.0"
+          },
+          "lib/net6.0/Aspose.Words.dll": {
+            "assemblyVersion": "23.5.0.0",
+            "fileVersion": "23.5.0.0"
+          }
         }
       },
       "AutoMapper/12.0.1": {
@@ -296,6 +317,12 @@
           }
         }
       },
+      "Microsoft.Win32.Registry/4.7.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "6.0.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
       "Microsoft.Win32.SystemEvents/7.0.0": {
         "runtime": {
           "lib/net6.0/Microsoft.Win32.SystemEvents.dll": {
@@ -410,6 +437,18 @@
       "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
+      "SendGrid/9.28.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "starkbank-ecdsa": "1.3.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SendGrid.dll": {
+            "assemblyVersion": "9.28.1.0",
+            "fileVersion": "9.28.1.0"
+          }
+        }
+      },
       "ServiceStack/6.6.0": {
         "dependencies": {
           "ServiceStack.Client": "6.6.0",
@@ -472,6 +511,39 @@
           }
         }
       },
+      "SkiaSharp/2.80.1": {
+        "dependencies": {
+          "System.Memory": "4.5.5"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SkiaSharp.dll": {
+            "assemblyVersion": "2.80.0.0",
+            "fileVersion": "2.80.1.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/osx/native/libSkiaSharp.dylib": {
+            "rid": "osx",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-arm64/native/libSkiaSharp.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libSkiaSharp.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libSkiaSharp.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
       "Spire.Doc/11.1.4": {
         "dependencies": {
           "System.Drawing.Common": "7.0.0",
@@ -487,6 +559,14 @@
           "lib/net6.0/Spire.Pdf.dll": {
             "assemblyVersion": "9.1.0.0",
             "fileVersion": "9.1.0.1360"
+          }
+        }
+      },
+      "starkbank-ecdsa/1.3.3": {
+        "runtime": {
+          "lib/netstandard2.1/StarkbankEcdsa.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -666,6 +746,22 @@
           "Microsoft.NETCore.Platforms": "1.1.1",
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.IO": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Emit/4.3.0": {
+        "dependencies": {
+          "System.IO": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Reflection.Emit.ILGeneration/4.3.0": {
+        "dependencies": {
+          "System.Reflection": "4.3.0",
           "System.Reflection.Primitives": "4.3.0",
           "System.Runtime": "4.3.0"
         }
@@ -858,6 +954,7 @@
           }
         }
       },
+      "System.Security.Principal.Windows/4.7.0": {},
       "System.Text.Encoding/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.1",
@@ -932,6 +1029,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Aspose.Words/23.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ux0fZXnMrVjRLipS+N/RsgAKnTHsJ8osaiVa+7yt2IO2IZJZpqqiGJj9J8O0+7vCMkDgFrz1h21CkGCKDekTMw==",
+      "path": "aspose.words/23.5.0",
+      "hashPath": "aspose.words.23.5.0.nupkg.sha512"
     },
     "AutoMapper/12.0.1": {
       "type": "package",
@@ -1129,6 +1233,13 @@
       "path": "microsoft.office.interop.word/15.0.4797.1004",
       "hashPath": "microsoft.office.interop.word.15.0.4797.1004.nupkg.sha512"
     },
+    "Microsoft.Win32.Registry/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
+      "path": "microsoft.win32.registry/4.7.0",
+      "hashPath": "microsoft.win32.registry.4.7.0.nupkg.sha512"
+    },
     "Microsoft.Win32.SystemEvents/7.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1276,6 +1387,13 @@
       "path": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.2",
       "hashPath": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512"
     },
+    "SendGrid/9.28.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LyIkgjd+svXuQxpqe5pvyOccyUdKcDqwnBNDPjyCngkKeVpXAOTAr3U1DBLWqHEbFHvu2UBFki3SJzDwxvJdfA==",
+      "path": "sendgrid/9.28.1",
+      "hashPath": "sendgrid.9.28.1.nupkg.sha512"
+    },
     "ServiceStack/6.6.0": {
       "type": "package",
       "serviceable": true,
@@ -1311,12 +1429,26 @@
       "path": "servicestack.text/6.6.0",
       "hashPath": "servicestack.text.6.6.0.nupkg.sha512"
     },
+    "SkiaSharp/2.80.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CiQwnDzG+1JNGzjAN9G/9n/lJgUVA/NPOFgSlEtu6c7qQ0O7P1tMjrXp/+PtWfX0xyyY9ABsFAZK2kW34U7r/A==",
+      "path": "skiasharp/2.80.1",
+      "hashPath": "skiasharp.2.80.1.nupkg.sha512"
+    },
     "Spire.Doc/11.1.4": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-QgPykl5LAKYpN1NZ1I27YbzyNyC/jNJeHkk5Suh6vzyOa7k/hCrnDcvg8K1nxtbcp+kDubrvobTJkRQj2kXQ4g==",
       "path": "spire.doc/11.1.4",
       "hashPath": "spire.doc.11.1.4.nupkg.sha512"
+    },
+    "starkbank-ecdsa/1.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OblOaKb1enXn+dSp7tsx9yjwV+/BEKM9jFhshIkZTwCk7LuTFTp+wSon6rFzuPiIiTGtvVWQNUw2slHjGktJog==",
+      "path": "starkbank-ecdsa/1.3.3",
+      "hashPath": "starkbank-ecdsa.1.3.3.nupkg.sha512"
     },
     "System.Collections/4.3.0": {
       "type": "package",
@@ -1451,6 +1583,20 @@
       "path": "system.reflection/4.3.0",
       "hashPath": "system.reflection.4.3.0.nupkg.sha512"
     },
+    "System.Reflection.Emit/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-228FG0jLcIwTVJyz8CLFKueVqQK36ANazUManGaJHkO0icjiIypKW7YLWLIWahyIkdh5M7mV2dJepllLyA1SKg==",
+      "path": "system.reflection.emit/4.3.0",
+      "hashPath": "system.reflection.emit.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Emit.ILGeneration/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-59tBslAk9733NXLrUJrwNZEzbMAcu8k344OYo+wfSVygcgZ9lgBdGIzH/nrg3LYhXceynyvTc8t5/GD4Ri0/ng==",
+      "path": "system.reflection.emit.ilgeneration/4.3.0",
+      "hashPath": "system.reflection.emit.ilgeneration.4.3.0.nupkg.sha512"
+    },
     "System.Reflection.Primitives/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -1583,6 +1729,13 @@
       "sha512": "sha512-T/uuc7AklkDoxmcJ7LGkyX1CcSviZuLCa4jg3PekfJ7SU0niF0IVTXwUiNVP9DSpzou2PpxJ+eNY2IfDM90ZCg==",
       "path": "system.security.permissions/6.0.0",
       "hashPath": "system.security.permissions.6.0.0.nupkg.sha512"
+    },
+    "System.Security.Principal.Windows/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
+      "path": "system.security.principal.windows/4.7.0",
+      "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
     },
     "System.Text.Encoding/4.3.0": {
       "type": "package",

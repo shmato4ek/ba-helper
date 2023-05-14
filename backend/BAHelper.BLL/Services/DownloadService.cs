@@ -35,6 +35,7 @@ namespace BAHelper.BLL.Services
             }
 
             string fileName = foundDocument.Name + ".docx";
+
             if (string.IsNullOrEmpty(fileName) || fileName == null)
             {
                 throw new NotFoundException(nameof(Document));

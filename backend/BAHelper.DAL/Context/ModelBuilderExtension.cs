@@ -20,7 +20,6 @@ namespace BAHelper.DAL.Context
             modelBuilder.ApplyConfiguration(new UserStoryFormulaConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectTaskConfiguration());
-            modelBuilder.ApplyConfiguration(new SubtaskConfiguration());
         }
     }
 }

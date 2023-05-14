@@ -12,10 +12,12 @@ namespace BAHelper.BLL.Services
     public class ProjectService : BaseService
     {
         private readonly ProjectTaskService _projectTaskService;
-        public ProjectService(BAHelperDbContext context, IMapper mapper, ProjectTaskService projectTaskService)
+        private readonly MailService _mailService;
+        public ProjectService(BAHelperDbContext context, IMapper mapper, ProjectTaskService projectTaskService, MailService mailService)
             : base(context, mapper) 
         {
             _projectTaskService = projectTaskService;
+            _mailService = mailService;
         }
 
         public async Task<ProjectInfoDTO> CreateProject(NewProjectDTO newProject, int userId)
@@ -42,6 +44,17 @@ namespace BAHelper.BLL.Services
                     {
                         unregisteredUsers.Add(email);
                     }
+                }
+            }
+            if (unregisteredUsers != null)
+            {
+                var authorEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+                string message = $"Hello, {authorEntity.Name} has invited you to the project {newProject.ProjectName}, but you must be registered in BAHelper.";
+                foreach (var sendEmail in unregisteredUsers)
+                {
+                    await _mailService.SendMail(sendEmail, "Invitation to the project", message);
                 }
             }
             // foreach (var task in newProject.Tasks)

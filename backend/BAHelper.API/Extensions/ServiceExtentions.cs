@@ -25,6 +25,7 @@ namespace BAHelper.API.Extensions
             services.AddScoped<ProjectTaskService>();
             services.AddScoped<AuthService>();
             services.AddScoped<JwtFactory>();
+            services.AddScoped<MailService>();
         }
 
         public static void RegisterAutoMapper(this IServiceCollection services)
