@@ -7,6 +7,7 @@ using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using ServiceStack.Text;
 
 namespace BAHelper.BLL.Services
 {
@@ -276,6 +277,20 @@ namespace BAHelper.BLL.Services
             taskEntity.TaskState = taskState;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
+            if (taskState == TaskState.Done)
+            {
+                var projectEntity = await _context
+                    .Projects
+                    .FirstOrDefaultAsync(p => p.Id == taskEntity.ProjectId);
+                var authorEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == projectEntity.AuthorId);
+                if (authorEntity.IsAgreedToNotification)
+                {
+                    string message = $"{userEntity.Name} have done task ({taskEntity.TaskName}) in project ({projectEntity.ProjectName}).";
+                    await _mailService.SendMail(authorEntity.Email, "Task done", message, authorEntity.Name);
+                }
+            }
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
         }
 
@@ -303,6 +318,17 @@ namespace BAHelper.BLL.Services
             taskEntity.TaskState = TaskState.Approved;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
+            if (taskEntity.Users.Count != 0)
+            {
+                foreach (var user in taskEntity.Users)
+                {
+                    if (user.IsAgreedToNotification)
+                    {
+                        string message = $"Your task {taskEntity.TaskName} was approved.";
+                        await _mailService.SendMail(user.Email, "Task approved", message, user.Name);
+                    }
+            }
+            }
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
         }
 
