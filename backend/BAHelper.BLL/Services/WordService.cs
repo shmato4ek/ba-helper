@@ -261,5 +261,100 @@ namespace BAHelper.BLL.Services
             }
             return;
         }
+
+        public async Task CreateCommunicationPlan(List<CommunicationPlan> plan)
+        {
+            try
+            {
+                object filename = "CommunicationPlan.docx";
+                Document document = new Document();
+                Section section = document.AddSection();
+
+                ParagraphStyle headerStyle = new ParagraphStyle(document);
+                headerStyle.Name = "Header style";
+                headerStyle.CharacterFormat.FontSize = 14;
+                document.Styles.Add(headerStyle);
+
+                Paragraph communicationPlanHeader = section.AddParagraph();
+                communicationPlanHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                communicationPlanHeader.AppendText(BuiltinStyle.Heading2.ToString());
+                string communicationPlanText = "Communication plan";
+                communicationPlanHeader.Text = communicationPlanText;
+                communicationPlanHeader.ApplyStyle(headerStyle.Name);
+
+                Paragraph comParagraph = section.AddParagraph();
+                List<string> comTableHeaders = new List<string>
+                {
+                    "Опис",
+                    "Частота",
+                    "Канал",
+                    "Аудиторія",
+                    "Організатор"
+                };
+
+                Table comTable = section.AddTable(true);
+                comTable.ResetCells(plan.Count + 1, comTableHeaders.Count);
+                TableRow FRow = comTable.Rows[0];
+                FRow.IsHeader = true;
+
+                for (int i = 0; i < comTableHeaders.Count; i++)
+                {
+                    Paragraph p = FRow.Cells[i].AddParagraph();
+                    FRow.Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                    p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                    TextRange TR = p.AppendText(comTableHeaders[i]);
+                    TR.CharacterFormat.FontSize = 12;
+                    TR.CharacterFormat.Bold = true;
+                }
+
+                for (int r = 0; r < plan.Count; r++)
+                {
+                    TableRow DataRow = comTable.Rows[r + 1];
+                    DataRow.Height = 20;
+                    for (int c = 0; c < 5; c++)
+                    {
+                        DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                        switch (c)
+                        {
+                            case 0:
+                                TextRange TR1 = p2.AppendText(plan[r].Description);
+                                TR1.CharacterFormat.FontSize = 11;
+                                break;
+                            case 1:
+                                TextRange TR2 = p2.AppendText(plan[r].Frequency);
+                                TR2.CharacterFormat.FontSize = 11;
+                                break;
+                            case 2:
+                                TextRange TR3 = p2.AppendText(plan[r].Channel);
+                                TR3.CharacterFormat.FontSize = 11;
+                                break;
+                            case 3:
+                                TextRange TR4 = p2.AppendText(plan[r].Audience);
+                                TR4.CharacterFormat.FontSize = 11;
+                                break;
+                            case 4:
+                                TextRange TR5 = p2.AppendText(plan[r].Organizer);
+                                TR5.CharacterFormat.FontSize = 11;
+                                break;
+                        }
+                        p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                    }
+                }
+                document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
+
+
+                //********************************************************
+
+
+
+                //********************************************************
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

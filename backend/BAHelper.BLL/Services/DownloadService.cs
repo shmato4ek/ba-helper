@@ -86,5 +86,30 @@ namespace BAHelper.BLL.Services
             DownloadFileModel result = new DownloadFileModel(memoryStream, mimeType(filePath), Path.GetFileName(filePath));
             return result;
         }
+
+        public async Task<DownloadFileModel> DownloadComPlan(List<CommunicationPlan> plan)
+        {
+            await _wordService.CreateCommunicationPlan(plan);
+            string fileName = "CommunicationPlan.docx";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+                "LocalFiles", fileName);
+            var memoryStream = new MemoryStream();
+
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Position = 0;
+
+            var mimeType = (string file) =>
+            {
+                var mimeTypes = MimeTypes.GetMimeTypes();
+                var extension = Path.GetExtension(file).ToLowerInvariant();
+                return mimeTypes[extension];
+            };
+            DownloadFileModel result = new DownloadFileModel(memoryStream, mimeType(filePath), Path.GetFileName(filePath));
+            return result;
+
+        }
     }
 }

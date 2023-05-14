@@ -28,5 +28,12 @@ namespace BAHelper.API.Controllers
             var fileConfig = await _downloadService.DownloadRaci(raciMatrix);
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
         }
+
+        [HttpPost("CommunicationPlan")]
+        public async Task<ActionResult> DownloadComPlan(List<CommunicationPlan> plan)
+        {
+            var fileConfig = await _downloadService.DownloadComPlan(plan);
+            return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
+        }
     }
 }
