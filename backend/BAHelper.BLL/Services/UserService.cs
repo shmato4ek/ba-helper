@@ -108,7 +108,8 @@ namespace BAHelper.BLL.Services
                 {
                     throw new InvalidUserNameOrPasswordException();
                 }
-                userEntity.Password = updatedUser.NewPassword;
+                var salt = SecurityHelper.GetRandomBytes();
+                userEntity.Password = SecurityHelper.HashPassword(updatedUser.NewPassword, salt);
             }
             userEntity.Name = updatedUser.Name;
             userEntity.Email = updatedUser.Email;

@@ -32,139 +32,164 @@ namespace BAHelper.BLL.Services
 
         public async Task<DocumentDTO> CreateWordFile(int documentId)
         {
-            var documentEntity = await _context.Documents.FirstOrDefaultAsync(doc => doc.Id == documentId);
+            var documentEntity = await _context
+                .Documents
+                .Include(doc => doc.Glossary)
+                .Include(doc => doc.UserStories)
+                .FirstOrDefaultAsync(doc => doc.Id == documentId);
             if (documentEntity is null)
             {
                 return null;
             }
-            else
+            try
             {
-                try
+                object filename = documentEntity.Name + ".docx";
+                Document document = new Document();
+                Section section1 = document.AddSection();
+
+                Paragraph documentHeader = section1.AddParagraph();
+                documentHeader.Format.AfterAutoSpacing = false;
+                documentHeader.Format.AfterSpacing = 15;
+                string documentHeaderText = documentEntity.Name;
+                TextRange documentHeaderTR = documentHeader.AppendText(documentHeaderText);
+                documentHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                documentHeaderTR.CharacterFormat.FontSize = 18;
+                documentHeaderTR.CharacterFormat.Bold = true;
+
+                Paragraph contentHeader = section1.AddParagraph();
+                contentHeader.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                contentHeader.Format.AfterAutoSpacing = false;
+                contentHeader.Format.AfterSpacing = 25;
+                string contentHeaderText = "Table of content";
+                TextRange contentHeaderTR = contentHeader.AppendText(contentHeaderText);
+                contentHeaderTR.CharacterFormat.FontSize = 14;
+                contentHeaderTR.CharacterFormat.Bold = true;
+
+                Paragraph contentParagraph = section1.AddParagraph();
+                contentParagraph.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                string contentParagraphText = "1. Aim of the project\n" +
+                                              "2. Glossary\n" +
+                                              "3. Functional requirements (Use cases)";
+                TextRange contentParagraphTR = contentParagraph.AppendText(contentParagraphText);
+                contentParagraphTR.CharacterFormat.FontSize = 14;
+
+                //Break pageBreak = new Break(document, BreakType.PageBreak);
+                //contentParagraph.ChildObjects.Insert(1, pageBreak);
+
+                Section section2 = document.AddSection();
+                Paragraph projectAimHeader = section2.AddParagraph();
+                projectAimHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                projectAimHeader.Format.AfterAutoSpacing = false;
+                projectAimHeader.Format.AfterSpacing = 10;
+                string projectAimHeaderText = "Project aim";
+                TextRange projectAimHeaderTR = projectAimHeader.AppendText(projectAimHeaderText);
+                projectAimHeaderTR.CharacterFormat.FontSize = 14;
+                projectAimHeaderTR.CharacterFormat.Bold = true;
+
+                Paragraph projectAimParagraph = section2.AddParagraph();
+                projectAimParagraph.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                projectAimParagraph.Format.AfterAutoSpacing = false;
+                projectAimHeader.Format.AfterSpacing = 20;
+                string projectAimText = documentEntity.ProjectAim;
+                TextRange projectAimTR = projectAimParagraph.AppendText(projectAimText);
+                projectAimTR.CharacterFormat.FontSize = 14;
+
+                Paragraph glossaryHeader = section2.AddParagraph();
+                string glossaryHeaderText = "Glossary";
+                glossaryHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                glossaryHeader.Format.AfterAutoSpacing = false;
+                glossaryHeader.Format.AfterSpacing = 10;
+                TextRange glossaryHeaderTR = glossaryHeader.AppendText(glossaryHeaderText);
+                glossaryHeaderTR.CharacterFormat.FontSize = 14;
+                glossaryHeaderTR.CharacterFormat.Bold = true;
+
+                if (documentEntity.Glossary != null)
                 {
-                    object filename = documentEntity.Name + ".docx";
-                    Document document = new Document();
-                    Section section = document.AddSection();
-
-                    ParagraphStyle headerStyle = new ParagraphStyle(document);
-                    headerStyle.Name = "Header style";
-                    headerStyle.CharacterFormat.FontSize = 14;
-                    document.Styles.Add(headerStyle);
-
-                    ParagraphStyle textStyle = new ParagraphStyle(document);
-                    textStyle.Name = "Text style";
-                    textStyle.CharacterFormat.FontSize = 11;
-                    document.Styles.Add(textStyle);
-
-
-                    Paragraph projectAimHeader = section.AddParagraph();
-                    projectAimHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
-                    projectAimHeader.AppendText(BuiltinStyle.Heading2.ToString());
-                    string projectAimHeaderText = "Aim of the project";
-                    projectAimHeader.Text = projectAimHeaderText;
-                    projectAimHeader.ApplyStyle(headerStyle.Name);
-
-                    Paragraph projectAimParagraph = section.AddParagraph();
-                    projectAimParagraph.Format.HorizontalAlignment = HorizontalAlignment.Left;
-                    if (documentEntity.ProjectAim != null)
+                    Paragraph glossaryParagraph = section2.AddParagraph();
+                    List<string> glossaryTableHeaders = new List<string> { "Term", "Definition" };
+                    Table glossaryTable = section2.AddTable(true);
+                    glossaryTable.ResetCells(documentEntity.Glossary.Count + 1, 2);
+                    TableRow FRow = glossaryTable.Rows[0];
+                    FRow.IsHeader = true;
+                    for (int i = 0; i < glossaryTableHeaders.Count; i++)
                     {
-                        string projectAimText = documentEntity.ProjectAim;
-                        projectAimHeader.Text = projectAimHeaderText;
+                        Paragraph p = FRow.Cells[i].AddParagraph();
+                        FRow.Cells[i].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                        p.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                        TextRange TR = p.AppendText(glossaryTableHeaders[i]);
+                        TR.CharacterFormat.FontSize = 12;
+                        TR.CharacterFormat.Bold = true;
                     }
-                    projectAimParagraph.ApplyStyle(textStyle.Name);
-
-                    Paragraph glossaryHeader = section.AddParagraph();
-                    string glossaryHeaderText = "Glossary";
-                    glossaryHeader.Text = glossaryHeaderText;
-                    glossaryHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
-                    glossaryHeader.ApplyStyle(headerStyle.Name);
-
-                    Paragraph glossaryParagraph = section.AddParagraph();
-                    var documentGlossary = await _context.Glossaries
-                        .Where(g => g.DocumentId == documentEntity.Id)
-                        .ToListAsync();
-                    if (documentGlossary != null)
+                    for (int r = 0; r < documentEntity.Glossary.Count; r++)
                     {
-                        List<string> glossaryTableHeaders = new List<string>();
-                        glossaryTableHeaders.Add("Term (abbreviation)");
-                        glossaryTableHeaders.Add("Definition");
-                        List<List<string>> glossaryTableData = new List<List<string>>();
-                        foreach (var glossary in documentGlossary)
+                        TableRow DataRow = glossaryTable.Rows[r + 1];
+                        DataRow.Height = 20;
+                        for (int c = 0; c < 2; c++)
                         {
-                            List<string> glossaryRow = new List<string>();
-                            glossaryRow.Add(glossary.Term);
-                            glossaryRow.Add(glossary.Definition);
-                            glossaryTableData.Add(glossaryRow);
-                        }
-
-                        Table glossaryTable = section.AddTable(true);
-                        glossaryTable.ResetCells(glossaryTableData.Count + 1, glossaryTableHeaders.Count);
-                        TableRow FRow = glossaryTable.Rows[0];
-                        FRow.IsHeader = true;
-                        for (int i = 0; i < glossaryTableHeaders.Count; i++)
-                        {
-                            TextRange TR = glossaryParagraph.AppendText(glossaryTableHeaders[i]);
-                            TR.CharacterFormat.FontSize = 11;
-                            TR.CharacterFormat.Bold = true;
-                        }
-
-                        for (int r = 0; r < glossaryTableData.Count; r++)
-                        {
-                            TableRow DataRow = glossaryTable.Rows[r + 1];
-                            for (int c = 0; c < glossaryTableData[r].Count; c++)
+                            if (c == 0)
                             {
-                                Paragraph glossaryPar = DataRow.Cells[c].AddParagraph();
-                                TextRange TR2 = glossaryPar.AppendText(glossaryTableData[r][c]);
+                                DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                                Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                                TextRange TR2 = p2.AppendText(documentEntity.Glossary[r].Term);
+                                p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                                TR2.CharacterFormat.FontSize = 11;
+                            }
+                            else
+                            {
+                                DataRow.Cells[c].CellFormat.VerticalAlignment = VerticalAlignment.Middle;
+                                Paragraph p2 = DataRow.Cells[c].AddParagraph();
+                                TextRange TR2 = p2.AppendText(documentEntity.Glossary[r].Definition);
+                                p2.Format.HorizontalAlignment = HorizontalAlignment.Center;
                                 TR2.CharacterFormat.FontSize = 11;
                             }
                         }
                     }
-
-                    Paragraph funcRequirementsHeader = section.AddParagraph();
-                    string funcRequirementsHeaderText = "Functional requirements";
-                    funcRequirementsHeader.Text = funcRequirementsHeaderText;
-                    funcRequirementsHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
-                    funcRequirementsHeader.ApplyStyle(headerStyle.Name);
-
-                    //Microsoft.Office.Interop.Word.Paragraph funcRequirementsParagraph = document.Content.Paragraphs.Add();
-                    //funcRequirementsParagraph.Range.Font.Size = 11;
-                    //if (documentEntity.UserStories != null)
-                    //{
-                    //    var userStories = documentEntity.UserStories.ToList();
-                    //    List<string> userStoryText = new List<string>();
-                    //    string para6Text = "";
-                    //    int userStoriesCount = 1;
-                    //    foreach (var userStory in userStories)
-                    //    {
-                    //        string usName = "User story " + userStoriesCount.ToString() + ". " + userStory.Name + "\n";
-                    //        string usText = "";
-                    //        foreach (var item in userStory.Formulas)
-                    //        {
-                    //            usText += item;
-                    //            usText += "\n";
-                    //        }
-                    //        string usCriteria = "Acceptance criteria:\n";
-                    //        int count = 1;
-                    //        foreach (var item in userStory.AcceptanceCriterias)
-                    //        {
-                    //            string criteria = count.ToString() + ". " + item + "\n";
-                    //            usCriteria += criteria;
-                    //            count++;
-                    //        }
-                    //        string usResult = usName + usText + usCriteria;
-                    //        para6Text += usResult;
-                    //    }
-                    //    funcRequirementsParagraph.Range.Text = para6Text;
-                    //}
-                    //funcRequirementsParagraph.Range.InsertParagraphAfter();
-
-                    document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
-                    return _mapper.Map<DocumentDTO>(documentEntity);
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                Section section3 = document.AddSection();
+                Paragraph funcRequirementsHeader = section3.AddParagraph();
+                string funcRequirementsHeaderText = "Functional requirements";
+                funcRequirementsHeader.Text = funcRequirementsHeaderText;
+                funcRequirementsHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                //funcRequirementsHeader.ApplyStyle(headerStyle.Name);
 
+                //Microsoft.Office.Interop.Word.Paragraph funcRequirementsParagraph = document.Content.Paragraphs.Add();
+                //funcRequirementsParagraph.Range.Font.Size = 11;
+                //if (documentEntity.UserStories != null)
+                //{
+                //    var userStories = documentEntity.UserStories.ToList();
+                //    List<string> userStoryText = new List<string>();
+                //    string para6Text = "";
+                //    int userStoriesCount = 1;
+                //    foreach (var userStory in userStories)
+                //    {
+                //        string usName = "User story " + userStoriesCount.ToString() + ". " + userStory.Name + "\n";
+                //        string usText = "";
+                //        foreach (var item in userStory.Formulas)
+                //        {
+                //            usText += item;
+                //            usText += "\n";
+                //        }
+                //        string usCriteria = "Acceptance criteria:\n";
+                //        int count = 1;
+                //        foreach (var item in userStory.AcceptanceCriterias)
+                //        {
+                //            string criteria = count.ToString() + ". " + item + "\n";
+                //            usCriteria += criteria;
+                //            count++;
+                //        }
+                //        string usResult = usName + usText + usCriteria;
+                //        para6Text += usResult;
+                //    }
+                //    funcRequirementsParagraph.Range.Text = para6Text;
+                //}
+                //funcRequirementsParagraph.Range.InsertParagraphAfter();
+
+                document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
+                return _mapper.Map<DocumentDTO>(documentEntity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -200,24 +225,6 @@ namespace BAHelper.BLL.Services
                 raciTable.ResetCells(raciMatrix.RACI.Count + 1, raciMatrixTableHeaders.Count);
                 TableRow FRow = raciTable.Rows[0];
                 FRow.IsHeader = true;
-                //for (int i = 0; i < raciMatrixTableHeaders.Count; i++)
-                //{
-                //    TextRange TR = raciParagraph.AppendText(raciMatrixTableHeaders[i]);
-                //    TR.CharacterFormat.FontSize = 11;
-                //    TR.CharacterFormat.Bold = true;
-                //}
-
-                //for (int r = 0; r < raciMatrix.RACI.Count; r++)
-                //{
-                //    TableRow DataRow = raciTable.Rows[r + 1];
-                //    for (int c = 0; c < raciMatrix.RACI[r].Count; c++)
-                //    {
-                //        Paragraph glossaryPar = DataRow.Cells[c].AddParagraph();
-                //        TextRange TR3 = glossaryPar.AppendText(raciMatrix.Tasks[i]);
-                //        TextRange TR2 = glossaryPar.AppendText(raciMatrix.RACI[r][c].ToString());
-                //        TR2.CharacterFormat.FontSize = 11;
-                //    }
-                //}
 
                 for (int i = 0; i < raciMatrixTableHeaders.Count; i++)
                 {
