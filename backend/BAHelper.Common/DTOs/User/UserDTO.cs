@@ -1,6 +1,7 @@
 ﻿using BAHelper.Common.DTOs.Document;
 using BAHelper.Common.DTOs.Project;
 using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.StatisticData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace BAHelper.Common.DTOs.User
         public string Name { get; set; }
         public string Email { get; set; }
         public bool IsAgreedToNotification { get; set; }
+        public bool IsEnoughData { get; set; }
+        public List<StatisticDataDTO> Statistic { get; set; }
         public List<ProjectDTO> Projects { get; set; }
         public List<ProjectTaskDTO> Tasks { get; set; }
         public List<DocumentDTO> Documents { get; set; }

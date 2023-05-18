@@ -92,12 +92,5 @@ D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Newtonsoft.Json.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Aspose.Words.Pdf2Word.dll
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Aspose.Words.dll
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\SkiaSharp.dll
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\runtimes\osx\native\libSkiaSharp.dylib
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\runtimes\win-arm64\native\libSkiaSharp.dll
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\runtimes\win-x64\native\libSkiaSharp.dll
-D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\runtimes\win-x86\native\libSkiaSharp.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\SendGrid.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\StarkbankEcdsa.dll

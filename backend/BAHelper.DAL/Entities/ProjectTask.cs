@@ -15,8 +15,11 @@ namespace BAHelper.DAL.Entities
         public string TaskName { get; set; }
         public string? Description { get; set; }
         public double Hours { get; set; }
+        public DateTime? TaskStart { get; set; }
+        public DateTime? TaskEnd { get; set; } 
         public List<User> Users { get; set; }
         public List<Subtask> Subtasks { get; set; }
+        public List<TopicTag> Tags { get; set; }
         public TaskState TaskState { get; set; } = TaskState.Pending;
     }
 }

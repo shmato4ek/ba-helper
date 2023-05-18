@@ -15,8 +15,11 @@ namespace BAHelper.DAL.Entities
         public string Password { get; set; }
         public string Salt { get; set; }
         public bool IsAgreedToNotification { get; set; } = true;
+        public bool IsEnoughData { get; set; } = false;
         public List<Project> Projects { get; set; }
         public List<ProjectTask> Tasks { get; set; }
         public List<Document> Documents { get; set; }
+        public List<StatisticData> Statistics { get; set; }
+        public List<Cluster> Clusters { get; set; }
     }
 }

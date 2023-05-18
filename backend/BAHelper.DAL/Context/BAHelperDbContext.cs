@@ -1,4 +1,5 @@
-﻿using BAHelper.DAL.Entities;
+﻿using BAHelper.Common.Enums;
+using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ namespace BAHelper.DAL.Context
         public DbSet<ProjectTask> Tasks { get; set; }
         public DbSet<Subtask> Subtasks { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<TaskTopic> TaskTopics { get; set; }
+        public DbSet<Cluster> Clusters { get; set; }
+        public DbSet<ClusterData> ClustersData { get; set; }
+        public DbSet<StatisticData> Statistics { get; set; }
 
         public BAHelperDbContext() { }
         public BAHelperDbContext(DbContextOptions<BAHelperDbContext> options) : base(options)

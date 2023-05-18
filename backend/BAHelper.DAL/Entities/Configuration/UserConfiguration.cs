@@ -18,6 +18,7 @@ namespace BAHelper.DAL.Entities.Configuration
             builder.Property(p => p.Password).IsRequired();
             builder.HasMany(p => p.Projects).WithMany(p => p.Users);
             builder.HasMany(p => p.Tasks).WithMany(p => p.Users);
+            builder.HasMany(p => p.Clusters).WithMany(p => p.Users);
         }
     }
 }

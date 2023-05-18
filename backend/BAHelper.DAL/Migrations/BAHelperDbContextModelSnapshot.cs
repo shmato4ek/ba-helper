@@ -49,6 +49,48 @@ namespace BAHelper.DAL.Migrations
                     b.ToTable("AcceptanceCriterias");
                 });
 
+            modelBuilder.Entity("BAHelper.DAL.Entities.Cluster", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Clusters");
+                });
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.ClusterData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClusterId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Quality")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Topic")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClusterId");
+
+                    b.ToTable("ClustersData");
+                });
+
             modelBuilder.Entity("BAHelper.DAL.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
@@ -171,9 +213,19 @@ namespace BAHelper.DAL.Migrations
                     b.Property<int?>("ProjectId1")
                         .HasColumnType("integer");
 
+                    b.Property<int[]>("Tags")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
+
+                    b.Property<DateTime?>("TaskEnd")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("TaskName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("TaskStart")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("TaskState")
                         .HasColumnType("integer");
@@ -213,6 +265,52 @@ namespace BAHelper.DAL.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("BAHelper.DAL.Entities.StatisticData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TaskCount")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TaskQuality")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("TaskTopic")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Statistics");
+                });
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.TaskTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Tag")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskTopics");
+                });
+
             modelBuilder.Entity("BAHelper.DAL.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -226,6 +324,9 @@ namespace BAHelper.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool>("IsAgreedToNotification")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsEnoughData")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
@@ -299,6 +400,21 @@ namespace BAHelper.DAL.Migrations
                     b.ToTable("UserStoryFormulas");
                 });
 
+            modelBuilder.Entity("ClusterUser", b =>
+                {
+                    b.Property<int>("ClustersId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ClustersId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ClusterUser");
+                });
+
             modelBuilder.Entity("ProjectTaskUser", b =>
                 {
                     b.Property<int>("TasksId")
@@ -340,6 +456,24 @@ namespace BAHelper.DAL.Migrations
                     b.HasOne("BAHelper.DAL.Entities.UserStory", null)
                         .WithMany("AcceptanceCriterias")
                         .HasForeignKey("UserStoryId1");
+                });
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.Cluster", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.Project", null)
+                        .WithMany("Clusters")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.ClusterData", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.Cluster", null)
+                        .WithMany("Data")
+                        .HasForeignKey("ClusterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.Document", b =>
@@ -420,6 +554,15 @@ namespace BAHelper.DAL.Migrations
                     b.Navigation("Subtasks");
                 });
 
+            modelBuilder.Entity("BAHelper.DAL.Entities.StatisticData", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.User", null)
+                        .WithMany("Statistics")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BAHelper.DAL.Entities.UserStory", b =>
                 {
                     b.HasOne("BAHelper.DAL.Entities.Document", null)
@@ -444,6 +587,21 @@ namespace BAHelper.DAL.Migrations
                     b.HasOne("BAHelper.DAL.Entities.UserStory", null)
                         .WithMany("Formulas")
                         .HasForeignKey("UserStoryId1");
+                });
+
+            modelBuilder.Entity("ClusterUser", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.Cluster", null)
+                        .WithMany()
+                        .HasForeignKey("ClustersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BAHelper.DAL.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectTaskUser", b =>
@@ -476,6 +634,11 @@ namespace BAHelper.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BAHelper.DAL.Entities.Cluster", b =>
+                {
+                    b.Navigation("Data");
+                });
+
             modelBuilder.Entity("BAHelper.DAL.Entities.Document", b =>
                 {
                     b.Navigation("Glossary");
@@ -485,12 +648,16 @@ namespace BAHelper.DAL.Migrations
 
             modelBuilder.Entity("BAHelper.DAL.Entities.Project", b =>
                 {
+                    b.Navigation("Clusters");
+
                     b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.User", b =>
                 {
                     b.Navigation("Documents");
+
+                    b.Navigation("Statistics");
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.UserStory", b =>

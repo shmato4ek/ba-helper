@@ -3,7 +3,9 @@ using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.MappingProfiles;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.StatisticData;
 using BAHelper.Common.DTOs.User;
+using BAHelper.Common.Enums;
 using BAHelper.Common.Security;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
@@ -32,6 +34,11 @@ namespace BAHelper.BLL.Services
             var salt = SecurityHelper.GetRandomBytes();
             userEntity.Salt = Convert.ToBase64String(salt);
             userEntity.Password = SecurityHelper.HashPassword(newUser.Password, salt);
+            userEntity.Statistics = new List<StatisticData>();
+            for (int i = 0; i < 8; i++)
+            {
+                userEntity.Statistics.Add(new StatisticData() { TaskCount = 0, TaskTopic = (TopicTag)i});
+            }
 
             var isUserExist = await _context
                 .Users

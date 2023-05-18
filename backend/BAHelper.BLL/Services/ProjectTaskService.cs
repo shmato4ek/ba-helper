@@ -2,6 +2,7 @@
 using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.ProjectTask;
+using BAHelper.Common.DTOs.StatisticData;
 using BAHelper.Common.DTOs.Subtask;
 using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
@@ -274,6 +275,12 @@ namespace BAHelper.BLL.Services
             {
                 throw new NoAccessException(userId);
             }
+            bool wasInPending = taskEntity.TaskState == TaskState.Pending;
+            bool isInProgress = taskState == TaskState.InProgress;
+            if (wasInPending && isInProgress) 
+            {
+                taskEntity.TaskStart = DateTime.UtcNow;
+            }
             taskEntity.TaskState = taskState;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
@@ -316,8 +323,11 @@ namespace BAHelper.BLL.Services
                 throw new NoAccessException(userId);
             }
             taskEntity.TaskState = TaskState.Approved;
+            taskEntity.TaskEnd = DateTime.UtcNow;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
+            var userEntityId = taskEntity.Users.FirstOrDefault().Id;
+            await UpdateSatistic(taskEntity.Id, userEntityId);
             if (taskEntity.Users.Count != 0)
             {
                 foreach (var user in taskEntity.Users)
@@ -330,6 +340,57 @@ namespace BAHelper.BLL.Services
             }
             }
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
+        }
+
+        private async Task UpdateSatistic(int taskId, int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .Include(user => user.Id == userId)
+                .FirstOrDefaultAsync();
+            var taskEntity = await _context
+                .Tasks
+                .Include(task => task.Tags)
+                .FirstOrDefaultAsync(task => task.Id == taskId);
+            foreach (var topic in taskEntity.Tags)
+            {
+                var newStatistic = new StatisticDataDTO();
+                newStatistic.UserId = userId;
+                newStatistic.TaskTopic = topic;
+                var timeDifference = (TimeSpan)(taskEntity.TaskEnd - taskEntity.TaskStart);
+                var diff = timeDifference.TotalHours;
+                double taskQuality = 50 + (taskEntity.Hours - diff)/ taskEntity.Hours*50;
+                if (taskQuality >= 0)
+                {
+                    newStatistic.TaskQuality = taskQuality;
+                }
+                else
+                {
+                    newStatistic.TaskQuality = 0;
+                }
+                var statistic = userEntity.Statistics.FirstOrDefault(stat => stat.TaskTopic == topic);
+                if (statistic.TaskCount == 0)
+                {
+                    statistic.TaskQuality = taskQuality;
+                    statistic.TaskCount++;
+                }
+                else
+                {
+                    statistic.TaskQuality = (statistic.TaskQuality*statistic.TaskCount + taskQuality) / (statistic.TaskCount + 1);
+                    statistic.TaskCount++;
+                }
+            }
+            int statisticCount = 0;
+            foreach (var statistic in userEntity.Statistics)
+            {
+                statisticCount += statistic.TaskCount;
+            }
+            if (!userEntity.IsEnoughData && statisticCount >= 10)
+            {
+                userEntity.IsEnoughData = true;
+            }
+            _context.Users.Update(userEntity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<SubtaskDTO> ChangeSubtaskState(int subtaskId, TaskState taskState, int userId)

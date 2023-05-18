@@ -17,5 +17,6 @@ namespace BAHelper.DAL.Entities
         public bool IsDeleted { get; set; } = false;
         public List<ProjectTask> Tasks { get; set; }
         public List<User> Users { get; set; }
+        public List<Cluster> Clusters { get; set; }
     }
 }
