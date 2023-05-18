@@ -13,6 +13,7 @@ namespace BAHelper.BLL.MappingProfiles
     {
         public StatisticDataProfile()
         {
+            CreateMap<NewStatisticDataDTO, StatisticData>();
             CreateMap<StatisticData, StatisticDataDTO>();
             CreateMap<StatisticDataDTO, StatisticData>();
         }

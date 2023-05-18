@@ -323,7 +323,7 @@ namespace BAHelper.BLL.Services
                 throw new NoAccessException(userId);
             }
             taskEntity.TaskState = TaskState.Approved;
-            taskEntity.TaskEnd = DateTime.UtcNow;
+            //taskEntity.TaskEnd = DateTime.UtcNow;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
             var userEntityId = taskEntity.Users.FirstOrDefault().Id;
@@ -346,11 +346,10 @@ namespace BAHelper.BLL.Services
         {
             var userEntity = await _context
                 .Users
-                .Include(user => user.Id == userId)
-                .FirstOrDefaultAsync();
+                .Include(user => user.Statistics)
+                .FirstOrDefaultAsync(user => user.Id == userId);
             var taskEntity = await _context
                 .Tasks
-                .Include(task => task.Tags)
                 .FirstOrDefaultAsync(task => task.Id == taskId);
             foreach (var topic in taskEntity.Tags)
             {
@@ -360,6 +359,7 @@ namespace BAHelper.BLL.Services
                 var timeDifference = (TimeSpan)(taskEntity.TaskEnd - taskEntity.TaskStart);
                 var diff = timeDifference.TotalHours;
                 double taskQuality = 50 + (taskEntity.Hours - diff)/ taskEntity.Hours*50;
+
                 if (taskQuality >= 0)
                 {
                     newStatistic.TaskQuality = taskQuality;

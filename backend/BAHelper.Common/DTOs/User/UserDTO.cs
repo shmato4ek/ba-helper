@@ -17,7 +17,7 @@ namespace BAHelper.Common.DTOs.User
         public string Email { get; set; }
         public bool IsAgreedToNotification { get; set; }
         public bool IsEnoughData { get; set; }
-        public List<StatisticDataDTO> Statistic { get; set; }
+        public List<StatisticDataDTO> Statistics { get; set; }
         public List<ProjectDTO> Projects { get; set; }
         public List<ProjectTaskDTO> Tasks { get; set; }
         public List<DocumentDTO> Documents { get; set; }

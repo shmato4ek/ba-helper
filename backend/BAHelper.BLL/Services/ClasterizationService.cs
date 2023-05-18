@@ -101,7 +101,7 @@ namespace BAHelper.BLL.Services
                     {
                         foreach (var user in cluster.Users)
                         {
-                            sum += user.Statistic.FirstOrDefault(s => s.TaskTopic == cluster.Data[i].Topic).TaskQuality;
+                            sum += user.Statistics.FirstOrDefault(s => s.TaskTopic == cluster.Data[i].Topic).TaskQuality;
                         }
                         cluster.Data[i].Quality = sum / cluster.Users.Count;
                     }

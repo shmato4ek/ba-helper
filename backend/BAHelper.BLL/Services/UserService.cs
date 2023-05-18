@@ -10,6 +10,7 @@ using BAHelper.Common.Security;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using ServiceStack;
 using System;
@@ -34,11 +35,6 @@ namespace BAHelper.BLL.Services
             var salt = SecurityHelper.GetRandomBytes();
             userEntity.Salt = Convert.ToBase64String(salt);
             userEntity.Password = SecurityHelper.HashPassword(newUser.Password, salt);
-            userEntity.Statistics = new List<StatisticData>();
-            for (int i = 0; i < 8; i++)
-            {
-                userEntity.Statistics.Add(new StatisticData() { TaskCount = 0, TaskTopic = (TopicTag)i});
-            }
 
             var isUserExist = await _context
                 .Users
@@ -47,9 +43,21 @@ namespace BAHelper.BLL.Services
             {
                 throw new ExistUserException(newUser.Email);
             }
+            userEntity.Statistics = new List<StatisticData>();
+            for (int i = 0; i < 8; i++)
+            {
+                var newStatistic = new NewStatisticDataDTO() { TaskCount = 0, TaskQuality = 0, TaskTopic = (TopicTag)i, UserId = userEntity.Id };
+                userEntity.Statistics.Add(_mapper.Map<StatisticData>(newStatistic));
+            }
             _context.Users.Add(userEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<UserDTO>(userEntity);
+            /////////////////
+            var createdUser = await _context
+                .Users
+                .Include(user => user.Statistics)
+                .FirstOrDefaultAsync(user => user.Id == userEntity.Id);
+            ///////////
+            return _mapper.Map<UserDTO>(createdUser);
         }
 
         public async Task<List<UserDTO>> GetAllUsers()

@@ -1,4 +1,5 @@
-﻿using BAHelper.Common.Enums;
+﻿using BAHelper.Common.DTOs.TaskTopic;
+using BAHelper.Common.Enums;
 
 namespace BAHelper.Common.DTOs.ProjectTask
 {
