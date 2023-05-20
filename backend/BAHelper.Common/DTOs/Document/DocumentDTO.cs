@@ -15,7 +15,7 @@ namespace BAHelper.Common.DTOs.Document
         public string Name { get; set; }
         public string ProjectAim { get; set; }
         public bool IsDeleted { get; set; }
-        public List<GlossaryDTO> Glossaries { get; set; } = null;
-        public List<UserStoryDTO> UserStories { get; set; } = null;
+        public List<GlossaryDTO> Glossary { get; set; }
+        public List<UserStoryDTO> UserStories { get; set; }
     }
 }

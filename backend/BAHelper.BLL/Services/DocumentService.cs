@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Office.Interop.Word;
 using ServiceStack;
+using Spire.Doc;
 using Spire.Pdf.Exporting.XPS.Schema;
 using System;
 using System.Collections.Generic;
@@ -32,21 +33,22 @@ namespace BAHelper.BLL.Services
             documentEntity.UserId = userId;
             documentEntity.ProjectAim = newDocumentDto.ProjectAim;
             documentEntity.Name = newDocumentDto.Name;
+            documentEntity.UserStories = new List<UserStory>();
 
             _context.Documents.Add(documentEntity);
             await _context.SaveChangesAsync();
 
-            var glossaryEntity = _mapper.Map<List<Glossary>>(newDocumentDto.Glossaries);
+            var glossaryEntity = _mapper.Map<List<Glossary>>(newDocumentDto.Glossary);
             foreach(var glossary in glossaryEntity)
             {
                 glossary.DocumentId = documentEntity.Id;
             }
             documentEntity.Glossary = glossaryEntity;
-
             var userStoriesEntity = new List<UserStory>();
             foreach(var userStory in newDocumentDto.UserStories)
             {
-                userStoriesEntity.Add(await AddUserStory(documentEntity.Id, userStory));
+                var userStoryEntity = new UserStory { Name = userStory.Name, DocumentId = documentEntity.Id, AcceptanceCriterias = userStory.AcceptanceCriterias, Formulas = userStory.Formulas };
+                userStoriesEntity.Add(userStoryEntity);
             }
             var createdDocument = await _context
                 .Documents
@@ -57,62 +59,13 @@ namespace BAHelper.BLL.Services
             {
                 throw new NotFoundException(nameof(DAL.Entities.Document));
             }
-            createdDocument.UserStories = userStoriesEntity;
-            createdDocument.Glossary = glossaryEntity;
+            foreach(var userStory in userStoriesEntity)
+            {
+                createdDocument.UserStories.Add(userStory);
+            }
             _context.Documents.Update(createdDocument);
             await _context.SaveChangesAsync();
             return _mapper.Map<DocumentDTO>(createdDocument);
-        }
-
-        public async Task<UserStory> AddUserStory(int documentId, NewUserStoryDTO newUserStory)
-        {
-            var documentEntity = await _context
-                .Documents
-                .Include(doc => doc.UserStories)
-                .FirstOrDefaultAsync(doc => doc.Id == documentId);
-            if (documentEntity is null)
-            {
-                throw new NotFoundException(nameof(DAL.Entities.Document), documentId);
-            }
-            var userStoryEntity = new UserStory { Name = newUserStory.Name, DocumentId = documentId };
-            _context.UserStories.Add(userStoryEntity);
-            await _context.SaveChangesAsync();
-            var createdUserStory = await _context
-                .UserStories
-                .Include(story => story.AcceptanceCriterias)
-                .Include(story => story.Formulas)
-                .FirstOrDefaultAsync(story => story.Id == userStoryEntity.Id);
-
-            if(createdUserStory is null)
-            {
-                throw new NotFoundException(nameof(DAL.Entities.Document));
-            }
-
-            if (createdUserStory.AcceptanceCriterias == null)
-            {
-                createdUserStory.AcceptanceCriterias = new List<AcceptanceCriteria>();
-            }
-            foreach(var criteria in newUserStory.AcceptanceCriterias)
-            {
-                AcceptanceCriteria criteriaEntity = new AcceptanceCriteria();
-                criteriaEntity.Text = criteria.Text;
-                criteriaEntity.UserStoryId = userStoryEntity.Id;
-                createdUserStory.AcceptanceCriterias.Add(criteriaEntity);
-            }
-            if (createdUserStory.Formulas == null)
-            {
-                createdUserStory.Formulas = new List<UserStoryFormula>();
-            }
-            foreach(var formula in newUserStory.UserStoryFormulas)
-            {
-                UserStoryFormula userStoryFormula = new UserStoryFormula();
-                userStoryFormula.Text = formula.Text;
-                userStoryFormula.UserStoryId = userStoryEntity.Id;
-                createdUserStory.Formulas.Add(userStoryFormula);
-            }
-            _context.UserStories.Update(createdUserStory);
-            await _context.SaveChangesAsync();
-            return createdUserStory;
         }
 
         public async Task<List<DocumentDTO>> GetAllUsersDocumentsById(int userId)

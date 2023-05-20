@@ -16,6 +16,7 @@
           "Microsoft.IdentityModel.Tokens": "6.29.0",
           "Microsoft.Office.Interop.Word": "15.0.4797.1004",
           "MimeKit": "3.5.0",
+          "NCrontab.Signed": "3.3.2",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.1",
           "SendGrid": "9.28.1",
           "ServiceStack": "6.6.0",
@@ -324,6 +325,14 @@
           "lib/net6.0/MimeKit.dll": {
             "assemblyVersion": "3.5.0.0",
             "fileVersion": "3.5.0.0"
+          }
+        }
+      },
+      "NCrontab.Signed/3.3.2": {
+        "runtime": {
+          "lib/netstandard2.0/NCrontab.Signed.dll": {
+            "assemblyVersion": "3.3.2.0",
+            "fileVersion": "3.3.2.0"
           }
         }
       },
@@ -1163,6 +1172,13 @@
       "sha512": "sha512-XHRxnUJjNC6ufN94Yixp0QaLAZL+4L3huwzBhG5grBn68FQo3lH24gHKl15ceK4ktsALTqxdKPc/iMbQ442CGA==",
       "path": "mimekit/3.5.0",
       "hashPath": "mimekit.3.5.0.nupkg.sha512"
+    },
+    "NCrontab.Signed/3.3.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ef9nJs/iIkM3hAcAEDD5dZy0cDFfmmPlhRAt/IPYcsWdMUHZ6MQLuqv5oA6TZrpvO6Sj8lq/B5njbJUMnxedLg==",
+      "path": "ncrontab.signed/3.3.2",
+      "hashPath": "ncrontab.signed.3.3.2.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.2": {
       "type": "package",

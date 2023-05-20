@@ -15,9 +15,7 @@ namespace BAHelper.DAL.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Glossary> Glossaries { get; set; }
         public DbSet<Document> Documents { get; set; }
-        public DbSet<AcceptanceCriteria> AcceptanceCriterias { get; set; }
         public DbSet<UserStory> UserStories { get; set; }
-        public DbSet<UserStoryFormula> UserStoryFormulas { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectTask> Tasks { get; set; }
         public DbSet<Subtask> Subtasks { get; set; }
@@ -37,6 +35,6 @@ namespace BAHelper.DAL.Context
             modelBuilder.Configure();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BAHelperTest;UserName=postgres;Password=0985883147");
+            => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BAHelper;UserName=postgres;Password=0985883147");
     }
 }

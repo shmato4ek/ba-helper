@@ -20,9 +20,9 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateDocument(NewDocumentDto newDocumentDto)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _documentService.CreateDocument(userId, newDocumentDto));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _documentService.CreateDocument(1, newDocumentDto));
         }
 
         [HttpGet("user")]

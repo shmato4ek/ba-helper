@@ -24,9 +24,9 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProject(NewProjectDTO newProject)
         {
-            //var token = Request.Headers["x-auth-token"].ToString();
-            //var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectService.CreateProject(newProject, 1));
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectService.CreateProject(newProject, userId));
         }
 
         [HttpGet("{projectId:int}")]
@@ -60,18 +60,6 @@ namespace BAHelper.API.Controllers
             var userId = _jwtFactory.GetValueFromToken(token);
             return Ok(await _projectService.GetAllUsersProjects(userId));
         }
-
-        //[HttpGet("tasks")]
-        //public async Task<ActionResult> GetAllProjectTasks(int projectId)
-        //{
-        //    return Ok(await _projectService.GetAllProjectTasks(projectId, 5));
-        //}
-
-        //[HttpPut("add-user")]
-        //public async Task<ActionResult> AddUserToProject(int projectId, string email)
-        //{
-        //    return Ok(await _projectService.AddUserToProject(projectId, email, 5));
-        //}
 
         [HttpPut]
         public async Task<ActionResult> UpdateProject([FromBody] UpdateProjectDTO updatedProject)

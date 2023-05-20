@@ -19,7 +19,7 @@ namespace BAHelper.API.Controllers
             _jwtFactory = jwtFactory;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<ActionResult<AuthUserDTO>> Register(NewUserDTO newUser)
         {
             var createdUser = await _userService.CreateUser(newUser);
@@ -33,7 +33,7 @@ namespace BAHelper.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult<AuthUserDTO>> Login([FromBody] LoginUserDTO userDTO)
         {
             return Ok(await _authService.Authorize(userDTO));

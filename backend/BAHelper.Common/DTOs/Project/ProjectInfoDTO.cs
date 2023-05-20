@@ -19,6 +19,7 @@ namespace BAHelper.Common.DTOs.Project
         public double Hours { get; set; }
         public bool CanEdit { get; set; }
         public bool IsDeleted { get; set; }
+        public DateTime ArchivedDate { get; set; }
         public List<ProjectTaskInfoDTO> Tasks { get; set; }
         public List<UserInfoDTO> Users { get; set; }
     }

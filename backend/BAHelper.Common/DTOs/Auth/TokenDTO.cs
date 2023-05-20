@@ -9,13 +9,6 @@ namespace BAHelper.Common.DTOs.Auth
     public class TokenDTO
     {
         public string AccessToken { get; }
-        //public string RefreshToken { get; }
-        //public TokenDTO(string accessToken, string refreshToken)
-        //{
-        //    AccessToken = accessToken;
-        //    RefreshToken = refreshToken;
-        //}
-
         public TokenDTO(string accessToken)
         {
             AccessToken = accessToken;

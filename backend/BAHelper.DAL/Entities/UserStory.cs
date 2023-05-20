@@ -11,7 +11,7 @@ namespace BAHelper.DAL.Entities
         public int Id { get; set; }
         public int DocumentId { get; set; }
         public string Name { get; set; }
-        public ICollection<UserStoryFormula> Formulas { get; set; }
-        public ICollection<AcceptanceCriteria> AcceptanceCriterias { get; set; }
+        public List<string>? Formulas { get; set; }
+        public List<string>? AcceptanceCriterias { get; set; }
     }
 }

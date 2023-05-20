@@ -24,25 +24,18 @@ namespace BAHelper.API.Controllers
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
         }
 
-        [HttpPost("RACI")]
+        [HttpPost("raci")]
         public async Task<ActionResult> DownloadRaci(RaciMatrix raciMatrix)
         {
             var fileConfig = await _downloadService.DownloadRaci(raciMatrix);
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
         }
 
-        [HttpPost("CommunicationPlan")]
+        [HttpPost("plan")]
         public async Task<ActionResult> DownloadComPlan(List<CommunicationPlan> plan)
         {
             var fileConfig = await _downloadService.DownloadComPlan(plan);
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
-        }
-
-        [HttpGet("test-download")]
-        public IActionResult Download()
-        {
-            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "LocalFiles", "Тестовий документ.docx");
-            return Ok(filepath);
         }
     }
 }

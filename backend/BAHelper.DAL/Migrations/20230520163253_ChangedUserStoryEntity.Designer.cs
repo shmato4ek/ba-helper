@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BAHelper.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BAHelper.DAL.Migrations
 {
     [DbContext(typeof(BAHelperDbContext))]
-    partial class BAHelperDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230520163253_ChangedUserStoryEntity")]
+    partial class ChangedUserStoryEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,6 +25,28 @@ namespace BAHelper.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.AcceptanceCriteria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserStoryId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserStoryId");
+
+                    b.ToTable("AcceptanceCriterias");
+                });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.Cluster", b =>
                 {
@@ -359,6 +384,28 @@ namespace BAHelper.DAL.Migrations
                     b.ToTable("UserStories");
                 });
 
+            modelBuilder.Entity("BAHelper.DAL.Entities.UserStoryFormula", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserStoryId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserStoryId");
+
+                    b.ToTable("UserStoryFormulas");
+                });
+
             modelBuilder.Entity("ClusterUser", b =>
                 {
                     b.Property<int>("ClustersId")
@@ -402,6 +449,15 @@ namespace BAHelper.DAL.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("ProjectUser");
+                });
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.AcceptanceCriteria", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.UserStory", null)
+                        .WithMany()
+                        .HasForeignKey("UserStoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.ClusterData", b =>
@@ -511,6 +567,15 @@ namespace BAHelper.DAL.Migrations
                     b.HasOne("BAHelper.DAL.Entities.Document", null)
                         .WithMany("UserStories")
                         .HasForeignKey("DocumentId1");
+                });
+
+            modelBuilder.Entity("BAHelper.DAL.Entities.UserStoryFormula", b =>
+                {
+                    b.HasOne("BAHelper.DAL.Entities.UserStory", null)
+                        .WithMany()
+                        .HasForeignKey("UserStoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ClusterUser", b =>

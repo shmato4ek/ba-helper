@@ -8,8 +8,7 @@ namespace BAHelper.BLL.MappingProfiles
     {
         public DocumentProfile()
         {
-            CreateMap<NewDocumentDto, Document>()
-            .ForMember(doc => doc.Glossary, opt => opt.MapFrom(src => src.Glossaries));
+            CreateMap<NewDocumentDto, Document>();
             CreateMap<Document, DocumentDTO>();
             CreateMap<DocumentDTO, Document>();
         }

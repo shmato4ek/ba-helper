@@ -12,12 +12,10 @@ namespace BAHelper.DAL.Context
     {
         public static void Configure(this ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new AcceptanceCriteriaConfiguration());
             modelBuilder.ApplyConfiguration(new DocumentConfiguration());
             modelBuilder.ApplyConfiguration(new GlossaryConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new UserStoryConfiguration());
-            modelBuilder.ApplyConfiguration(new UserStoryFormulaConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectTaskConfiguration());
         }
