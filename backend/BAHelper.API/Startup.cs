@@ -2,6 +2,9 @@
 using BAHelper.API.Middleware;
 using BAHelper.DAL.Context;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace BAHelper.API
 {
@@ -21,7 +24,13 @@ namespace BAHelper.API
 
             services.RegisterAutoMapper();
             services.RegisterCustomServices();
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+
+                });
             services.ConfigureJwt(Configuration);
             services.AddSwaggerGen();
 
@@ -64,6 +73,5 @@ namespace BAHelper.API
             using var context = scope.ServiceProvider.GetRequiredService<BAHelperDbContext>();
             context.Database.Migrate();
         }
-
     }
 }

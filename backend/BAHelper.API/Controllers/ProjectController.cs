@@ -1,6 +1,7 @@
 ﻿using BAHelper.BLL.JWT;
 using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Project;
+using BAHelper.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
@@ -11,19 +12,21 @@ namespace BAHelper.API.Controllers
     {
         private readonly ProjectService _projectService;
         private readonly JwtFactory _jwtFactory;
+        private readonly ClasterizationService _clasterizationService;
 
-        public ProjectController(ProjectService projectService, JwtFactory jwtFactory)
+        public ProjectController(ProjectService projectService, JwtFactory jwtFactory, ClasterizationService clusterizationService)
         {
             _projectService = projectService;
             _jwtFactory = jwtFactory;
+            _clasterizationService = clusterizationService;
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateProject(NewProjectDTO newProject)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectService.CreateProject(newProject, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectService.CreateProject(newProject, 1));
         }
 
         [HttpGet("{projectId:int}")]
@@ -93,6 +96,23 @@ namespace BAHelper.API.Controllers
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
             await _projectService.DeleteProject(projectId, userId);
+            return NoContent();
+        }
+
+        [HttpGet("statistic")]
+        public async Task<ActionResult> TestCluster(int projectId)
+        {
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _clasterizationService.Cluster(projectId, userId));
+        }
+
+        [HttpPut("restore")]
+        public async Task<ActionResult> RestoreProject(int projectId)
+        {
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            await _projectService.RestoreProject(projectId, userId);
             return NoContent();
         }
     }

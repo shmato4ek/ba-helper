@@ -65,6 +65,10 @@
               "target": "Package",
               "version": "[6.29.0, )"
             },
+            "NetTopologySuite.IO.GeoJSON4STJ": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[7.0.1, )"
@@ -167,6 +171,10 @@
             "MimeKit": {
               "target": "Package",
               "version": "[3.5.0, )"
+            },
+            "NCrontab.Signed": {
+              "target": "Package",
+              "version": "[3.3.2, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",

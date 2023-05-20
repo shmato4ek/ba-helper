@@ -6,6 +6,7 @@ using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using ServiceStack;
 
 namespace BAHelper.BLL.Services
 {
@@ -342,6 +343,26 @@ namespace BAHelper.BLL.Services
             }
 
             projectEntity.IsDeleted = true;
+            projectEntity.ArchivedDate = DateTime.UtcNow;
+            _context.Projects.Update(projectEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RestoreProject(int projectId, int userId)
+        {
+            var projectEntity = await _context
+                .Projects
+                .FirstOrDefaultAsync(project => project.Id == projectId);
+            if (projectEntity is null)
+            {
+                throw new NotFoundException(nameof(Project), projectId);
+            }
+            if (projectEntity.AuthorId != userId)
+            {
+                throw new NoAccessException(userId);
+            }
+            projectEntity.IsDeleted = false;
+            projectEntity.ArchivedDate = new DateTime();
             _context.Projects.Update(projectEntity);
             await _context.SaveChangesAsync();
         }
@@ -362,6 +383,21 @@ namespace BAHelper.BLL.Services
 
             _context.Projects.Remove(projectEntity);
             _context.SaveChanges();
+        }
+
+        public async Task DeleteArchivedProjects()
+        {
+            var currentDate = DateTime.UtcNow;
+            var archivedProjectsEntity = await _context
+                .Projects
+                .Where(project => project.IsDeleted)
+                .Where(project => project.ArchivedDate.AddDays(30) > currentDate)
+                .ToListAsync();
+            foreach (var project in archivedProjectsEntity)
+            {
+                _context.Projects.Remove(project);
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }

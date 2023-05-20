@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jO8g1gnINoT869/GVzgRcb1nt0T9XfGeo7h6llbpGWN5CDTNHF/Zm1AJEN+FsauEYz6TZcjryPlSpOr86ZAHUA==",
+  "dgSpecHash": "uZH2pns6j+/dKA530fk/Zd44fZidA4PbkkASUy3j1sbA0uqOkgu8oyVz3S21xs4fdqs3S/Xu8s1rZnDJpfmndQ==",
   "success": true,
   "projectFilePath": "D:\\BA Hepler\\ba-helper\\backend\\BAHelper.API\\BAHelper.API.csproj",
   "expectedPackageFiles": [
@@ -45,6 +45,10 @@
     "C:\\Users\\gangt\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Users\\gangt\\.nuget\\packages\\mimekit\\3.5.0\\mimekit.3.5.0.nupkg.sha512",
     "C:\\Users\\gangt\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\gangt\\.nuget\\packages\\ncrontab.signed\\3.3.2\\ncrontab.signed.3.3.2.nupkg.sha512",
+    "C:\\Users\\gangt\\.nuget\\packages\\nettopologysuite\\2.0.0\\nettopologysuite.2.0.0.nupkg.sha512",
+    "C:\\Users\\gangt\\.nuget\\packages\\nettopologysuite.features\\2.1.0\\nettopologysuite.features.2.1.0.nupkg.sha512",
+    "C:\\Users\\gangt\\.nuget\\packages\\nettopologysuite.io.geojson4stj\\3.0.0\\nettopologysuite.io.geojson4stj.3.0.0.nupkg.sha512",
     "C:\\Users\\gangt\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
     "C:\\Users\\gangt\\.nuget\\packages\\npgsql\\7.0.1\\npgsql.7.0.1.nupkg.sha512",
     "C:\\Users\\gangt\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.1\\npgsql.entityframeworkcore.postgresql.7.0.1.nupkg.sha512",

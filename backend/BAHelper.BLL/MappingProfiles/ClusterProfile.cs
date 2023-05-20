@@ -13,6 +13,7 @@ namespace BAHelper.BLL.MappingProfiles
     {
         public ClusterProfile() 
         {
+            CreateMap<ClusterDTO, ClusterInfoDTO>();
             CreateMap<ClusterDTO, Cluster>();
             CreateMap<Cluster, ClusterDTO>();
         }

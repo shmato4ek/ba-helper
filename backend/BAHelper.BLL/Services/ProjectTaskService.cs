@@ -212,14 +212,14 @@ namespace BAHelper.BLL.Services
             _context.Tasks.Update(taskEntity);
             await _context.SaveChangesAsync();
 
-            if (userEntity.IsAgreedToNotification)
-            {
-                var authorEntity = await _context
-                    .Users
-                    .FirstOrDefaultAsync(user => user.Id == userId);
-                string message = $"{authorEntity.Name} asigned task ({taskEntity.TaskName}) of project ({projectEntity.ProjectName}) to you";
-                await _mailService.SendMail(userEntity.Email, "Added to task", message, userEntity.Name);
-            }
+            //if (userEntity.IsAgreedToNotification)
+            //{
+            //    var authorEntity = await _context
+            //        .Users
+            //        .FirstOrDefaultAsync(user => user.Id == userId);
+            //    string message = $"{authorEntity.Name} asigned task ({taskEntity.TaskName}) of project ({projectEntity.ProjectName}) to you";
+            //    await _mailService.SendMail(userEntity.Email, "Added to task", message, userEntity.Name);
+            //}
 
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
 
@@ -328,17 +328,17 @@ namespace BAHelper.BLL.Services
             _context.SaveChanges();
             var userEntityId = taskEntity.Users.FirstOrDefault().Id;
             await UpdateSatistic(taskEntity.Id, userEntityId);
-            if (taskEntity.Users.Count != 0)
-            {
-                foreach (var user in taskEntity.Users)
-                {
-                    if (user.IsAgreedToNotification)
-                    {
-                        string message = $"Your task {taskEntity.TaskName} was approved.";
-                        await _mailService.SendMail(user.Email, "Task approved", message, user.Name);
-                    }
-            }
-            }
+            //if (taskEntity.Users.Count != 0)
+            //{
+            //    foreach (var user in taskEntity.Users)
+            //    {
+            //        if (user.IsAgreedToNotification)
+            //        {
+            //            string message = $"Your task {taskEntity.TaskName} was approved.";
+            //            await _mailService.SendMail(user.Email, "Task approved", message, user.Name);
+            //        }
+            //    }
+            //}
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
         }
 
@@ -385,7 +385,7 @@ namespace BAHelper.BLL.Services
             {
                 statisticCount += statistic.TaskCount;
             }
-            if (!userEntity.IsEnoughData && statisticCount >= 10)
+            if (!userEntity.IsEnoughData && statisticCount >= 5)
             {
                 userEntity.IsEnoughData = true;
             }

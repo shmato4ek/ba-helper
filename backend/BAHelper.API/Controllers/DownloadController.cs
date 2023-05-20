@@ -1,6 +1,8 @@
 ﻿using BAHelper.BLL.Services;
 using BAHelper.Common.Services;
 using Microsoft.AspNetCore.Mvc;
+using ServiceStack.Script;
+using System;
 
 namespace BAHelper.API.Controllers
 {
@@ -34,6 +36,13 @@ namespace BAHelper.API.Controllers
         {
             var fileConfig = await _downloadService.DownloadComPlan(plan);
             return File(fileConfig.MemoryStream, fileConfig.MimeType, fileConfig.FileName);
+        }
+
+        [HttpGet("test-download")]
+        public IActionResult Download()
+        {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "LocalFiles", "Тестовий документ.docx");
+            return Ok(filepath);
         }
     }
 }

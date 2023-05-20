@@ -22,17 +22,17 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddTask([FromBody] NewProjectTaskDTO newTaskDto)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.AddProjectTask(newTaskDto, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectTaskService.AddProjectTask(newTaskDto, 1));
         }
 
         [HttpPut("assign")]
         public async Task<ActionResult> AddUsersToTask(int taskId, string email)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.AddUserToTask(taskId, email, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectTaskService.AddUserToTask(taskId, email, 1));
         }
 
         [HttpPut]
@@ -116,9 +116,9 @@ namespace BAHelper.API.Controllers
         [HttpPut("approve")]
         public async Task<ActionResult> ApproveTask(int taskId)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.ApproveTask(taskId, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectTaskService.ApproveTask(taskId, 1));
         }
 
         [HttpPut("subtask/approve")]

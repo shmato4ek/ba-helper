@@ -16,6 +16,7 @@ namespace BAHelper.BLL.MappingProfiles
             CreateMap<NewUserDTO, User>();
             CreateMap<User, UserDTO>();
             CreateMap<User, UserInfoDTO>();
+            CreateMap<UserDTO, UserInfoDTO>();
         }
     }
 }

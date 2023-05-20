@@ -495,6 +495,19 @@
           }
         }
       },
+      "NCrontab.Signed/3.3.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NCrontab.Signed.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NCrontab.Signed.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
       "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
@@ -2508,6 +2521,24 @@
         "lib/netstandard2.1/MimeKit.xml",
         "mimekit.3.5.0.nupkg.sha512",
         "mimekit.nuspec"
+      ]
+    },
+    "NCrontab.Signed/3.3.2": {
+      "sha512": "Ef9nJs/iIkM3hAcAEDD5dZy0cDFfmmPlhRAt/IPYcsWdMUHZ6MQLuqv5oA6TZrpvO6Sj8lq/B5njbJUMnxedLg==",
+      "type": "package",
+      "path": "ncrontab.signed/3.3.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "COPYING.txt",
+        "lib/net35/NCrontab.Signed.dll",
+        "lib/net35/NCrontab.Signed.pdb",
+        "lib/netstandard1.0/NCrontab.Signed.dll",
+        "lib/netstandard1.0/NCrontab.Signed.pdb",
+        "lib/netstandard2.0/NCrontab.Signed.dll",
+        "lib/netstandard2.0/NCrontab.Signed.pdb",
+        "ncrontab.signed.3.3.2.nupkg.sha512",
+        "ncrontab.signed.nuspec"
       ]
     },
     "Newtonsoft.Json/13.0.2": {
@@ -5198,6 +5229,7 @@
       "Microsoft.IdentityModel.Tokens >= 6.29.0",
       "Microsoft.Office.Interop.Word >= 15.0.4797.1004",
       "MimeKit >= 3.5.0",
+      "NCrontab.Signed >= 3.3.2",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 7.0.1",
       "SendGrid >= 9.28.1",
       "ServiceStack >= 6.6.0",
@@ -5275,6 +5307,10 @@
           "MimeKit": {
             "target": "Package",
             "version": "[3.5.0, )"
+          },
+          "NCrontab.Signed": {
+            "target": "Package",
+            "version": "[3.3.2, )"
           },
           "Npgsql.EntityFrameworkCore.PostgreSQL": {
             "target": "Package",

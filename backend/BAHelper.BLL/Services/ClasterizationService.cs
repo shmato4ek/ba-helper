@@ -23,21 +23,28 @@ namespace BAHelper.BLL.Services
         {
 
         }
-        public async Task Cluster(int projectId)
+        public async Task<List<ClusterInfoDTO>> Cluster(int projectId, int userId)
         {
             var projectEntity = await _context
                 .Projects
                 .Include(project => project.Users)
-                .Include(project => project.Clusters)
                 .FirstOrDefaultAsync(project => project.Id == projectId);
             if (projectEntity is null)
             {
                 throw new NotFoundException(nameof(Project), projectId);
             }
+            if (projectEntity.AuthorId != userId)
+            {
+                throw new NoAccessException(userId);
+            }
             var usersStatistic = new List<List<double>>();
             foreach (var user in projectEntity.Users)
             {
-                foreach (var stat in user.Statistics)
+                var userEntity = await _context
+                    .Users
+                    .Include(user => user.Statistics)
+                    .FirstOrDefaultAsync(us => us.Id == user.Id);
+                foreach (var stat in userEntity.Statistics)
                 {
                     var userStat = new List<double>();
                     userStat.Add((double)stat.TaskTopic);
@@ -54,7 +61,7 @@ namespace BAHelper.BLL.Services
                 raw[1] = usersStatistic[i][1];
                 rawData[i] = raw;
             }
-            int numClusters = (int)Math.Round((double)projectEntity.Users.Count / 3);
+            int numClusters = (int)Math.Round((double)projectEntity.Users.Count);
             double[][] data = Normalized(rawData);
 
             bool changed = true;
@@ -83,11 +90,12 @@ namespace BAHelper.BLL.Services
             }
             for (int i = 0; i < clustering.Length; i++)
             {
+                var clusteredUserId = usersStatistic[i][2];
                 var clusteredUser = await _context
                     .Users
-                    .FirstOrDefaultAsync(user => user.Id == usersStatistic[i][2]);
-                var foundCluster = newClusters[clustering[i]].Users.FirstOrDefault(user => user.Id == clusteredUser.Id);
-                if (foundCluster != null)
+                    .FirstOrDefaultAsync(user => user.Id == clusteredUserId);
+                var foundCluster = newClusters[clustering[i]].Users.FirstOrDefault(user => user.Id == clusteredUserId);
+                if (foundCluster == null)
                 {
                     newClusters[clustering[i]].Users.Add(_mapper.Map<UserDTO>(clusteredUser));
                 }
@@ -107,9 +115,19 @@ namespace BAHelper.BLL.Services
                     }
                 }
             }
-            projectEntity.Clusters = _mapper.Map<List<Cluster>>(newClusters);
-            _context.Projects.Update(projectEntity);
-            await _context.SaveChangesAsync();
+            List<ClusterInfoDTO> clustersInfo = new List<ClusterInfoDTO>();
+            foreach (var c in newClusters)
+            {
+                var clusterInfo = new ClusterInfoDTO
+                {
+                    ProjectName = projectEntity.ProjectName,
+                    Data = c.Data,
+                    Users = _mapper.Map<List<UserInfoDTO>>(c.Users)
+                };
+                clusterInfo.Data[0].Topic = TopicTag.Tag1;
+                clustersInfo.Add(clusterInfo);
+            }
+            return clustersInfo;
         }
 
         private static double[][] Normalized(double[][] rawData)

@@ -15,8 +15,8 @@ namespace BAHelper.DAL.Entities
         public string Description { get; set; }
         public double Hours { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public DateTime ArchivedData { get; set; }
         public List<ProjectTask> Tasks { get; set; }
         public List<User> Users { get; set; }
-        public List<Cluster> Clusters { get; set; }
     }
 }

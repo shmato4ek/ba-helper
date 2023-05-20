@@ -133,5 +133,19 @@ namespace BAHelper.BLL.Services
             await _context.SaveChangesAsync();
             return _mapper.Map<UserInfoDTO>(userEntity);
         }
+
+        public async Task<List<StatisticDataInfo>> GetUserStatistic(int userId)
+        {
+            var userEntity = await _context
+                .Users
+                .Include(user => user.Statistics)
+                .FirstOrDefaultAsync(user => user.Id == userId);
+            if (userEntity is null)
+            {
+                throw new NotFoundException(nameof(User), userId);
+            }
+            var userStatisticEntity = userEntity.Statistics;
+            return _mapper.Map<List<StatisticDataInfo>>(userStatisticEntity);
+        }
     }
 }

@@ -193,10 +193,44 @@ namespace BAHelper.BLL.Services
                 throw new NoAccessException(userId);
             }
             docEntity.IsDeleted = true;
+            docEntity.ArchivedDate = DateTime.UtcNow;
             _context.Documents.Update(docEntity);
             await _context.SaveChangesAsync();
         }
 
+        public async System.Threading.Tasks.Task DeleteArchivedDocuments()
+        {
+            var currentDate = DateTime.UtcNow;
+            var archivedDocumentsEntity = await _context
+                .Documents
+                .Where(document => document.IsDeleted)
+                .Where(document => document.ArchivedDate.AddDays(30) > currentDate)
+                .ToListAsync();
+            foreach (var document in archivedDocumentsEntity)
+            {
+                _context.Documents.Remove(document);
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async System.Threading.Tasks.Task RestoreDocument(int documentId, int userId)
+        {
+            var documentEntity = await _context
+                .Documents
+                .FirstOrDefaultAsync(document => document.Id == documentId);
+            if (documentEntity is null)
+            {
+                throw new NotFoundException(nameof(DAL.Entities.Document), documentId);
+            }
+            if (documentEntity.UserId != userId)
+            {
+                throw new NoAccessException(userId);
+            }
+            documentEntity.IsDeleted = false;
+            documentEntity.ArchivedDate = new DateTime();
+            _context.Documents.Update(documentEntity);
+            await _context.SaveChangesAsync();
+        }
         public async System.Threading.Tasks.Task DeleteDocument(int documentId, int userId)
         {
             var docEntity = await _context

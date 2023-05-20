@@ -94,3 +94,6 @@ D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Microsoft.IdentityM
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\SendGrid.dll
 D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\StarkbankEcdsa.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\NetTopologySuite.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\NetTopologySuite.Features.dll
+D:\BA Hepler\ba-helper\backend\BAHelper.API\bin\Debug\net6.0\NetTopologySuite.IO.GeoJSON4STJ.dll

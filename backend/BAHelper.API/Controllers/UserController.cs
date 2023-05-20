@@ -62,5 +62,19 @@ namespace BAHelper.API.Controllers
             var userId = _jwtFactory.GetValueFromToken(token);
             return Ok(await _userService.UpdateUser(updatedUser, userId));
         }
+
+        [HttpGet("statistic/me")]
+        public async Task<ActionResult> GetOwmStatistic()
+        {
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _userService.GetUserStatistic(userId));
+        }
+
+        [HttpGet("statistic")]
+        public async Task<ActionResult> GetUserStatisticById(int userId)
+        {
+            return Ok(await _userService.GetUserStatistic(userId));
+        }
     }
 }
