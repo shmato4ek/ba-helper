@@ -202,6 +202,17 @@ const Project: FC<Props> = (params) => {
                 </tbody>
               </Table>
             </Wrapper>
+            <AlignCenter>
+              <Button buttonType='button' styleType='simple'>
+                <Link
+                  to={`/projects/statistics/${params.project.id}`}
+                  style={{
+                    textDecoration: 'none',
+                    color: 'white',
+                  }}
+                >Показати Статистику</Link>
+              </Button>
+            </AlignCenter>
             <Footer>
               <b>Загальна кількість годин: {totalHours}</b>
             </Footer>

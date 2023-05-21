@@ -37,6 +37,19 @@ export interface PostProjectDto {
   users: string[]; // list of emails
 }
 
+export interface ClusterInfo {
+  projectName: string;
+  users: UserDto[];
+  data: ClusterData[];
+}
+
+export interface ClusterData {
+  id: number;
+  clusterId: number;
+  topic: number;
+  quality: number;
+}
+
 /**
  * @description
  *    - temporary object to store UI edit state before sending well-formated PUT request
@@ -165,6 +178,12 @@ export interface EditPutUserDto
   passwordConfirm: string;
 }
 
+export interface StatisticDataInfo {
+  taskTopic: number;
+  taskQuality: number;
+  taskCount: number;
+}
+
 export enum TaskState {
   Pending,
   InProgress,
@@ -266,6 +285,41 @@ export const taskStateToText = (taskState: TaskState) => {
       return "В процесі";
     case TaskState.Pending:
       return "В очікуванні";
+
+    default:
+      return taskState;
+  }
+};
+
+export enum TaskTopic {
+  Design = 1,
+  Frontend = 2,
+  Backend = 3,
+  Testing = 4,
+  Deploy = 5,
+  ProcessDesing = 6,
+  Documentation = 7,
+  PlanningAndAnalysis = 8,
+}
+
+export const taskTopicToText = (taskState: TaskTopic) => {
+  switch (taskState) {
+    case TaskTopic.Design:
+      return "Дизайн";
+    case TaskTopic.Frontend:
+      return "Фронтенд";
+    case TaskTopic.Backend:
+      return "Бекенд";
+    case TaskTopic.Testing:
+      return "Тестування";
+    case TaskTopic.Deploy:
+      return "Деплой";
+    case TaskTopic.ProcessDesing:
+      return "Проектування процесу";
+    case TaskTopic.Documentation:
+      return "Створення документації";
+    case TaskTopic.PlanningAndAnalysis:
+      return "Планування та аналіз";
 
     default:
       return taskState;

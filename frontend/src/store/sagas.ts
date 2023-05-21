@@ -3,7 +3,7 @@ import { put, call, takeLeading } from 'redux-saga/effects';
 import { ErrorCodes } from '../error';
 import { globals } from '../services/is';
 import {
-  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, Login, LoginSuccess, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
+  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
 } from './actions';
 import { PutUserDto } from './types';
 import { LocalStorageService } from '../services/local-storage';
@@ -58,13 +58,33 @@ function* getMe() {
   }
 }
 
+function* getMeStatistics() {
+  try {
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.get(`${globals.endpoint}${globals.paths.user.statisticsMe}`);
+    });
+    
+    console.log('@response.data');
+    console.log(JSON.stringify(response.data, null, 2));
+
+    yield put({
+      type: 'GET_ME_STATISTICS_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'GET_ME_STATISTICS_FAILURE');
+  }
+}
+
 function* login(login: Login) {
   try {
     console.log('@---');
     const response: {
       data: LoginSuccess['payload']
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`, login);
+      return axios.post(`${globals.endpoint}${globals.paths.auth.login}`, login.payload);
     });
 
     yield put<AppAction>({
@@ -150,6 +170,23 @@ function* getProject(getProject: GetProject) {
     });
   } catch (error) {
     yield call(errorHandler, error, 'GET_PROJECT_FAILURE');
+  }
+}
+
+function* getProjectStatistics(getProjectStatistics: GetProjectStatistics) {
+  try {
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.get(`${globals.endpoint}${globals.paths.project.stats}/${getProjectStatistics.payload.id}`);
+    });
+
+    yield put<AppAction>({
+      type: 'GET_PROJECT_STATISTICS_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'GET_PROJECT_STATISTICS_FAILURE');
   }
 }
 
@@ -406,15 +443,21 @@ function* documentDownload(documentDownload: DocumentDownload) {
     console.log('Document download state action');
 
     const response: {
-      data: any
+      data: any;
+      blob: any;
     } = yield call(() => {
       return axios.get(`${globals.endpoint}${globals.paths.download._}/${documentDownload.payload}`, {
         data: documentDownload.payload
+        // headers: {
+        //   'Content-Type': 'application/problem+json; charset=utf-8'
+        // }
       });
     });
     console.log('@response');
     console.log(JSON.stringify(response.data, null, 2));
 
+
+    window.open(`${globals.endpoint}${globals.paths.download._}/${documentDownload.payload}`, '_blank');
 
     yield put<AppAction>({
       type: 'DOCUMENT_DOWNLOAD_SUCCESS',
@@ -427,11 +470,13 @@ function* documentDownload(documentDownload: DocumentDownload) {
 
 export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.GET_ME, getMe);
+  yield takeLeading(actionTypes.GET_ME_STATISTICS, getMeStatistics);
   yield takeLeading(actionTypes.LOGIN, login);
   yield takeLeading(actionTypes.REGISTER, register);
   yield takeLeading(actionTypes.PUT_USER, putUser);
   yield takeLeading(actionTypes.DELETE_USER, deleteUser);
   yield takeLeading(actionTypes.GET_PROJECT, getProject);
+  yield takeLeading(actionTypes.GET_PROJECT_STATISTICS, getProjectStatistics);
   yield takeLeading(actionTypes.GET_PROJECTS, getProjects);
   yield takeLeading(actionTypes.GET_PROJECTS_OWN, getProjectsOwn);
   yield takeLeading(actionTypes.POST_PROJECT, postProject);

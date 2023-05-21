@@ -9,7 +9,7 @@ import { CreateErrorObject, EditPutUserDto, PutUserDto } from '../../../store/ty
 import { DeleteUser, PutUser } from '../../../store/actions';
 import { AppState } from '../../../store/reducer';
 import { useSelector } from 'react-redux';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import NotFound from '../../../components/NotFound/NotFound';
 
 const ProfilePage = () => {
@@ -79,6 +79,7 @@ const ProfilePage = () => {
   return (
     <Profile
       onDeleteUser={onDeleteUser}
+      user={me}
       putUser={putUser}
       onValidate={onValidate}
       onSubmit={onSubmit}

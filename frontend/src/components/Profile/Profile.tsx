@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { EditPutProjectDto, EditPutUserDto, ProjectDto, ProjectDtoFields, PutUserDto, taskStateToText } from '../../store/types';
+import { EditPutProjectDto, EditPutUserDto, Me, ProjectDto, ProjectDtoFields, PutUserDto, taskStateToText } from '../../store/types';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import { AlignCenter, VerticalGrid, VerticalMargins, Wrapper } from '../Utils/Utils';
@@ -46,6 +46,7 @@ const Footer = styled.footer`
 `;
 
 type Props = {
+  user: Me;
   putUser: EditPutUserDto;
 
   onDeleteUser: () => any;
@@ -114,6 +115,17 @@ const Profile: FC<Props> = (params) => {
                   </HorizontalGrid>
                 </VerticalGrid>
               </VerticalMargins>
+              <AlignCenter>
+                <Button buttonType='button' styleType='simple'>
+                  <Link
+                    to={`/profile/statistics`}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'white',
+                    }}
+                  >Моя статистика</Link>
+                </Button>
+              </AlignCenter>
             </Wrapper>
             <Footer>
               <Button buttonType='button' styleType='gray' onClick={() => {
