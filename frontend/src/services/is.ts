@@ -5,9 +5,9 @@ export const is = {
 export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
-    if (is.localhost) {
-      return 'http://localhost:5054';
-    }
+    // if (is.localhost) {
+    // return 'https://fb1a-77-47-209-159.ngrok-free.app';
+    // }
 
     return 'http://localhost:5054';
   })(),
@@ -22,7 +22,8 @@ export const globals = {
       me: '/api/auth/me',
     },
     user: {
-      _: '/api/user'
+      _: '/api/user',
+      statisticsMe: '/api/user/statistics/me',
     },
     document: {
       _: '/api/document',
@@ -32,6 +33,7 @@ export const globals = {
       _: '/api/project',
       user: '/api/project/user',
       userOwn: '/api/project/user/own',
+      stats: '/api/project/statistics',
     },
     task: {
       _: '/api/task',

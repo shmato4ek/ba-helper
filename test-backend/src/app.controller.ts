@@ -89,6 +89,22 @@ export class AppController {
     return AlphaProject;
   }
 
+  @Get('/user/statistics/me')
+  getMeStatistics(@Param('id') id: string): StatisticDataInfo[] {
+    console.log('/profile/statistics/me');
+    console.log(id);
+
+    return meStatistics;
+  }
+
+  @Get('/project/statistics/:id')
+  getProjectStatisticsById(@Param('id') id: string): ClusterInfo[] {
+    console.log('/project/:id');
+    console.log(id);
+
+    return clusters;
+  }
+
   @Get('/project/:id')
   getProjectById(@Param('id') id: string): ProjectDto {
     console.log('/project/:id');
@@ -202,6 +218,70 @@ export const Documents: DocumentDto[] = [
   },
 ];
 
+export const clusters: ClusterInfo[] = [
+  {
+    data: [
+      {
+        id: 1,
+        clusterId: 1,
+        quality: 0.45,
+        topic: 3,
+      },
+      {
+        id: 1,
+        clusterId: 2,
+        quality: 0.67,
+        topic: 3,
+      },
+    ],
+    projectName: 'Project 1',
+    users: [AlphaUser, BetaUser],
+  },
+  {
+    data: [
+      {
+        id: 2,
+        clusterId: 2,
+        quality: 0.45,
+        topic: 3,
+      },
+    ],
+    projectName: 'Project 2',
+    users: [BetaUser],
+  },
+  {
+    data: [
+      {
+        id: 3,
+        clusterId: 3,
+        quality: 0.45,
+        topic: 3,
+      },
+    ],
+    projectName: 'Project 3',
+    users: [BetaUser],
+  },
+];
+
+export enum TaskTopic {
+  Design = 1,
+  Frontend = 2,
+  Backend = 3,
+  Testing = 4,
+  Deploy = 5,
+  ProcessDesing = 6,
+  Documentation = 7,
+  PlanningAndAnalysis = 8,
+}
+
+export const meStatistics: StatisticDataInfo[] = [
+  {
+    taskCount: 3,
+    taskQuality: 0.34,
+    taskTopic: TaskTopic.Frontend,
+  },
+];
+
 /**
  * @description - Project
  */
@@ -222,6 +302,19 @@ export interface PostProjectDto {
   projectName: string;
   description: string;
   users: string[]; // list of emails
+}
+
+export interface ClusterInfo {
+  projectName: string;
+  users: UserDto[];
+  data: ClusterData[];
+}
+
+export interface ClusterData {
+  id: number;
+  clusterId: number;
+  topic: number;
+  quality: number;
 }
 
 export interface PutProjectDto extends Pick<PostProjectDto, 'deadline' | 'projectName' | 'description' | 'users'> {
@@ -355,6 +448,12 @@ export interface RACIMatrixDto {
   executors: string[];
   tasks: string[];
   RACI: RACIStatus[][];
+}
+
+export interface StatisticDataInfo {
+  taskTopic: TaskTopic;
+  taskQuality: number;
+  taskCount: number;
 }
 
 export enum RACIStatus {

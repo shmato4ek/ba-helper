@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { actionTypes, AppAction } from './actions';
-import { DocumentDto, Me, ProjectDto, TaskDto } from './types';
+import { ClusterInfo, DocumentDto, Me, ProjectDto, StatisticDataInfo, TaskDto } from './types';
 import { BisFunctionDto } from './bis-function.types';
 import { AlphaProject, BetaProject } from '../mock';
 
@@ -36,6 +36,11 @@ export const RootReducerInitialState = {
        *  - getMeFailure
        */
       success: null as boolean | null, // is user logged in
+    },
+
+    getMeStatistics: {
+      loading: false as boolean,
+      errors: null as string[] | null,
     },
 
     login: {
@@ -76,6 +81,11 @@ export const RootReducerInitialState = {
     },
 
     getProject: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    getProjectStatistics: {
       loading: false as boolean,
       errors: null as string[] | null,
     },
@@ -141,9 +151,11 @@ export const RootReducerInitialState = {
    *  - getMe
    */
   me: null as Me | null,
+  meStatistics: null as StatisticDataInfo[] | null,
   projects: null as ProjectDto[] | null,
   projectsOwn: null as ProjectDto[] | null,
   currentProject: null as ProjectDto | null,
+  currentProjectStats: null as ClusterInfo[] | null,
   documents: null as DocumentDto[] | null,
 };
 
@@ -167,6 +179,25 @@ export const RootReducer = produce(
         draft.actions.getMe.errors = action.payload.errors;
         draft.actions.getMe.loading = false;
         draft.actions.getMe.success = false;
+        break;
+
+      case actionTypes.GET_ME_STATISTICS:
+        console.log('actionTypes.GET_ME_STATISTICS')
+        draft.actions.getMeStatistics.errors = null;
+        draft.actions.getMeStatistics.loading = true;
+        break;
+      case actionTypes.GET_ME_STATISTICS_SUCCESS:
+        console.log('actionTypes.GET_ME_STATISTICS_SUCCESS')
+        console.log('@action.payload');
+        console.log(action.payload);
+        draft.meStatistics = action.payload;
+        draft.actions.getMeStatistics.errors = null;
+        draft.actions.getMeStatistics.loading = false;
+        break;
+      case actionTypes.GET_ME_STATISTICS_FAILURE:
+        console.log('actionTypes.GET_ME_STATISTICS_FAILURE')
+        draft.actions.getMeStatistics.errors = action.payload.errors;
+        draft.actions.getMeStatistics.loading = false;
         break;
 
       case actionTypes.LOGIN:
@@ -300,6 +331,23 @@ export const RootReducer = produce(
         console.log('actionTypes.GET_PROJECT_FAILURE')
         draft.actions.getProject.errors = action.payload.errors;
         draft.actions.getProject.loading = false;
+        break;
+
+      case actionTypes.GET_PROJECT_STATISTICS:
+        console.log('actionTypes.GET_PROJECT_STATISTICS')
+        draft.actions.getProjectStatistics.errors = null;
+        draft.actions.getProjectStatistics.loading = true;
+        break;
+      case actionTypes.GET_PROJECT_STATISTICS_SUCCESS:
+        console.log('actionTypes.GET_PROJECT_STATISTICS_SUCCESS')
+        draft.currentProjectStats = action.payload;
+        draft.actions.getProjectStatistics.errors = null;
+        draft.actions.getProjectStatistics.loading = false;
+        break;
+      case actionTypes.GET_PROJECT_STATISTICS_FAILURE:
+        console.log('actionTypes.GET_PROJECT_STATISTICS_FAILURE')
+        draft.actions.getProjectStatistics.errors = action.payload.errors;
+        draft.actions.getProjectStatistics.loading = false;
         break;
 
       case actionTypes.POST_PROJECT:

@@ -1,5 +1,5 @@
 import { NavigateFunction } from 'react-router';
-import { DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, SubtaskDto, TaskDto, UserDto } from './types';
+import { ClusterInfo, DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, StatisticDataInfo, SubtaskDto, TaskDto, UserDto } from './types';
 
 /* Action Types */
 export const actionTypes = {
@@ -10,6 +10,10 @@ export const actionTypes = {
   GET_ME: 'GET_ME' as 'GET_ME',
   GET_ME_SUCCESS: 'GET_ME_SUCCESS' as 'GET_ME_SUCCESS',
   GET_ME_FAILURE: 'GET_ME_FAILURE' as 'GET_ME_FAILURE',
+
+  GET_ME_STATISTICS: 'GET_ME_STATISTICS' as 'GET_ME_STATISTICS',
+  GET_ME_STATISTICS_SUCCESS: 'GET_ME_STATISTICS_SUCCESS' as 'GET_ME_STATISTICS_SUCCESS',
+  GET_ME_STATISTICS_FAILURE: 'GET_ME_STATISTICS_FAILURE' as 'GET_ME_STATISTICS_FAILURE',
 
   LOGIN: 'LOGIN' as 'LOGIN',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS' as 'LOGIN_SUCCESS',
@@ -47,6 +51,11 @@ export const actionTypes = {
   GET_PROJECT: 'GET_PROJECT' as 'GET_PROJECT',
   GET_PROJECT_SUCCESS: 'GET_PROJECT_SUCCESS' as 'GET_PROJECT_SUCCESS',
   GET_PROJECT_FAILURE: 'GET_PROJECT_FAILURE' as 'GET_PROJECT_FAILURE',
+
+  // GET /api/project/statistics/:id
+  GET_PROJECT_STATISTICS: 'GET_PROJECT_STATISTICS' as 'GET_PROJECT_STATISTICS',
+  GET_PROJECT_STATISTICS_SUCCESS: 'GET_PROJECT_STATISTICS_SUCCESS' as 'GET_PROJECT_STATISTICS_SUCCESS',
+  GET_PROJECT_STATISTICS_FAILURE: 'GET_PROJECT_STATISTICS_FAILURE' as 'GET_PROJECT_STATISTICS_FAILURE',
 
   // POST /api/project
   POST_PROJECT: 'POST_PROJECT' as 'POST_PROJECT',
@@ -139,6 +148,19 @@ export interface GetMeSuccess {
 
 export interface GetMeFailure extends ErrorPayload {
   type: typeof actionTypes.GET_ME_FAILURE;
+}
+
+export interface GetMeStatistics {
+  type: typeof actionTypes.GET_ME_STATISTICS;
+}
+
+export interface GetMeStatisticsSuccess {
+  type: typeof actionTypes.GET_ME_STATISTICS_SUCCESS;
+  payload: StatisticDataInfo[];
+}
+
+export interface GetMeStatisticsFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_ME_STATISTICS_FAILURE;
 }
 
 export interface Login {
@@ -254,6 +276,20 @@ export interface GetProjectSuccess {
 
 export interface GetProjectFailure extends ErrorPayload {
   type: typeof actionTypes.GET_PROJECT_FAILURE;
+}
+
+export interface GetProjectStatistics {
+  type: typeof actionTypes.GET_PROJECT_STATISTICS;
+  payload: { id: number; }
+}
+
+export interface GetProjectStatisticsSuccess {
+  type: typeof actionTypes.GET_PROJECT_STATISTICS_SUCCESS;
+  payload: ClusterInfo[];
+}
+
+export interface GetProjectStatisticsFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_PROJECT_STATISTICS_FAILURE;
 }
 
 export interface PostProject {
@@ -428,6 +464,7 @@ export interface DocumentDownloadFailure extends ErrorPayload {
 /** UI actions */
 export type FailureAppActionTypes =
   | typeof actionTypes.GET_ME_FAILURE
+  | typeof actionTypes.GET_ME_STATISTICS_FAILURE
   | typeof actionTypes.REGISTER_FAILURE
   | typeof actionTypes.PUT_USER_FAILURE
   | typeof actionTypes.DELETE_USER_FAILURE
@@ -435,6 +472,7 @@ export type FailureAppActionTypes =
   | typeof actionTypes.GET_PROJECTS_FAILURE
   | typeof actionTypes.GET_PROJECTS_OWN_FAILURE
   | typeof actionTypes.GET_PROJECT_FAILURE
+  | typeof actionTypes.GET_PROJECT_STATISTICS_FAILURE
   | typeof actionTypes.POST_PROJECT_FAILURE
   | typeof actionTypes.PUT_PROJECT_FAILURE
   | typeof actionTypes.POST_TASK_FAILURE
@@ -451,6 +489,7 @@ export type FailureAppActionTypes =
 
 export type FailureAppAction =
   | GetMeFailure
+  | GetMeStatisticsFailure
   | LoginFailure
   | RegisterFailure
   | PutUserFailure
@@ -459,6 +498,7 @@ export type FailureAppAction =
   | GetProjectsFailure
   | GetProjectsOwnFailure
   | GetProjectFailure
+  | GetProjectStatisticsFailure
   | PostProjectFailure
   | PutProjectFailure
   | PostTaskFailure
@@ -478,6 +518,9 @@ export type AppAction =
   | GetMe
   | GetMeSuccess
   | GetMeFailure
+  | GetMeStatistics
+  | GetMeStatisticsSuccess
+  | GetMeStatisticsFailure
   | Login
   | LoginSuccess
   | LoginFailure
@@ -502,6 +545,9 @@ export type AppAction =
   | GetProject
   | GetProjectSuccess
   | GetProjectFailure
+  | GetProjectStatistics
+  | GetProjectStatisticsSuccess
+  | GetProjectStatisticsFailure
   | PostProject
   | PostProjectSuccess
   | PostProjectFailure
