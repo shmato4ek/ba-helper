@@ -6,7 +6,7 @@ export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
     // if (is.localhost) {
-    // return 'https://fb1a-77-47-209-159.ngrok-free.app';
+    // return 'https://public-kings-joke.loca.lt';
     // }
 
     return 'http://localhost:5054';

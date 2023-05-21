@@ -443,18 +443,17 @@ function* documentDownload(documentDownload: DocumentDownload) {
     console.log('Document download state action');
 
     const response: {
-      data: any
+      data: any;
+      blob: any;
     } = yield call(() => {
-      return axios.get(`${globals.endpoint}${globals.paths.download._}`, {
-        data: documentDownload.payload,
-        headers: {
-          'Content-Type': 'application/problem+json; charset=utf-8'
-        }
+      return axios.get(`${globals.endpoint}${globals.paths.download._}/${documentDownload.payload}`, {
+        // headers: {
+        //   'Content-Type': 'application/problem+json; charset=utf-8'
+        // }
       });
     });
 
-    console.log('@response');
-    console.log(JSON.stringify(response.data, null, 2));
+    window.open(`${globals.endpoint}${globals.paths.download._}/${documentDownload.payload}`, '_blank');
 
     yield put<AppAction>({
       type: 'DOCUMENT_DOWNLOAD_SUCCESS',
