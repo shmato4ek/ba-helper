@@ -44,7 +44,7 @@ namespace BAHelper.BLL.Services
                 throw new ExistUserException(newUser.Email);
             }
             userEntity.Statistics = new List<StatisticData>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 1; i <= 8; i++)
             {
                 var newStatistic = new NewStatisticDataDTO() { TaskCount = 0, TaskQuality = 0, TaskTopic = (TopicTag)i, UserId = userEntity.Id };
                 userEntity.Statistics.Add(_mapper.Map<StatisticData>(newStatistic));

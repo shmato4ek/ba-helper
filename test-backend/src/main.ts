@@ -17,7 +17,7 @@ async function bootstrap() {
   const origins = [configService.get('front_host')];
   if (configService.get('node_env') !== 'production') {
     origins.push('http://localhost:3000');
-  }
+  }У 
 
   app.enableCors({
     origin: origins,

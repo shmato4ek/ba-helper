@@ -6,10 +6,10 @@ export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
     if (is.localhost) {
-      return 'http://localhost:5054';
+      return 'https://large-llamas-tickle.loca.lt';
     }
 
-    return 'http://localhost:5054';
+    return 'https://large-llamas-tickle.loca.lt';
   })(),
   ports: {
     be: 5054,

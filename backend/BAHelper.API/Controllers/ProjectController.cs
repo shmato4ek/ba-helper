@@ -24,9 +24,9 @@ namespace BAHelper.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProject(NewProjectDTO newProject)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectService.CreateProject(newProject, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _projectService.CreateProject(newProject, 1));
         }
 
         [HttpGet("{projectId:int}")]
@@ -90,9 +90,9 @@ namespace BAHelper.API.Controllers
         [HttpGet("statistic")]
         public async Task<ActionResult> TestCluster(int projectId)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _clasterizationService.Cluster(projectId, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _clasterizationService.Cluster(projectId, 1));
         }
 
         [HttpPut("restore")]

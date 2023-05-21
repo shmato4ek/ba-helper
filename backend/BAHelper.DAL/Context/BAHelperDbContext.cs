@@ -35,6 +35,6 @@ namespace BAHelper.DAL.Context
             modelBuilder.Configure();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BAHelper;UserName=postgres;Password=0985883147");
+            => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BAHelperTest2;UserName=postgres;Password=0985883147");
     }
 }

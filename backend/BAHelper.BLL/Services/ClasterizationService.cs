@@ -82,7 +82,7 @@ namespace BAHelper.BLL.Services
             for (int i = 0; i < numClusters; i++)
             {
                 var addedCluster = new ClusterDTO { Data = new List<ClusterDataDTO>(), ProjectId = projectId, Users = new List<UserDTO>() };
-                for (int j = 0; j < 8; j++)
+                for (int j = 1; j <= 8; j++)
                 {
                     addedCluster.Data.Add(new ClusterDataDTO() { Quality = 0, Topic = (TopicTag)j});
                 }
@@ -118,16 +118,70 @@ namespace BAHelper.BLL.Services
             List<ClusterInfoDTO> clustersInfo = new List<ClusterInfoDTO>();
             foreach (var c in newClusters)
             {
+                c.Data.Sort(CompareClusterData);
                 var clusterInfo = new ClusterInfoDTO
                 {
                     ProjectName = projectEntity.ProjectName,
-                    Data = c.Data,
+                    Data = new List<ClusterDataDTO>(),
                     Users = _mapper.Map<List<UserInfoDTO>>(c.Users)
                 };
-                clusterInfo.Data[0].Topic = TopicTag.Tag1;
+                clusterInfo.Data.Add(c.Data[7]);
+                clusterInfo.Data.Add(c.Data[6]);
+                clusterInfo.Data.Add(c.Data[5]);
                 clustersInfo.Add(clusterInfo);
             }
             return clustersInfo;
+        }
+
+        private static int CompareClusterData(ClusterDataDTO x, ClusterDataDTO y)
+        {
+            if (x == null)
+            {
+                if (y == null)
+                {
+                    // If x is null and y is null, they're
+                    // equal.
+                    return 0;
+                }
+                else
+                {
+                    // If x is null and y is not null, y
+                    // is greater.
+                    return -1;
+                }
+            }
+            else
+            {
+                // If x is not null...
+                //
+                if (y == null)
+                // ...and y is null, x is greater.
+                {
+                    return 1;
+                }
+                else
+                {
+                    // ...and y is not null, compare the
+                    // lengths of the two strings.
+                    //
+                    int retval = x.Quality.CompareTo(y.Quality);
+
+                    if (retval != 0)
+                    {
+                        // If the strings are not of equal length,
+                        // the longer string is greater.
+                        //
+                        return retval;
+                    }
+                    else
+                    {
+                        // If the strings are of equal length,
+                        // sort them with ordinary string comparison.
+                        //
+                        return x.Quality.CompareTo(y.Quality);
+                    }
+                }
+            }
         }
 
         private static double[][] Normalized(double[][] rawData)
