@@ -9,7 +9,7 @@ export const globals = {
     // return 'https://public-kings-joke.loca.lt';
     // }
 
-    return 'https://large-llamas-tickle.loca.lt';
+    return 'http://localhost:5054';
   })(),
   ports: {
     be: 5054,

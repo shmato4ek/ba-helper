@@ -36,15 +36,15 @@ namespace BAHelper.API.Controllers
             return Ok(await _userService.UpdateUser(updatedUser, userId));
         }
 
-        [HttpGet("statistic/me")]
+        [HttpGet("statistics/me")]
         public async Task<ActionResult> GetOwmStatistic()
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _userService.GetUserStatistic(userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _userService.GetUserStatistic(2));
         }
 
-        [HttpGet("statistic")]
+        [HttpGet("statistics")]
         public async Task<ActionResult> GetUserStatisticById(int userId)
         {
             return Ok(await _userService.GetUserStatistic(userId));

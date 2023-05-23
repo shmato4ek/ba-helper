@@ -46,5 +46,12 @@ namespace BAHelper.API.Controllers
             var userId = _jwtFactory.GetValueFromToken(token);
             return Ok(await _userService.GetUserById(userId));
         }
+
+        [HttpGet("logout")]
+        public async Task<ActionResult> Logout()
+        {
+            Response.Headers.Remove("x-auth-token");
+            return NoContent();
+        }
     }
 }

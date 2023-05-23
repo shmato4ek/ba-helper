@@ -1,7 +1,6 @@
 ﻿using BAHelper.BLL.JWT;
 using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.Project;
-using BAHelper.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
@@ -87,7 +86,7 @@ namespace BAHelper.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("statistic")]
+        [HttpGet("statistics/{projectId:int}")]
         public async Task<ActionResult> TestCluster(int projectId)
         {
             //var token = Request.Headers["x-auth-token"].ToString();

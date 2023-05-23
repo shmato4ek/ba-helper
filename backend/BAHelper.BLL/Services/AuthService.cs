@@ -53,7 +53,7 @@ namespace BAHelper.BLL.Services
 
         public async Task<TokenDTO> GenerateAccessToken(int id, string userName, string userEmail)
         {
-            string refreshToken = _jwtFactory.GenerateRefreshToken();
+            //string refreshToken = _jwtFactory.GenerateRefreshToken();
 
             //_context.RefreshTokens.Add(new RefreshToken
             //{

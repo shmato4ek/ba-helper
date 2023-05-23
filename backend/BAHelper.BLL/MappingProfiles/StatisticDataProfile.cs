@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using BAHelper.Common.DTOs.StatisticData;
 using BAHelper.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.MappingProfiles
 {
@@ -16,6 +11,7 @@ namespace BAHelper.BLL.MappingProfiles
             CreateMap<NewStatisticDataDTO, StatisticData>();
             CreateMap<StatisticData, StatisticDataDTO>();
             CreateMap<StatisticDataDTO, StatisticData>();
+            CreateMap<StatisticData, StatisticDataInfo>();
         }
     }
 }

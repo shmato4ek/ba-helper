@@ -2,23 +2,9 @@
 using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.Document;
-using BAHelper.Common.DTOs.Glossary;
-using BAHelper.Common.DTOs.UserStory;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Office.Interop.Word;
-using ServiceStack;
-using Spire.Doc;
-using Spire.Pdf.Exporting.XPS.Schema;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.Services
 {
@@ -38,7 +24,7 @@ namespace BAHelper.BLL.Services
             _context.Documents.Add(documentEntity);
             await _context.SaveChangesAsync();
 
-            var glossaryEntity = _mapper.Map<List<Glossary>>(newDocumentDto.Glossary);
+            var glossaryEntity = _mapper.Map<List<Glossary>>(newDocumentDto.Glossaries);
             foreach(var glossary in glossaryEntity)
             {
                 glossary.DocumentId = documentEntity.Id;
@@ -47,7 +33,17 @@ namespace BAHelper.BLL.Services
             var userStoriesEntity = new List<UserStory>();
             foreach(var userStory in newDocumentDto.UserStories)
             {
-                var userStoryEntity = new UserStory { Name = userStory.Name, DocumentId = documentEntity.Id, AcceptanceCriterias = userStory.AcceptanceCriterias, Formulas = userStory.Formulas };
+                var acceptanceCriterias = new List<string>();
+                foreach (var c in userStory.AcceptanceCriterias)
+                {
+                    acceptanceCriterias.Add(c.Text);
+                }
+                var formulas = new List<string>();
+                foreach (var f in userStory.UserStoryFormulas)
+                {
+                    formulas.Add(f.Text);
+                }
+                var userStoryEntity = new UserStory { Name = userStory.Name, DocumentId = documentEntity.Id, AcceptanceCriterias = acceptanceCriterias, Formulas = formulas };
                 userStoriesEntity.Add(userStoryEntity);
             }
             var createdDocument = await _context
