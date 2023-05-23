@@ -97,6 +97,7 @@ type Props = {
   onSubmit: (values: EditPutProjectDto) => void;
 
   isEditMode: boolean;
+  canEdit: boolean;
   onEditModeSwitch: () => void;
 }
 
@@ -159,6 +160,7 @@ const Project: FC<Props> = (params) => {
                       }
                     </FieldGrid>
                   </HorizontalGrid>
+                  {params.canEdit &&
                   <AlignCenter>
                     {!params.isEditMode
                     ? <Button buttonType='button' styleType='simple' onClick={() => params.onEditModeSwitch()}>Редагувати</Button>
@@ -167,6 +169,7 @@ const Project: FC<Props> = (params) => {
                       params.onEditModeSwitch();
                     }}>Зберегти</Button>}
                   </AlignCenter>
+                  }
                 </VerticalGrid>
               </VerticalMargins>
               <Header>Завдання</Header>
@@ -185,12 +188,14 @@ const Project: FC<Props> = (params) => {
                     return (
                       <>
                         <TaskContainer
+                          canEdit={params.canEdit}
                           projectUsers={params.project.users}
                           task={task}
                           key={`task/${task.id}`}
                         />
                         {task.subtasks.map(subtask => {
                           return <SubtaskContainer
+                            canEdit={params.canEdit}
                             subtask={subtask}
                             key={`subtask/${subtask.id}`}
                           />
@@ -198,7 +203,9 @@ const Project: FC<Props> = (params) => {
                       </>
                     )
                   })}
-                  <NewTaskContainer project={params.project}/>
+                  {params.canEdit &&
+                    <NewTaskContainer project={params.project}/>
+                  }
                 </tbody>
               </Table>
             </Wrapper>

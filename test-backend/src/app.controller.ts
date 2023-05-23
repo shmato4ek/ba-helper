@@ -14,7 +14,7 @@ export class AppController {
     name: 'Ruslan Plastun',
   };
 
-  @Post('/auth/register')
+  @Post('/register')
   register() {
     return {
       user: this.meDto,
@@ -22,7 +22,7 @@ export class AppController {
     };
   }
 
-  @Post('/auth/login')
+  @Post('/login')
   login() {
     return {
       user: this.meDto,
@@ -66,6 +66,7 @@ export class AppController {
       authorName: 'BetaUser',
       hours: 0,
       isDeleted: false,
+      canEdit: true,
       tasks: [],
       users: [],
       deadline: params.deadline,
@@ -189,6 +190,7 @@ export const AlphaProject: ProjectDto = {
   authorName: 'AlphaUser',
   hours: 30,
   isDeleted: false,
+  canEdit: true,
   tasks: [AlphaTask1, AlphaTask2],
   users: [AlphaUser, BetaUser],
   deadline: new Date(),
@@ -201,6 +203,7 @@ export const BetaProject: ProjectDto = {
   authorName: 'BetaUser',
   hours: 11,
   isDeleted: false,
+  canEdit: false,
   tasks: [],
   users: [],
   deadline: new Date(),
@@ -224,7 +227,7 @@ export const clusters: ClusterInfo[] = [
       {
         id: 1,
         clusterId: 1,
-        quality: 0.45,
+        quality: 0.412323,
         topic: 3,
       },
       {
@@ -294,6 +297,7 @@ export interface ProjectDto {
   projectName: string;
   hours: number;
   isDeleted: boolean;
+  canEdit: boolean;
   tasks: TaskDto[];
   users: UserDto[];
 }
