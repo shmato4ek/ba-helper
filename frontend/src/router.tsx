@@ -17,7 +17,7 @@ export default createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<AppContainer />}>
       <Route index element={<FrontPage />} />
-      <Route path="services" element={<ServicesPage />} />
+      {/* <Route path="services" element={<ServicesPage />} /> */}
       <Route path="my-projects" element={<ProjectsPage />} />
       <Route path="owned-projects" element={<ProjectsPage />} />
       <Route path="projects/:projectId" element={<ProjectPage />} />

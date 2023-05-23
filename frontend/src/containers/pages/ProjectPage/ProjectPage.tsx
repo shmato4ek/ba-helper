@@ -10,25 +10,27 @@ import { CreateErrorObject, EditPutProjectDto, PutProjectDto } from '../../../st
 import * as yup from 'yup'
 import { validateStraight } from '../../../yup';
 import * as _ from 'lodash'
+import { useFirstRender } from '../../../hooks/useFirstRender';
 
 const ProjectPage = () => {
   const dispatch = useDispatch();
   const currentProject = useSelector((state: AppState) => state.currentProject);
-  const getProjectAction = useSelector((state: AppState) => state.actions.getProject);
+  // const getProjectAction = useSelector((state: AppState) => state.actions.getProject);
   const { projectId } = useParams();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const isFirstRender = useFirstRender();
 
   console.log('@currentProject');
   console.log(JSON.stringify(currentProject, null, 2));
 
   useEffect(()=> {
-    if(!getProjectAction.loading && !currentProject) {
+    if(isFirstRender) {
       dispatch<AppAction>({ type: 'GET_PROJECT', payload: {
           id: Number(projectId as any)
         }
       });
     }
-  }, [dispatch, projectId, getProjectAction, currentProject]);
+  }, [dispatch, projectId, isFirstRender]);
 
   const onValidate = useCallback((values: EditPutProjectDto) => {
     console.log('Project Page values validate');
@@ -93,6 +95,7 @@ const ProjectPage = () => {
     <Project
       putProject={putProject}
       isEditMode={isEditMode}
+      canEdit={currentProject.canEdit}
       project={currentProject}
       onValidate={onValidate}
       onSubmit={onSubmit}
