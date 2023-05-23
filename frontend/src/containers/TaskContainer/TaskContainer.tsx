@@ -20,11 +20,13 @@ import FormDropdown from '../../components/Form/FormDropdown/FormDropdown';
 interface Props {
   task: TaskDto;
   projectUsers: UserDto[];
+  canEdit: boolean;
 }
 
 const TaskContainer = ({
   task,
   projectUsers,
+  canEdit,
 }: Props) => {
   const dispatch = useDispatch();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -112,7 +114,7 @@ const TaskContainer = ({
           <TD>
             {isEditMode
               ?  <>
-                  <FormStringField placeholder="Ім'я субтаски" name={'taskName'} label="" />
+                  <FormStringField placeholder="Ім'я таски" name={'taskName'} label="" />
                   <FormError name='taskName' />
                 </>
               : <>{task.taskName}</>}
@@ -153,20 +155,20 @@ const TaskContainer = ({
               onOptionChoose={onTaskStateChoose as any}
             />
           </TD>
-          {
-          <TDWhite>
-            {isEditMode
-              ? <Button buttonType='button' styleType='none' onClick={() => {
-                  handleSubmit();
-                  onEditModeSwitch();
-                }}>
-                <Icon type='save' style={{width: 30, height: 30 }} />
-              </Button> 
-              : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
-                <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
-              </Button>}
-          </TDWhite>
-        }
+          {canEdit &&
+            <TDWhite>
+              {isEditMode
+                ? <Button buttonType='button' styleType='none' onClick={() => {
+                    handleSubmit();
+                    onEditModeSwitch();
+                  }}>
+                  <Icon type='save' style={{width: 30, height: 30 }} />
+                </Button> 
+                : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
+                  <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
+                </Button>}
+            </TDWhite>
+          }
         </TR>
       </>
     )}

@@ -94,7 +94,7 @@ function* login(login: Login) {
 
     LocalStorageService.setState('x-auth-token', response.data.token.accessToken)
 
-    login.navigate(`/services`);
+    login.navigate(`/my-projects`);
   } catch (error) {
     yield call(errorHandler, error, 'LOGIN_FAILURE');
   }

@@ -27,6 +27,7 @@ export interface ProjectDto {
   projectName: string;
   hours: number;
   isDeleted: boolean;
+  canEdit: boolean;
   tasks: TaskDto[];
   users: UserDto[];
 }
@@ -94,11 +95,13 @@ export interface PostTaskDto {
   deadline: Date;
   projectId: number;
   taskName: string;
+  tags: TaskTopic[];
   hours: number;
 }
 
 export interface EditPostTaskDto
-  extends Pick<PostTaskDto, "deadline" | "taskName" | "hours"> {
+  extends Pick<PostTaskDto, "deadline" | "taskName" | "hours" > {
+    tag: TaskTopic;
 }
 
 export interface PutTaskDto
@@ -301,6 +304,8 @@ export enum TaskTopic {
   Documentation = 7,
   PlanningAndAnalysis = 8,
 }
+
+export const taskTopics: TaskTopic[] = [1,2,3,4,5,6,7,8]
 
 export const taskTopicToText = (taskState: TaskTopic) => {
   switch (taskState) {

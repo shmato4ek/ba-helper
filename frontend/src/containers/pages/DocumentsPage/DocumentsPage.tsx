@@ -6,17 +6,18 @@ import { ProjectDtoFields } from '../../../store/types';
 import Loading from '../../../components/Loading/Loading';
 import { AppAction, DocumentDownload } from '../../../store/actions';
 import Documents from '../../../components/Documents/Documents';
+import { useFirstRender } from '../../../hooks/useFirstRender';
 
 const DocumentsPage = () => {
   const dispatch = useDispatch();
   const documents = useSelector((state: AppState) => state.documents);
-  const getDocumentsAction = useSelector((state: AppState) => state.actions.getDocuments);
+  const isFirstRender = useFirstRender();
 
   useEffect(()=> {
-    if(!getDocumentsAction.loading && !documents) {
+    if(isFirstRender) {
       dispatch<AppAction>({ type: 'GET_DOCUMENTS' });
     }
-  }, [dispatch, documents, getDocumentsAction.loading]);
+  }, [dispatch, isFirstRender]);
 
   const onDocumentDownload = useCallback((documentId: number) => {
     console.log('Delete user');

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import * as yup from 'yup'
 import * as _ from 'lodash'
-import { CreateErrorObject, EditPostTaskDto, PostTaskDto, ProjectDto } from '../../store/types';
+import { CreateErrorObject, EditPostTaskDto, PostTaskDto, ProjectDto, TaskTopic, taskTopics, taskTopicToText } from '../../store/types';
 import { validateStraight } from '../../yup';
 import { PostTask } from '../../store/actions';
 import { TD, TDWhite, TR } from '../../components/Project/Project';
@@ -14,6 +14,7 @@ import Icon from '../../components/Icon/Icon';
 import FormStringField from '../../components/Form/FormStringField/FormStringField';
 import FormError from '../../components/Form/FormError/FormError';
 import FormDatepicker from '../../components/Form/FormDatepicker/FormDatepicker';
+import FormDropdown from '../../components/Form/FormDropdown/FormDropdown';
 
 interface Props {
   project: ProjectDto;
@@ -43,7 +44,8 @@ const NewTaskContainer = ({
       projectId: project.id,
       deadline: values.deadline,
       taskName: values.taskName,
-      hours: Number(values.hours)
+      hours: Number(values.hours),
+      tags: [values.tag]
     };
 
     console.log('Task values submit');
@@ -59,6 +61,7 @@ const NewTaskContainer = ({
     deadline: new Date() as any,
     taskName: '',
     hours: 0,
+    tag: TaskTopic.Frontend
   };
 
   console.log('@editTask');
@@ -75,7 +78,7 @@ const NewTaskContainer = ({
       <>
         <TR key={`task/new`}>
           <TD>
-            <FormStringField placeholder="Ім'я субтаски" name={'taskName'} label="" />
+            <FormStringField placeholder="Ім'я таски" name={'taskName'} label="" />
             <FormError name='taskName' />
           </TD>
           <TD>
@@ -86,7 +89,17 @@ const NewTaskContainer = ({
             <FormStringField placeholder="К-ість годин" name={'hours'} label="" />
             <FormError name='hours' />
           </TD>
-          <TD></TD>
+          <TD>
+            <FormDropdown
+              name='tag'
+              placeholder="Стан завдання"
+              label=""
+              options={taskTopics.map(x => x)}
+              labels={taskTopics.map(x => taskTopicToText(x))}
+              onOptionChoose={() => {}}
+            />
+            <FormError name='taskState' />
+          </TD>
           <TD></TD>
           {
           <TDWhite>

@@ -17,10 +17,12 @@ import FormDropdown from '../../components/Form/FormDropdown/FormDropdown';
 
 interface Props {
   subtask: SubtaskDto;
+  canEdit: boolean;
 }
 
 const SubtaskContainer = ({
   subtask,
+  canEdit,
 }: Props) => {
   const dispatch = useDispatch();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -106,20 +108,20 @@ const SubtaskContainer = ({
             />
             <FormError name='taskState' />
           </TD>
-          {
-          <TDWhite>
-            {isEditMode
-              ? <Button buttonType='button' styleType='none' onClick={() => {
-                  handleSubmit();
-                  onEditModeSwitch();
-                }}>
-                <Icon type='save' style={{width: 30, height: 30 }} />
-              </Button> 
-              : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
-                <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
-              </Button>}
-          </TDWhite>
-        }
+          {canEdit &&
+            <TDWhite>
+              {isEditMode
+                ? <Button buttonType='button' styleType='none' onClick={() => {
+                    handleSubmit();
+                    onEditModeSwitch();
+                  }}>
+                  <Icon type='save' style={{width: 30, height: 30 }} />
+                </Button> 
+                : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
+                  <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
+                </Button>}
+            </TDWhite>
+          }
         </TR>
       </>
     )}
