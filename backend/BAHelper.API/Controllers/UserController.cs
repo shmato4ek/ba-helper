@@ -39,8 +39,8 @@ namespace BAHelper.API.Controllers
         [HttpGet("statistics/me")]
         public async Task<ActionResult> GetOwmStatistic()
         {
-            //var token = Request.Headers["x-auth-token"].ToString();
-            //var userId = _jwtFactory.GetValueFromToken(token);
+            var token = Request.Headers["x-auth-token"].ToString();
+            var userId = _jwtFactory.GetValueFromToken(token);
             return Ok(await _userService.GetUserStatistic(2));
         }
 

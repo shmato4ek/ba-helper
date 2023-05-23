@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BAHelper.BLL.Exceptions;
-using BAHelper.BLL.MappingProfiles;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.StatisticData;
@@ -10,14 +9,6 @@ using BAHelper.Common.Security;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using ServiceStack;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.Services
 {
@@ -124,7 +115,7 @@ namespace BAHelper.BLL.Services
                     throw new InvalidUserNameOrPasswordException();
                 }
                 var salt = SecurityHelper.GetRandomBytes();
-                userEntity.Password = SecurityHelper.HashPassword(updatedUser.NewPassword, salt);
+                userEntity.Password = SecurityHelper.HashPassword(updatedUser.Password, salt);
             }
             userEntity.Name = updatedUser.Name;
             userEntity.Email = updatedUser.Email;
@@ -144,8 +135,45 @@ namespace BAHelper.BLL.Services
             {
                 throw new NotFoundException(nameof(User), userId);
             }
-            var userStatisticEntity = userEntity.Statistics;
-            return _mapper.Map<List<StatisticDataInfo>>(userStatisticEntity);
+            var statistics = _mapper.Map<List<StatisticDataInfo>>(userEntity.Statistics);
+            statistics.Sort(CompareStatistic);
+            return statistics;
         }
+
+        private static int CompareStatistic(StatisticDataInfo x, StatisticDataInfo y)
+        {
+            if (x == null)
+            {
+                if (y == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                if (y == null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    int retval = y.TaskQuality.CompareTo(x.TaskQuality);
+
+                    if (retval != 0)
+                    {
+                        return retval;
+                    }
+                    else
+                    {
+                        return y.TaskQuality.CompareTo(x.TaskQuality);
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -8,11 +8,6 @@ using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.Services
 {
@@ -125,11 +120,13 @@ namespace BAHelper.BLL.Services
                     Data = new List<ClusterDataDTO>(),
                     Users = _mapper.Map<List<UserInfoDTO>>(c.Users)
                 };
-                clusterInfo.Data.Add(c.Data[7]);
-                clusterInfo.Data.Add(c.Data[6]);
-                clusterInfo.Data.Add(c.Data[5]);
+                for (int i = 0; i < 3; i++)
+                {
+                    clusterInfo.Data.Add(c.Data[i]);
+                }
                 clustersInfo.Add(clusterInfo);
             }
+            clustersInfo.Sort(CompareClusterInfo);
             return clustersInfo;
         }
 
@@ -139,50 +136,74 @@ namespace BAHelper.BLL.Services
             {
                 if (y == null)
                 {
-                    // If x is null and y is null, they're
-                    // equal.
                     return 0;
                 }
                 else
                 {
-                    // If x is null and y is not null, y
-                    // is greater.
                     return -1;
                 }
             }
             else
             {
-                // If x is not null...
-                //
                 if (y == null)
-                // ...and y is null, x is greater.
                 {
                     return 1;
                 }
                 else
                 {
-                    // ...and y is not null, compare the
-                    // lengths of the two strings.
-                    //
-                    int retval = x.Quality.CompareTo(y.Quality);
+                    int retval = y.Quality.CompareTo(x.Quality);
 
                     if (retval != 0)
                     {
-                        // If the strings are not of equal length,
-                        // the longer string is greater.
-                        //
                         return retval;
                     }
                     else
                     {
-                        // If the strings are of equal length,
-                        // sort them with ordinary string comparison.
-                        //
-                        return x.Quality.CompareTo(y.Quality);
+                        return y.Quality.CompareTo(x.Quality);
                     }
                 }
             }
         }
+
+        private static int CompareClusterInfo(ClusterInfoDTO x, ClusterInfoDTO y)
+        {
+            if (x == null)
+            {
+                if (y == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                if (y == null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    x.Data.Sort(CompareClusterData);
+                    y.Data.Sort(CompareClusterData);
+                    double xMax = x.Data[0].Quality;
+                    double yMax = y.Data[0].Quality;
+                    int retval = yMax.CompareTo(xMax);
+
+                    if (retval != 0)
+                    {
+                        return retval;
+                    }
+                    else
+                    {
+                        return yMax.CompareTo(xMax);
+                    }
+                }
+            }
+        }
+
 
         private static double[][] Normalized(double[][] rawData)
         {
