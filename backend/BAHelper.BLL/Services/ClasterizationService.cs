@@ -23,6 +23,7 @@ namespace BAHelper.BLL.Services
             var projectEntity = await _context
                 .Projects
                 .Include(project => project.Users)
+                .ThenInclude(user => user.Statistics)
                 .FirstOrDefaultAsync(project => project.Id == projectId);
             if (projectEntity is null)
             {
@@ -106,7 +107,8 @@ namespace BAHelper.BLL.Services
                         {
                             sum += user.Statistics.FirstOrDefault(s => s.TaskTopic == cluster.Data[i].Topic).TaskQuality;
                         }
-                        cluster.Data[i].Quality = sum / cluster.Users.Count;
+                        double result = sum / cluster.Users.Count;
+                        cluster.Data[i].Quality = (int)Math.Round(result);
                     }
                 }
             }

@@ -34,44 +34,18 @@ namespace BAHelper.BLL.Services
             {
                 throw new ExistUserException(newUser.Email);
             }
+            _context.Users.Add(userEntity);
+            await _context.SaveChangesAsync();
+            var createdUser = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Email == newUser.Email);
             userEntity.Statistics = new List<StatisticData>();
             for (int i = 1; i <= 8; i++)
             {
-                var newStatistic = new NewStatisticDataDTO() { TaskCount = 0, TaskQuality = 0, TaskTopic = (TopicTag)i, UserId = userEntity.Id };
+                var newStatistic = new NewStatisticDataDTO() { TaskCount = 0, TaskQuality = 0, TaskTopic = (TopicTag)i, UserId = createdUser.Id };
                 userEntity.Statistics.Add(_mapper.Map<StatisticData>(newStatistic));
             }
-            _context.Users.Add(userEntity);
-            await _context.SaveChangesAsync();
-            /////////////////
-            var createdUser = await _context
-                .Users
-                .Include(user => user.Statistics)
-                .FirstOrDefaultAsync(user => user.Id == userEntity.Id);
-            ///////////
             return _mapper.Map<UserDTO>(createdUser);
-        }
-
-        public async Task<List<UserDTO>> GetAllUsers()
-        {
-            var allUsers = await _context
-                .Users
-                .ToListAsync();
-            var allUsersDTO = _mapper.Map<List<UserDTO>>(allUsers);
-            return allUsersDTO;
-        }
-
-        public async Task<List<ProjectTaskDTO>> GetAllUsersTasks(int userId)
-        {
-            var userEntity = await _context
-                .Users
-                .Include(user => user.Tasks)
-                .FirstOrDefaultAsync(user => user.Id == userId);
-            if (userEntity is null)
-            {
-                throw new NotFoundException(nameof(User), userId);
-            }
-            var tasksEntity = userEntity.Tasks;
-            return _mapper.Map<List<ProjectTaskDTO>>(tasksEntity);
         }
 
         public async Task DeleteUser(int userId)

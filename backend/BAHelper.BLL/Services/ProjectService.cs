@@ -6,7 +6,6 @@ using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using ServiceStack;
 
 namespace BAHelper.BLL.Services
 {
@@ -99,15 +98,28 @@ namespace BAHelper.BLL.Services
                 .Include(task => task.Subtasks)
                 .ToListAsync();
             var projectDto = _mapper.Map<ProjectInfoDTO>(projectEntity);
-            if (projectDto.AuthorId == userId)
-            {
-                projectDto.CanEdit = true;
-            }
             var userEntity = await _context
                 .Users
                 .FirstOrDefaultAsync(user => user.Id == projectEntity.AuthorId);
             projectDto.AuthorName = userEntity.Name;
             projectDto.Tasks = _mapper.Map<List<ProjectTaskInfoDTO>>(tasksEntity);
+            if (projectDto.AuthorId == userId)
+            {
+                projectDto.CanEdit = true;
+            }
+            else
+            {
+                foreach(var task in projectDto.Tasks)
+                {
+                    if(task.Users != null)
+                    {
+                        if (task.Users.FirstOrDefault(u => u.Id == userId) != null)
+                        {
+                            task.CanEditState = true;
+                        }
+                    }
+                }
+            }
             return projectDto;
         }
 
@@ -168,6 +180,10 @@ namespace BAHelper.BLL.Services
             await _context.SaveChangesAsync();
             var updatedProjectDto = _mapper.Map<ProjectInfoDTO>(projectEntity);
             updatedProjectDto.CanEdit = true;
+            var userEntity = await _context
+                .Users
+                .FirstOrDefaultAsync(user => user.Id == projectEntity.AuthorId);
+            updatedProjectDto.AuthorName = userEntity.Name;
             var tasksDto = await _context
                 .Tasks
                 .Where(task => task.ProjectId == projectEntity.Id)
@@ -266,33 +282,6 @@ namespace BAHelper.BLL.Services
                 }
             }
             return usersProjects;
-        }
-
-        public async Task<List<ProjectTaskInfoDTO>> GetAllProjectTasks(int projectId, int userId)
-        {
-            var projectEntity = await _context
-                .Projects
-                .FirstOrDefaultAsync(p => p.Id == projectId);
-            if (projectEntity is null)
-            {
-                throw new NotFoundException(nameof(Project), projectId);
-            }
-            var projectTasks = await _context
-                .Tasks
-                .Where(t => t.ProjectId == projectEntity.Id)
-                .Include(task => task.Subtasks)
-                .Include(task => task.Users)
-                .ToListAsync();
-
-            var projectTasksDto = _mapper.Map<List<ProjectTaskInfoDTO>>(projectTasks);
-            foreach(var task in projectTasksDto)
-            {
-                if (task.Users.FirstOrDefault(user => user.Id == userId) != null)
-                {
-                    task.CanEditState = true;
-                }
-            }
-            return projectTasksDto;
         }
 
         public async Task<ProjectDTO> AddUserToProject(int projectId, string email, int userId)

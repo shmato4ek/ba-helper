@@ -21,15 +21,6 @@ namespace BAHelper.BLL.Services
         public WordService(BAHelperDbContext context, IMapper mapper)
             :base (context, mapper) { }
 
-        public async Task<DocumentDTO> CreateDocument(int userId, NewDocumentDto newDocumentDto)
-        {
-            var documentEntity = _mapper.Map<DAL.Entities.Document>(newDocumentDto);
-            documentEntity.UserId = userId;
-            _context.Documents.Add(documentEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<DocumentDTO>(documentEntity);
-        }
-
         public async Task<DocumentDTO> CreateWordFile(int documentId)
         {
             var documentEntity = await _context
@@ -72,9 +63,6 @@ namespace BAHelper.BLL.Services
                                               "3. Functional requirements (Use cases)";
                 TextRange contentParagraphTR = contentParagraph.AppendText(contentParagraphText);
                 contentParagraphTR.CharacterFormat.FontSize = 14;
-
-                //Break pageBreak = new Break(document, BreakType.PageBreak);
-                //contentParagraph.ChildObjects.Insert(1, pageBreak);
 
                 Section section2 = document.AddSection();
                 Paragraph projectAimHeader = section2.AddParagraph();
@@ -150,39 +138,6 @@ namespace BAHelper.BLL.Services
                 string funcRequirementsHeaderText = "Functional requirements";
                 funcRequirementsHeader.Text = funcRequirementsHeaderText;
                 funcRequirementsHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
-                //funcRequirementsHeader.ApplyStyle(headerStyle.Name);
-
-                //Microsoft.Office.Interop.Word.Paragraph funcRequirementsParagraph = document.Content.Paragraphs.Add();
-                //funcRequirementsParagraph.Range.Font.Size = 11;
-                //if (documentEntity.UserStories != null)
-                //{
-                //    var userStories = documentEntity.UserStories.ToList();
-                //    List<string> userStoryText = new List<string>();
-                //    string para6Text = "";
-                //    int userStoriesCount = 1;
-                //    foreach (var userStory in userStories)
-                //    {
-                //        string usName = "User story " + userStoriesCount.ToString() + ". " + userStory.Name + "\n";
-                //        string usText = "";
-                //        foreach (var item in userStory.Formulas)
-                //        {
-                //            usText += item;
-                //            usText += "\n";
-                //        }
-                //        string usCriteria = "Acceptance criteria:\n";
-                //        int count = 1;
-                //        foreach (var item in userStory.AcceptanceCriterias)
-                //        {
-                //            string criteria = count.ToString() + ". " + item + "\n";
-                //            usCriteria += criteria;
-                //            count++;
-                //        }
-                //        string usResult = usName + usText + usCriteria;
-                //        para6Text += usResult;
-                //    }
-                //    funcRequirementsParagraph.Range.Text = para6Text;
-                //}
-                //funcRequirementsParagraph.Range.InsertParagraphAfter();
 
                 document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
                 return _mapper.Map<DocumentDTO>(documentEntity);
@@ -349,14 +304,6 @@ namespace BAHelper.BLL.Services
                     }
                 }
                 document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
-
-
-                //********************************************************
-
-
-
-                //********************************************************
-
             }
             catch (Exception ex)
             {

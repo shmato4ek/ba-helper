@@ -8,7 +8,6 @@ using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using ServiceStack.Text;
 
 namespace BAHelper.BLL.Services
 {
@@ -21,7 +20,7 @@ namespace BAHelper.BLL.Services
             _mailService = mailService;
         }
 
-        public async Task<ProjectTaskDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int userId)
+        public async Task<ProjectTaskInfoDTO> AddProjectTask(NewProjectTaskDTO newProjectTaskDto, int userId)
         {
             var projectEntity = await _context
                 .Projects
@@ -41,11 +40,12 @@ namespace BAHelper.BLL.Services
             }
             var projectTaskEntity = _mapper.Map<ProjectTask>(newProjectTaskDto);
             projectTaskEntity.ProjectId = newProjectTaskDto.ProjectId;
+            projectTaskEntity.Deadine = newProjectTaskDto.Deadline;
             projectEntity.Hours += projectTaskEntity.Hours;
             projectEntity.Tasks.Add(projectTaskEntity);
             _context.Update(projectEntity);
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProjectTaskDTO>(projectTaskEntity);
+            return _mapper.Map<ProjectTaskInfoDTO>(projectTaskEntity);
         }
 
         public async Task<ProjectTaskDTO> UpdateTask(UpdateProjectTaskDTO updatedProjectTask, int userId)
@@ -144,22 +144,6 @@ namespace BAHelper.BLL.Services
             return _mapper.Map<SubtaskDTO>(subtaskEntity);
         }
 
-        public async Task<List<SubtaskDTO>> GetAllSubtasks(int taskId)
-        {
-            var taskEntity = await _context
-                .Tasks
-                .FirstOrDefaultAsync(t => t.Id == taskId);
-            if(taskEntity is null)
-            {
-                throw new NotFoundException(nameof(ProjectTask), taskId);
-            }
-            var subtasks = await _context
-                .Subtasks
-                .Where(t => t.TaskId == taskEntity.Id)
-                .ToListAsync();
-            return _mapper.Map<List<SubtaskDTO>>(subtasks);
-        }
-
         public async Task<ProjectTaskDTO> AddUserToTask(int taskId, string email, int userId)
         {
             var taskEntity = await _context
@@ -225,38 +209,6 @@ namespace BAHelper.BLL.Services
 
         }
 
-        public async Task<List<ProjectTaskDTO>> GetAllUsersTasksByProject(int userId, int projectId)
-        {
-            var userEntity = await _context
-                .Users
-                .Include(user => user.Tasks)
-                .FirstOrDefaultAsync(user => user.Id == userId);
-            if (userEntity is null)
-            {
-                throw new NotFoundException(nameof(User), userId);
-            }
-            var userTasksEntity = userEntity.Tasks.Where(task => task.ProjectId == projectId).ToList();
-            return _mapper.Map<List<ProjectTaskDTO>>(userTasksEntity);
-        }
-
-        public async Task<List<ProjectTaskDTO>> GetAllTasksByProjectId(int projectId)
-        {
-            var projectEntity = await _context
-                .Projects
-                .FirstOrDefaultAsync(project => project.Id == projectId);
-            if (projectEntity is null)
-            {
-                throw new NotFoundException(nameof(Project), projectId);
-            }
-            var tasksEntities = await _context
-                .Tasks
-                .Include(task => task.Users)
-                .Include(task => task.Subtasks)
-                .Where(task => task.ProjectId == projectId)
-                .ToListAsync();
-
-            return _mapper.Map<List<ProjectTaskDTO>>(tasksEntities);
-        }
 
         public async Task<ProjectTaskDTO> ChangeTaskState(int userId, int taskId, TaskState taskState)
         {

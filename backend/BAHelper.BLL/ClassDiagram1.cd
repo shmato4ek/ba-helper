@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BAHelper.DAL.Entities.UserStory">
+    <Position X="0.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.User">
+    <Position X="4.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.Subtask">
+    <Position X="6" Y="12" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.StatisticData">
+    <Position X="7.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.ProjectTask">
+    <Position X="9.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.Project">
+    <Position X="11.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.Glossary">
+    <Position X="14.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.Document">
+    <Position X="13" Y="11.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.DAL.Entities.ClusterData">
+    <Position X="2.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="BAHelper.BLL.Services.WordService">
+    <Position X="0.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAABgAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\WordService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.UserService">
+    <Position X="2.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAQBAAAAEAAAAAACAAQAAAAAAAAAAAAEQAAA=</HashCode>
+      <FileName>Services\UserService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.ProjectTaskService">
+    <Position X="4.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAFBABAAAAABABAAAAEBIAAADAAAAAEAgACAQAAAAA=</HashCode>
+      <FileName>Services\ProjectTaskService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.ProjectService">
+    <Position X="6.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAOAAQAAAQAAAAAAAQgAAAgAAAAAAQQAIAQCACAA=</HashCode>
+      <FileName>Services\ProjectService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.MailService">
+    <Position X="8.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Services\MailService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.DownloadService">
+    <Position X="10" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAIAgAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\DownloadService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.DocumentService">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAEAAAAAgAAAAAAAAAAAAEAAEAAEAAgAAAAAAAAA=</HashCode>
+      <FileName>Services\DocumentService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.ClasterizationService">
+    <Position X="13.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAEEAAAgAAAAACAAAAAAAAAAAABAABAAEEABAAA=</HashCode>
+      <FileName>Services\ClasterizationService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.AuthService">
+    <Position X="15.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAEACAABAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Services\AuthService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BAHelper.BLL.Services.Abstract.BaseService">
+    <Position X="8.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Abstract\BaseService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

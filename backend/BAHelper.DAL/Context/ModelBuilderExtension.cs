@@ -18,6 +18,7 @@ namespace BAHelper.DAL.Context
             modelBuilder.ApplyConfiguration(new UserStoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectConfiguration());
             modelBuilder.ApplyConfiguration(new ProjectTaskConfiguration());
+            modelBuilder.ApplyConfiguration(new StatisticDataConfiguration());
         }
     }
 }

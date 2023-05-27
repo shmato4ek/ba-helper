@@ -69,22 +69,22 @@ namespace BAHelper.BLL.Services
             return new TokenDTO(accessToken);
         }
 
-        public async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalAuthDto externalAuth)
-        {
-            try
-            {
-                string clientId = _configuration["GoogleClientId"];
-                var settings = new GoogleJsonWebSignature.ValidationSettings()
-                {
-                    Audience = new List<string>() { clientId }
-                };
-                var payload = await GoogleJsonWebSignature.ValidateAsync(externalAuth.IdToken, settings);
-                return payload;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+        //public async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalAuthDto externalAuth)
+        //{
+        //    try
+        //    {
+        //        string clientId = _configuration["GoogleClientId"];
+        //        var settings = new GoogleJsonWebSignature.ValidationSettings()
+        //        {
+        //            Audience = new List<string>() { clientId }
+        //        };
+        //        var payload = await GoogleJsonWebSignature.ValidateAsync(externalAuth.IdToken, settings);
+        //        return payload;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

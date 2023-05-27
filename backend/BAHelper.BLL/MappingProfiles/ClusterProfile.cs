@@ -1,11 +1,5 @@
 ﻿using AutoMapper;
 using BAHelper.Common.DTOs.Cluster;
-using BAHelper.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.MappingProfiles
 {
@@ -14,8 +8,6 @@ namespace BAHelper.BLL.MappingProfiles
         public ClusterProfile() 
         {
             CreateMap<ClusterDTO, ClusterInfoDTO>();
-            CreateMap<ClusterDTO, Cluster>();
-            CreateMap<Cluster, ClusterDTO>();
         }
     }
 }

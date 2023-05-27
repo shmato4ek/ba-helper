@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.MappingProfiles
 {
@@ -15,7 +10,9 @@ namespace BAHelper.BLL.MappingProfiles
         {
             CreateMap<NewProjectTaskDTO, ProjectTask>();
             CreateMap<ProjectTask, ProjectTaskDTO>();
-            CreateMap<ProjectTask, ProjectTaskInfoDTO>();
+            CreateMap<ProjectTask, ProjectTaskInfoDTO>()
+                .ForMember(p => p.Deadline, opt => opt.MapFrom(t => t.Deadine))
+                .ForMember(p => p.Deadline, opt => opt.MapFrom(t => t.Deadine.ToString("s")));
         }
     }
 }

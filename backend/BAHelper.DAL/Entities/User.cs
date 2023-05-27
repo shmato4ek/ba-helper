@@ -20,6 +20,5 @@ namespace BAHelper.DAL.Entities
         public List<ProjectTask> Tasks { get; set; }
         public List<Document> Documents { get; set; }
         public List<StatisticData> Statistics { get; set; }
-        public List<Cluster> Clusters { get; set; }
     }
 }

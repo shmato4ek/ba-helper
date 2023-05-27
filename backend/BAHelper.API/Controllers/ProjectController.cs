@@ -87,7 +87,7 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpGet("statistics/{projectId:int}")]
-        public async Task<ActionResult> TestCluster(int projectId)
+        public async Task<ActionResult> Cluster(int projectId)
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);

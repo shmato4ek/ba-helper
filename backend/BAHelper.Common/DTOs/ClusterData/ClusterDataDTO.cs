@@ -12,6 +12,6 @@ namespace BAHelper.Common.DTOs.ClusterData
         public int Id { get; set; }
         public int ClusterId { get; set; }
         public TopicTag Topic { get; set; }
-        public double Quality { get; set; }
+        public int Quality { get; set; }
     }
 }
