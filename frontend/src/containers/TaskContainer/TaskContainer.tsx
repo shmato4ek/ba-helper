@@ -160,7 +160,7 @@ const TaskContainer = ({
                   />
                   <FormError name='assignedUser' />
                 </>
-              : <>{task.users[0].name}</>}
+              : <>{task.users[0] ? task.users[0].name : "Not assigned"}</>}
           </TD>
           <TD>
             {isEditMode && task.taskState !== TaskState.Approve
