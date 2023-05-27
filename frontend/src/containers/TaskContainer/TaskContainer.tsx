@@ -3,7 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup'
 import * as _ from 'lodash'
-import { CreateErrorObject, EditPutTaskDto, PutTaskDto, TaskDto, TaskState, taskStates, taskStateToText, UserDto } from '../../store/types';
+import {
+  CreateErrorObject,
+  EditPutTaskDto,
+  PutTaskDto,
+  TaskDto,
+  TaskState,
+  taskStates,
+  taskStateToText,
+  taskTopics, taskTopicToText,
+  UserDto
+} from '../../store/types';
 import { validateStraight } from '../../yup';
 import { PutTask, PutTaskApprove, PutTaskAssign, PutTaskState } from '../../store/actions';
 import { TD, TDWhite, TR } from '../../components/Project/Project';
@@ -149,6 +159,21 @@ const TaskContainer = ({
           </TD>
           <TD>
             {isEditMode
+                ?  <>
+                  <FormDropdown
+                      name='tag'
+                      placeholder="Тег завдання"
+                      label=""
+                      options={taskTopics.map(x => x)}
+                      labels={taskTopics.map(x => taskTopicToText(x))}
+                      onOptionChoose={() => {}}
+                  />
+                  <FormError name='taskState' />
+                </>
+                : <>{task.tags[0] ? taskTopicToText(task.tags[0]) : "No tags"}</>}
+          </TD>
+          <TD>
+            {isEditMode
               ?  <>
                   <FormDropdown
                     name='assignedUser'
@@ -177,9 +202,8 @@ const TaskContainer = ({
                 </>
               : <>{taskStateToText(task.taskState)}</>}
           </TD>
-          {canEditState &&
-            <TDWhite>
-              {isEditMode
+          <TDWhite>
+          {canEditState && isEditMode
                 ? <Button buttonType='button' styleType='none' onClick={() => {
                     handleSubmit();
                     onEditModeSwitch();
@@ -189,8 +213,7 @@ const TaskContainer = ({
                 : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
                   <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
                 </Button>}
-            </TDWhite>
-          }
+          </TDWhite>
         </TR>
       </>
     )}

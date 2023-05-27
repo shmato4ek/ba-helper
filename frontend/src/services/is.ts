@@ -6,7 +6,7 @@ export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
     // if (is.localhost) {
-    // return 'https://ripe-dots-sit.loca.lt';
+    // return "https://moody-frogs-warn.loca.lt";
     // }
 
     return 'http://localhost:5054';
