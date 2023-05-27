@@ -33,6 +33,7 @@ const ProjectsPage = () => {
 
     return (
       <Projects
+        mode={'owned-projects'}
         projects={projectsOwn}
         optionalFields={[ProjectDtoFields.hours, ProjectDtoFields.taskCount]}
       />
@@ -45,6 +46,7 @@ const ProjectsPage = () => {
 
   return (
     <Projects
+      mode={'my-projects'}
       projects={projects}
       optionalFields={[ProjectDtoFields.authorName, ProjectDtoFields.hours]}
     />

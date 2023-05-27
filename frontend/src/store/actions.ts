@@ -1,5 +1,5 @@
 import { NavigateFunction } from 'react-router';
-import { ClusterInfo, DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, StatisticDataInfo, SubtaskDto, TaskDto, UserDto } from './types';
+import { ClusterInfo, DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskApproveDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskApproveDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, StatisticDataInfo, SubtaskDto, TaskDto, UserDto } from './types';
 
 /* Action Types */
 export const actionTypes = {
@@ -87,6 +87,11 @@ export const actionTypes = {
   PUT_TASK_STATE_SUCCESS: 'PUT_TASK_STATE_SUCCESS' as 'PUT_TASK_STATE_SUCCESS',
   PUT_TASK_STATE_FAILURE: 'PUT_TASK_STATE_FAILURE' as 'PUT_TASK_STATE_FAILURE',
 
+  // PUT /api/task/approve
+  PUT_TASK_APPROVE: 'PUT_TASK_APPROVE' as 'PUT_TASK_APPROVE',
+  PUT_TASK_APPROVE_SUCCESS: 'PUT_TASK_APPROVE_SUCCESS' as 'PUT_TASK_APPROVE_SUCCESS',
+  PUT_TASK_APPROVE_FAILURE: 'PUT_TASK_APPROVE_FAILURE' as 'PUT_TASK_APPROVE_FAILURE',
+
   // POST /api/task/subtask
   POST_SUBTASK: 'POST_SUBTASK' as 'POST_SUBTASK',
   POST_SUBTASK_SUCCESS: 'POST_SUBTASK_SUCCESS' as 'POST_SUBTASK_SUCCESS',
@@ -101,6 +106,11 @@ export const actionTypes = {
   PUT_SUBTASK_STATE: 'PUT_SUBTASK_STATE' as 'PUT_SUBTASK_STATE',
   PUT_SUBTASK_STATE_SUCCESS: 'PUT_SUBTASK_STATE_SUCCESS' as 'PUT_SUBTASK_STATE_SUCCESS',
   PUT_SUBTASK_STATE_FAILURE: 'PUT_SUBTASK_STATE_FAILURE' as 'PUT_SUBTASK_STATE_FAILURE',
+
+  // PUT /api/subtask/approve
+  PUT_SUBTASK_APPROVE: 'PUT_SUBTASK_APPROVE' as 'PUT_SUBTASK_APPROVE',
+  PUT_SUBTASK_APPROVE_SUCCESS: 'PUT_SUBTASK_APPROVE_SUCCESS' as 'PUT_SUBTASK_APPROVE_SUCCESS',
+  PUT_SUBTASK_APPROVE_FAILURE: 'PUT_SUBTASK_APPROVE_FAILURE' as 'PUT_SUBTASK_APPROVE_FAILURE',
 
   // GET /api/document/user
   GET_DOCUMENTS: 'GET_DOCUMENTS' as 'GET_DOCUMENTS',
@@ -228,6 +238,7 @@ export interface RegisterFailure extends ErrorPayload {
 
 export interface LogOut {
   type: typeof actionTypes.LOG_OUT_ENDUSER;
+  navigate: NavigateFunction;
 }
 
 export interface LogOutSuccess {
@@ -377,6 +388,21 @@ export interface PutTaskStateFailure extends ErrorPayload {
   type: typeof actionTypes.PUT_TASK_STATE_FAILURE;
 }
 
+export interface PutTaskApprove {
+  type: typeof actionTypes.PUT_TASK_APPROVE;
+  payload: PutTaskApproveDto;
+}
+
+export interface PutTaskApproveSuccess {
+  type: typeof actionTypes.PUT_TASK_APPROVE_SUCCESS;
+  payload: TaskDto;
+}
+
+export interface PutTaskApproveFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_TASK_APPROVE_FAILURE;
+}
+
+
 export interface PostSubtask {
   type: typeof actionTypes.POST_SUBTASK;
   payload: PostSubtaskDto;
@@ -413,6 +439,20 @@ export interface PutSubtaskState {
 export interface PutSubtaskStateSuccess {
   type: typeof actionTypes.PUT_SUBTASK_STATE_SUCCESS;
   payload: SubtaskDto;
+}
+
+export interface PutSubtaskApprove {
+  type: typeof actionTypes.PUT_SUBTASK_APPROVE;
+  payload: PutSubtaskApproveDto;
+}
+
+export interface PutSubtaskApproveSuccess {
+  type: typeof actionTypes.PUT_SUBTASK_APPROVE_SUCCESS;
+  payload: SubtaskDto;
+}
+
+export interface PutSubtaskApproveFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_SUBTASK_APPROVE_FAILURE;
 }
 
 export interface PutSubtaskStateFailure extends ErrorPayload {
@@ -479,12 +519,15 @@ export type FailureAppActionTypes =
   | typeof actionTypes.PUT_TASK_FAILURE
   | typeof actionTypes.PUT_TASK_ASSIGN_FAILURE
   | typeof actionTypes.PUT_TASK_STATE_FAILURE
+  | typeof actionTypes.PUT_TASK_APPROVE_FAILURE
   | typeof actionTypes.POST_SUBTASK_FAILURE
   | typeof actionTypes.PUT_SUBTASK_FAILURE
   | typeof actionTypes.PUT_SUBTASK_STATE_FAILURE
+  | typeof actionTypes.PUT_SUBTASK_APPROVE_FAILURE
   | typeof actionTypes.GET_DOCUMENTS_FAILURE
   | typeof actionTypes.POST_DOCUMENT_FAILURE
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
+  | typeof actionTypes.LOG_OUT_ENDUSER_FAILURE
   ;
 
 export type FailureAppAction =
@@ -505,12 +548,15 @@ export type FailureAppAction =
   | PutTaskFailure
   | PutTaskAssignFailure
   | PutTaskStateFailure
+  | PutTaskApproveFailure
   | PostSubtaskFailure
   | PutSubtaskFailure
   | PutSubtaskStateFailure
+  | PutSubtaskApproveFailure
   | GetDocumentsFailure
   | PostDocumentFailure
   | DocumentDownloadFailure
+  | LogOutFailure
   ;
 
 export type AppAction =
@@ -566,6 +612,9 @@ export type AppAction =
   | PutTaskState
   | PutTaskStateSuccess
   | PutTaskStateFailure
+  | PutTaskApprove
+  | PutTaskApproveSuccess
+  | PutTaskApproveFailure
   | PostSubtask
   | PostSubtaskSuccess
   | PostSubtaskFailure
@@ -575,6 +624,9 @@ export type AppAction =
   | PutSubtaskState
   | PutSubtaskStateSuccess
   | PutSubtaskStateFailure
+  | PutSubtaskApprove
+  | PutSubtaskApproveSuccess
+  | PutSubtaskApproveFailure
   | GetDocuments
   | GetDocumentsSuccess
   | GetDocumentsFailure
@@ -584,4 +636,7 @@ export type AppAction =
   | DocumentDownload
   | DocumentDownloadSuccess
   | DocumentDownloadFailure
+  | LogOut
+  | LogOutSuccess
+  | LogOutFailure
   ;

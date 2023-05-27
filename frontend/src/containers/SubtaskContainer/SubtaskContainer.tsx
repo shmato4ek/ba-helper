@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import * as _ from 'lodash'
 import { CreateErrorObject, EditSubtaskDto, PutSubtaskDto, SubtaskDto, TaskState, taskStates, taskStateToText } from '../../store/types';
 import { validateStraight } from '../../yup';
-import { PutSubtask, PutSubtaskState } from '../../store/actions';
+import { PutSubtask, PutSubtaskApprove, PutSubtaskState } from '../../store/actions';
 import { TD, TDWhite, TR } from '../../components/Project/Project';
 import FormStringField from '../../components/Form/FormStringField/FormStringField';
 import FormError from '../../components/Form/FormError/FormError';
@@ -18,11 +18,13 @@ import FormDropdown from '../../components/Form/FormDropdown/FormDropdown';
 interface Props {
   subtask: SubtaskDto;
   canEdit: boolean;
+  canEditState: boolean;
 }
 
 const SubtaskContainer = ({
   subtask,
   canEdit,
+  canEditState,
 }: Props) => {
   const dispatch = useDispatch();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -63,17 +65,27 @@ const SubtaskContainer = ({
     console.log('Subtask state submit');
     console.log(JSON.stringify(taskState, null, 2));
 
-    dispatch<PutSubtaskState>({
-      type: 'PUT_SUBTASK_STATE',
-      payload: {
-        subtaskId: subtask.id,
-        taskState,
-      }
-    })
+    if(taskState !== TaskState.Approve) {
+      dispatch<PutSubtaskState>({
+        type: 'PUT_SUBTASK_STATE',
+        payload: {
+          subtaskId: subtask.id,
+          taskState,
+        }
+      })
+    } else {
+      dispatch<PutSubtaskApprove>({
+        type: 'PUT_SUBTASK_APPROVE',
+        payload: {
+          subtaskId: subtask.id,
+        }
+      })
+    }
   }, [dispatch, subtask.id]);
 
   const editSubtask: EditSubtaskDto = {
     name: subtask.name,
+    taskState: subtask.taskState
   };
 
   return (
@@ -98,17 +110,21 @@ const SubtaskContainer = ({
           <TD></TD>
           <TD></TD>
           <TD>
-            <FormDropdown
-              name='taskState'
-              placeholder="Стан завдання"
-              label=""
-              options={taskStates.map(x => x)}
-              labels={taskStates.map(x => taskStateToText(x))}
-              onOptionChoose={onSubtaskStateChoose as any}
-            />
-            <FormError name='taskState' />
+            {isEditMode
+            ?  <>
+                <FormDropdown
+                  name='taskState'
+                  placeholder="Стан завдання"
+                  label=""
+                  options={taskStates.map(x => x)}
+                  labels={taskStates.map(x => taskStateToText(x))}
+                  onOptionChoose={onSubtaskStateChoose as any}
+                />
+                <FormError name='taskState' />
+              </>
+            : <>{taskStateToText(subtask.taskState)}</>}
           </TD>
-          {canEdit &&
+          {canEditState &&
             <TDWhite>
               {isEditMode
                 ? <Button buttonType='button' styleType='none' onClick={() => {

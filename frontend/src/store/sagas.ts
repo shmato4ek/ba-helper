@@ -3,7 +3,7 @@ import { put, call, takeLeading } from 'redux-saga/effects';
 import { ErrorCodes } from '../error';
 import { globals } from '../services/is';
 import {
-  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskState, PutTask, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
+  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, LogOut, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskApprove, PutSubtaskState, PutTask, PutTaskApprove, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
 } from './actions';
 import { PutUserDto } from './types';
 import { LocalStorageService } from '../services/local-storage';
@@ -12,11 +12,14 @@ function* errorHandler(
   error: any,
   actionType: FailureAppActionTypes,
 ) {
+  console.log(error);
+  
+
   if (error.request && error.response) {
     yield put<FailureAppAction>({
       type: actionType,
       payload: {
-        errors: ['stub error'],
+        errors: [error.response.data.message],
       },
     });
   } else if (
@@ -100,6 +103,22 @@ function* login(login: Login) {
   }
 }
 
+
+function* logout(logout: LogOut) {
+  try {
+    console.log('@');
+    yield put<AppAction>({
+      type: 'LOG_OUT_ENDUSER_SUCCESS',
+    });
+
+    LocalStorageService.clearState('x-auth-token')
+    logout.navigate(`/`);
+  } catch (error) {
+    yield call(errorHandler, error, 'LOG_OUT_ENDUSER_FAILURE');
+  }
+}
+
+
 function* register(register: Register) {
   try {
     const response: {
@@ -115,7 +134,7 @@ function* register(register: Register) {
 
     LocalStorageService.setState('x-auth-token', response.data.token.accessToken)
 
-    register.navigate(`/services`);
+    register.navigate(`/my-projects`);
   } catch (error) {
     yield call(errorHandler, error, 'REGISTER_FAILURE');
   }
@@ -341,6 +360,25 @@ function* putTaskState(putTaskState: PutTaskState) {
   }
 }
 
+function* putTaskApprove(putTaskApprove: PutTaskApprove) {
+  try {
+    console.log('Put task approve action: ' + putTaskApprove);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.put(`${globals.endpoint}${globals.paths.task.approve}`,  putTaskApprove.payload);
+    });
+
+    yield put<AppAction>({
+      type: 'PUT_SUBTASK_APPROVE_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'PUT_SUBTASK_APPROVE_FAILURE');
+  }
+}
+
 function* postSubtask(postSubtask: PostSubtask) {
   try {
     console.log('Post subtask action: ' + postSubtask);
@@ -395,6 +433,25 @@ function* putSubtaskState(putSubtaskState: PutSubtaskState) {
     });
   } catch (error) {
     yield call(errorHandler, error, 'PUT_SUBTASK_STATE_FAILURE');
+  }
+}
+
+function* putSubtaskApprove(putSubtaskApprove: PutSubtaskApprove) {
+  try {
+    console.log('Put subtask approve action: ' + putSubtaskApprove);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.put(`${globals.endpoint}${globals.paths.task.subtaskApprove}`,  putSubtaskApprove.payload);
+    });
+
+    yield put<AppAction>({
+      type: 'PUT_SUBTASK_APPROVE_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'PUT_SUBTASK_APPROVE_FAILURE');
   }
 }
 
@@ -485,10 +542,13 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.PUT_TASK, putTask);
   yield takeLeading(actionTypes.PUT_TASK_ASSIGN, putTaskAssign);
   yield takeLeading(actionTypes.PUT_TASK_STATE, putTaskState);
+  yield takeLeading(actionTypes.PUT_TASK_APPROVE, putTaskApprove);
   yield takeLeading(actionTypes.POST_SUBTASK, postSubtask);
   yield takeLeading(actionTypes.PUT_SUBTASK, putSubtask);
   yield takeLeading(actionTypes.PUT_SUBTASK_STATE, putSubtaskState);
+  yield takeLeading(actionTypes.PUT_SUBTASK_APPROVE, putSubtaskApprove);
   yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);
+  yield takeLeading(actionTypes.LOG_OUT_ENDUSER, logout);
 };
