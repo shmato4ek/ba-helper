@@ -15,6 +15,6 @@ namespace BAHelper.Common.DTOs.ProjectTask
         public List<TopicTag>? Tags { get; set; }
         public List<UserInfoDTO>? Users { get; set; }
         public List<SubtaskDTO>? Subtasks { get; set; }
-        public TaskState TaskState { get; set; } = TaskState.Pending;
+        public int TaskState { get; set; }
     }
 }

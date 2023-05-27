@@ -103,6 +103,7 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Id == projectEntity.AuthorId);
             projectDto.AuthorName = userEntity.Name;
             projectDto.Tasks = _mapper.Map<List<ProjectTaskInfoDTO>>(tasksEntity);
+            foreach (var t in projectDto.Tasks)
             if (projectDto.AuthorId == userId)
             {
                 projectDto.CanEdit = true;
