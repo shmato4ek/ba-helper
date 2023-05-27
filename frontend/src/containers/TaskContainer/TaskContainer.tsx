@@ -134,7 +134,7 @@ const TaskContainer = ({
       <>
         <TR key={`task/${task.id}`}>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormStringField placeholder="Ім'я таски" name={'taskName'} label="" />
                   <FormError name='taskName' />
@@ -142,7 +142,7 @@ const TaskContainer = ({
               : <>{task.taskName}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormDatepicker name={'deadline'} label="" />
                   <FormError name='deadline' />
@@ -150,7 +150,7 @@ const TaskContainer = ({
               : <>{DateTime.fromISO(task.deadline).toFormat('dd.MM.yyyy')}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormStringField placeholder="К-ість годин" name={'hours'} label="" />
                   <FormError name='hours' />
@@ -158,7 +158,7 @@ const TaskContainer = ({
               : <>{task.hours}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
                 ?  <>
                   <FormDropdown
                       name='tag'
@@ -173,7 +173,7 @@ const TaskContainer = ({
                 : <>{task.tags[0] ? taskTopicToText(task.tags[0]) : "No tags"}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormDropdown
                     name='assignedUser'
@@ -185,7 +185,7 @@ const TaskContainer = ({
                   />
                   <FormError name='assignedUser' />
                 </>
-              : <>{task.users[0] ? task.users[0].name : "Not assigned"}</>}
+              : <>{task.users[0] ? task.users[0].name : "Не призначено"}</>}
           </TD>
           <TD>
             {isEditMode && task.taskState !== TaskState.Approve
@@ -194,8 +194,8 @@ const TaskContainer = ({
                     name='taskState'
                     placeholder="Стан завдання"
                     label=""
-                    options={canEdit ? [0,1,2,3].map(x => x) : [0,1,2].map(x => x) }
-                    labels={canEdit ? [0,1,2,3].map(x => taskStateToText(x)) : [0,1,2].map(x => taskStateToText(x))}
+                    options={canEdit ? [1,2,3,4].map(x => x) : [1,2,3].map(x => x) }
+                    labels={canEdit ? [1,2,3,4].map(x => taskStateToText(x)) : [1,2,3].map(x => taskStateToText(x))}
                     onOptionChoose={onTaskStateChoose as any}
                   />
                   <FormError name='taskState' />
@@ -203,7 +203,7 @@ const TaskContainer = ({
               : <>{taskStateToText(task.taskState)}</>}
           </TD>
           <TDWhite>
-          {canEditState && isEditMode
+          {(canEdit || canEditState) && (isEditMode
                 ? <Button buttonType='button' styleType='none' onClick={() => {
                     handleSubmit();
                     onEditModeSwitch();
@@ -212,7 +212,8 @@ const TaskContainer = ({
                 </Button> 
                 : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
                   <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
-                </Button>}
+                </Button>
+          )}
           </TDWhite>
         </TR>
       </>
