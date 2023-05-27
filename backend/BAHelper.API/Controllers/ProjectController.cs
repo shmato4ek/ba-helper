@@ -11,9 +11,9 @@ namespace BAHelper.API.Controllers
     {
         private readonly ProjectService _projectService;
         private readonly JwtFactory _jwtFactory;
-        private readonly ClasterizationService _clasterizationService;
+        private readonly KMeansClasterizationService _clasterizationService;
 
-        public ProjectController(ProjectService projectService, JwtFactory jwtFactory, ClasterizationService clusterizationService)
+        public ProjectController(ProjectService projectService, JwtFactory jwtFactory, KMeansClasterizationService clusterizationService)
         {
             _projectService = projectService;
             _jwtFactory = jwtFactory;

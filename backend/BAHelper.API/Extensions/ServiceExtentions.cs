@@ -27,7 +27,7 @@ namespace BAHelper.API.Extensions
             services.AddScoped<AuthService>();
             services.AddScoped<JwtFactory>();
             services.AddScoped<MailService>();
-            services.AddScoped<ClasterizationService>();
+            services.AddScoped<KMeansClasterizationService>();
             //services.AddHostedService<ScheduledService>();
         }
 
