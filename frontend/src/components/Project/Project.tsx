@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { EditPutProjectDto, ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
+import { EditPutProjectDto, Me, ProjectDto, ProjectDtoFields, taskStateToText } from '../../store/types';
 import Button from '../Button/Button';
 import Icon from '../Icon/Icon';
 import { AlignCenter, VerticalGrid, VerticalMargins, Wrapper } from '../Utils/Utils';
@@ -90,6 +90,7 @@ const Footer = styled.footer`
 `;
 
 type Props = {
+  me: Me;
   project: ProjectDto;
   putProject: EditPutProjectDto;
 
@@ -189,6 +190,7 @@ const Project: FC<Props> = (params) => {
                       <>
                         <TaskContainer
                           canEdit={params.canEdit}
+                          canEditState={task.canEditState}
                           projectUsers={params.project.users}
                           task={task}
                           key={`task/${task.id}`}
@@ -196,6 +198,7 @@ const Project: FC<Props> = (params) => {
                         {task.subtasks.map(subtask => {
                           return <SubtaskContainer
                             canEdit={params.canEdit}
+                            canEditState={task.canEditState}
                             subtask={subtask}
                             key={`subtask/${subtask.id}`}
                           />
@@ -210,15 +213,16 @@ const Project: FC<Props> = (params) => {
               </Table>
             </Wrapper>
             <AlignCenter>
-              <Button buttonType='button' styleType='simple'>
-                <Link
-                  to={`/projects/statistics/${params.project.id}`}
-                  style={{
-                    textDecoration: 'none',
-                    color: 'white',
-                  }}
-                >Показати Статистику</Link>
-              </Button>
+              {params.me.id === params.project.authorId &&
+                <Button buttonType='button' styleType='simple'>
+                  <Link
+                    to={`/projects/statistics/${params.project.id}`}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'white',
+                    }}
+                  >Показати Статистику</Link>
+                </Button>}
             </AlignCenter>
             <Footer>
               <b>Загальна кількість годин: {totalHours}</b>

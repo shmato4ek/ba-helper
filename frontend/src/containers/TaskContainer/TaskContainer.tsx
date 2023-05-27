@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import * as _ from 'lodash'
 import { CreateErrorObject, EditPutTaskDto, PutTaskDto, TaskDto, TaskState, taskStates, taskStateToText, UserDto } from '../../store/types';
 import { validateStraight } from '../../yup';
-import { PutTask, PutTaskAssign, PutTaskState } from '../../store/actions';
+import { PutTask, PutTaskApprove, PutTaskAssign, PutTaskState } from '../../store/actions';
 import { TD, TDWhite, TR } from '../../components/Project/Project';
 import { DateTime } from 'luxon';
 import { Formik, FormikProps } from 'formik';
@@ -21,12 +21,14 @@ interface Props {
   task: TaskDto;
   projectUsers: UserDto[];
   canEdit: boolean;
+  canEditState: boolean;
 }
 
 const TaskContainer = ({
   task,
   projectUsers,
   canEdit,
+  canEditState,
 }: Props) => {
   const dispatch = useDispatch();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -71,13 +73,23 @@ const TaskContainer = ({
     console.log('Task state submit');
     console.log(JSON.stringify(taskState, null, 2));
 
-    dispatch<PutTaskState>({
-      type: 'PUT_TASK_STATE',
-      payload: {
-        taskId: task.id,
-        taskState,
-      }
-    })
+    if(taskState !== TaskState.Approve) {
+      dispatch<PutTaskState>({
+        type: 'PUT_TASK_STATE',
+        payload: {
+          taskId: task.id,
+          taskState,
+        }
+      });
+    } else {
+      dispatch<PutTaskApprove>({
+        type: 'PUT_TASK_APPROVE',
+        payload: {
+          taskId: task.id,
+        }
+      });
+    }
+
   }, [dispatch, task.id]);
 
   const onTaskAssign = useCallback((email: string) => {
@@ -136,26 +148,36 @@ const TaskContainer = ({
               : <>{task.hours}</>}
           </TD>
           <TD>
-            <FormDropdown
-              name='assignedUser'
-              placeholder="Виконавець"
-              label=""
-              options={projectUsers.map(x => x.email)}
-              labels={projectUsers.map(x => x.name)}
-              onOptionChoose={onTaskAssign as any}
-            />
+            {isEditMode
+              ?  <>
+                  <FormDropdown
+                    name='assignedUser'
+                    placeholder="Виконавець"
+                    label=""
+                    options={projectUsers.map(x => x.email)}
+                    labels={projectUsers.map(x => x.name)}
+                    onOptionChoose={onTaskAssign as any}
+                  />
+                  <FormError name='assignedUser' />
+                </>
+              : <>{task.users[0].name}</>}
           </TD>
           <TD>
-            <FormDropdown
-              name='taskState'
-              placeholder="Стан завдання"
-              label=""
-              options={taskStates.map(x => x)}
-              labels={taskStates.map(x => taskStateToText(x))}
-              onOptionChoose={onTaskStateChoose as any}
-            />
+            {isEditMode && task.taskState !== TaskState.Approve
+              ?  <>
+                  <FormDropdown
+                    name='taskState'
+                    placeholder="Стан завдання"
+                    label=""
+                    options={canEdit ? [0,1,2,3].map(x => x) : [0,1,2].map(x => x) }
+                    labels={canEdit ? [0,1,2,3].map(x => taskStateToText(x)) : [0,1,2].map(x => taskStateToText(x))}
+                    onOptionChoose={onTaskStateChoose as any}
+                  />
+                  <FormError name='taskState' />
+                </>
+              : <>{taskStateToText(task.taskState)}</>}
           </TD>
-          {canEdit &&
+          {canEditState &&
             <TDWhite>
               {isEditMode
                 ? <Button buttonType='button' styleType='none' onClick={() => {

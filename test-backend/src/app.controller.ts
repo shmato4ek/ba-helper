@@ -24,6 +24,8 @@ export class AppController {
 
   @Post('/login')
   login() {
+    // throw new InternalServerErrorException('Invalid email');
+
     return {
       user: this.meDto,
       token: { accessToken: this.meDto.email },
@@ -63,6 +65,7 @@ export class AppController {
       id: 3,
       projectName: params.projectName,
       description: params.description,
+      authorId: 2,
       authorName: 'BetaUser',
       hours: 0,
       isDeleted: false,
@@ -138,7 +141,7 @@ export const AlphaUser: UserDto = {
 };
 
 export const BetaUser: UserDto = {
-  id: 1,
+  id: 2,
   email: 'beta@gmail.com',
   name: 'Beta',
   documents: [],
@@ -154,7 +157,8 @@ export const AlphaTask1: TaskDto = {
   hours: 15,
   projectId: 1,
   taskName: 'Завдання 1',
-  taskState: TaskState.InProgress,
+  taskState: TaskState.Approve,
+  canEditState: true,
   users: [AlphaUser],
   subtasks: [
     {
@@ -179,6 +183,7 @@ export const AlphaTask2: TaskDto = {
   projectId: 1,
   taskName: 'Завдання 2',
   taskState: TaskState.InProgress,
+  canEditState: true,
   users: [AlphaUser],
   subtasks: [],
 };
@@ -187,6 +192,7 @@ export const AlphaProject: ProjectDto = {
   id: 1,
   projectName: 'Проект 1',
   description: 'Тестовий опис проекту 1',
+  authorId: 1,
   authorName: 'AlphaUser',
   hours: 30,
   isDeleted: false,
@@ -200,6 +206,7 @@ export const BetaProject: ProjectDto = {
   id: 2,
   projectName: 'Проект 2',
   description: 'Тестовий опис проекту 2',
+  authorId: 2,
   authorName: 'BetaUser',
   hours: 11,
   isDeleted: false,
@@ -291,7 +298,7 @@ export const meStatistics: StatisticDataInfo[] = [
 export interface ProjectDto {
   id: number;
   deadline: Date;
-  // authorid: number; // Hide since it's not needed
+  authorId: number; // Hide since it's not needed
   authorName: string;
   description: string; // Post MVP
   projectName: string;
@@ -335,6 +342,7 @@ export interface TaskDto {
   taskName: string;
   hours: number;
   taskState: TaskState;
+  canEditState: boolean;
   users: UserDto[];
   subtasks: SubtaskDto[];
 }

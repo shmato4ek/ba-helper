@@ -24,12 +24,15 @@ const ProfilePage = () => {
     let formErrors: CreateErrorObject<EditPutUserDto> = {};
 
     formErrors.email = validateStraight(yup.string().email('Invalid Email').required("Обов'язково"), values.email);
-    formErrors.password = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').required("Обов'язково"), values.password);
-    formErrors.passwordConfirm = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').nullable(), values.passwordConfirm);
-    formErrors.oldPassword = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').nullable(), values.oldPassword);
 
-    if(values.password !== values.passwordConfirm) {
-      formErrors.passwordConfirm = 'Підтвердження пароля повинно бути однаковим з паролем'
+    if(values.password || values.passwordConfirm || values.oldPassword) {
+      formErrors.password = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').required("Обов'язково"), values.password);
+      formErrors.passwordConfirm = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').nullable(), values.passwordConfirm);
+      formErrors.oldPassword = validateStraight(yup.string().min(6, 'Пароль має мати як мінімум 6 символів').max(255, 'Пароль повинен бути меншим за 255 символів').nullable(), values.oldPassword);
+  
+      if(values.password !== values.passwordConfirm) {
+        formErrors.passwordConfirm = 'Підтвердження пароля повинно бути однаковим з паролем'
+      }
     }
 
     formErrors = _.pickBy(formErrors, _.identity);
@@ -38,12 +41,19 @@ const ProfilePage = () => {
   }, []);
 
   const onSubmit = useCallback((values: EditPutUserDto) => {
-    const putUserDto: PutUserDto = {
+
+
+    const putUserDto: any = {
       email: values.email,
       name: values.name,
-      oldPassword: values.oldPassword,
-      password: values.password
+      changePassword: false
     };
+
+    if(values.oldPassword && values.password) {
+      putUserDto.oldPassword = values.oldPassword;
+      putUserDto.password = values.password;
+      putUserDto.changePassword = true;
+    }
 
     console.log('Profile Page values submit');
     console.log(JSON.stringify(putUserDto, null, 2));

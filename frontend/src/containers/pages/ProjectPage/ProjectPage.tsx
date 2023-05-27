@@ -15,10 +15,12 @@ import { useFirstRender } from '../../../hooks/useFirstRender';
 const ProjectPage = () => {
   const dispatch = useDispatch();
   const currentProject = useSelector((state: AppState) => state.currentProject);
+  const me = useSelector((state: AppState) => state.me);
   // const getProjectAction = useSelector((state: AppState) => state.actions.getProject);
   const { projectId } = useParams();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const isFirstRender = useFirstRender();
+
 
   console.log('@currentProject');
   console.log(JSON.stringify(currentProject, null, 2));
@@ -79,6 +81,10 @@ const ProjectPage = () => {
     setIsEditMode(!isEditMode);
   }, [isEditMode]);
 
+  if(!me) {
+    return <NotFound />
+  }
+  
   if(!currentProject) {
     return <NotFound />
   }
@@ -93,6 +99,7 @@ const ProjectPage = () => {
 
   return (
     <Project
+      me={me}
       putProject={putProject}
       isEditMode={isEditMode}
       canEdit={currentProject.canEdit}

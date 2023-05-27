@@ -91,7 +91,7 @@ const Profile: FC<Props> = (params) => {
                   <hr style={{ backgroundColor: 'green', height: 2}}/>
                   <HorizontalGrid>
                     <Header>
-                      Налаштування профілю
+                      Зміна паролю
                     </Header>
                     <VerticalGrid>
                       <b>Старий пароль</b>

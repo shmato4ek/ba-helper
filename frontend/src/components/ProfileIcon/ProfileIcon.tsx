@@ -20,23 +20,36 @@ const ProfileDiv = styled.div`
 
 type Props = {
   me?: Me | null;
+  onLogout: () => void;
 }
 
 const ProfileIcon: FC<Props> = (params) => {
   return (
     <ProfileDiv>
-      <Link
-        to={params.me ? "/profile" : '/login'}
-        style={{
-          textDecoration: 'none',
-          color: 'white',
-        }}
-      >
         <FieldGrid>
-          <Icon type='profile-white' style={{width: 50, height: 50, paddingRight: 10 }}  />
-          <Button buttonType='button'>Увійти</Button>
+          <Link
+            to={params.me ? "/profile" : '/login'}
+            style={{
+              textDecoration: 'none',
+              color: 'white',
+            }}
+          >
+              <Icon type='profile-white' style={{width: 50, height: 50, paddingRight: 10 }}  />
+          </Link>
+          {params.me ?
+            <Button buttonType='button' onClick={() => params.onLogout()}>Вийти</Button>
+            :
+            <Link
+              to={'/login'}
+              style={{
+                textDecoration: 'none',
+                color: 'white',
+              }}
+            >
+              <Button buttonType='button'>Увійти</Button>
+            </Link> 
+          }
         </FieldGrid>
-      </Link>
     </ProfileDiv>
   );
 };

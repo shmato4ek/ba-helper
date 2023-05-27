@@ -45,6 +45,7 @@ export const TR = styled.tr`
 `;
 
 type Props = {
+  mode: 'my-projects' | 'owned-projects';
   projects: ProjectDto[];
   optionalFields: ProjectDtoFields[];
 }
@@ -94,6 +95,7 @@ const Projects: FC<Props> = (params) => {
         </tbody>
       </Table>
       <AlignCenter>
+        {params.mode === 'owned-projects' &&
         <Button buttonType='button' styleType='simple'>
           <Link
             to="/projects/new"
@@ -103,6 +105,7 @@ const Projects: FC<Props> = (params) => {
             }}
           >Створити</Link>
         </Button>
+        }
       </AlignCenter>
     </ProjectsStyled>
   );

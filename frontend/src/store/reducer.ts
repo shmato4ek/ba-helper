@@ -120,6 +120,11 @@ export const RootReducerInitialState = {
       errors: null as string[] | null,
     },
 
+    putTaskApprove: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
     postSubtask: {
       loading: false as boolean,
       errors: null as string[] | null,
@@ -131,6 +136,11 @@ export const RootReducerInitialState = {
     },
 
     putSubtaskState: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    putSubtaskApprove: {
       loading: false as boolean,
       errors: null as string[] | null,
     },
@@ -275,6 +285,7 @@ export const RootReducer = produce(
         console.log('actionTypes.LOG_OUT_ENDUSER_SUCCESS')
         draft.actions.logout.errors = null;
         draft.actions.logout.loading = false;
+        draft.me = null;
         break;
       case actionTypes.LOG_OUT_ENDUSER_FAILURE:
         console.log('actionTypes.LOG_OUT_ENDUSER_FAILURE')
@@ -448,6 +459,22 @@ export const RootReducer = produce(
         draft.actions.putTaskState.loading = false;
         break;
 
+      case actionTypes.PUT_TASK_APPROVE:
+        console.log('actionTypes.PUT_TASK_APPROVE')
+        draft.actions.putTaskApprove.errors = null;
+        draft.actions.putTaskApprove.loading = true;
+        break;
+      case actionTypes.PUT_TASK_APPROVE_SUCCESS:
+        console.log('actionTypes.PUT_TASK_APPROVE_SUCCESS')
+        draft.actions.putTaskApprove.errors = null;
+        draft.actions.putTaskApprove.loading = false;
+        break;
+      case actionTypes.PUT_TASK_APPROVE_FAILURE:
+        console.log('actionTypes.PUT_TASK_APPROVE_FAILURE')
+        draft.actions.putTaskApprove.errors = action.payload.errors;
+        draft.actions.putTaskApprove.loading = false;
+        break;
+
       case actionTypes.POST_SUBTASK:
         console.log('actionTypes.POST_SUBTASK')
         draft.actions.postSubtask.errors = null;
@@ -478,6 +505,22 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_SUBTASK_FAILURE')
         draft.actions.putSubtask.errors = action.payload.errors;
         draft.actions.putSubtask.loading = false;
+        break;
+
+      case actionTypes.PUT_SUBTASK_APPROVE:
+        console.log('actionTypes.PUT_SUBTASK_APPROVE')
+        draft.actions.putSubtaskApprove.errors = null;
+        draft.actions.putSubtaskApprove.loading = true;
+        break;
+      case actionTypes.PUT_SUBTASK_APPROVE_SUCCESS:
+        console.log('actionTypes.PUT_SUBTASK_APPROVE_SUCCESS')
+        draft.actions.putSubtaskApprove.errors = null;
+        draft.actions.putSubtaskApprove.loading = false;
+        break;
+      case actionTypes.PUT_SUBTASK_APPROVE_FAILURE:
+        console.log('actionTypes.PUT_SUBTASK_APPROVE_FAILURE')
+        draft.actions.putSubtaskApprove.errors = action.payload.errors;
+        draft.actions.putSubtaskApprove.loading = false;
         break;
 
       case actionTypes.PUT_SUBTASK_STATE:

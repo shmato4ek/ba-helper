@@ -21,7 +21,7 @@ export enum ProjectDtoFields {
 export interface ProjectDto {
   id: number;
   deadline: string;
-  // authorid: number; // Hide since it's not needed
+  authorId: number; // Hide since it's not needed
   authorName: string;
   description: string; // Post MVP
   projectName: string;
@@ -87,6 +87,7 @@ export interface TaskDto {
   taskName: string;
   hours: number;
   taskState: TaskState;
+  canEditState: boolean;
   users: UserDto[];
   subtasks: SubtaskDto[];
 }
@@ -125,6 +126,10 @@ export interface PutTaskStateDto {
   taskState: TaskState;
 }
 
+export interface PutTaskApproveDto {
+  taskId: number;
+}
+
 /**
  * @description - SubTask
  */
@@ -146,11 +151,17 @@ export interface PutSubtaskDto extends Pick<PostSubtaskDto, "name"> {
   id: number;
 }
 
-export interface EditSubtaskDto extends Pick<PostSubtaskDto, "name"> {}
+export interface EditSubtaskDto extends Pick<PostSubtaskDto, "name"> {
+  taskState: TaskState;
+}
 
 export interface PutSubtaskStateDto {
   subtaskId: number;
   taskState: TaskState;
+}
+
+export interface PutSubtaskApproveDto {
+  subtaskId: number;
 }
 
 /**

@@ -15,6 +15,8 @@ import { useDispatch } from 'react-redux';
 import { EditRegisterDto, LoginDto, RegisterDto } from '../../../store/types';
 import { useNavigate } from 'react-router';
 import FormError from '../../../components/Form/FormError/FormError';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../store/reducer';
 
 const LoginPageStyled = styled.div`
   display: grid;
@@ -77,6 +79,8 @@ const LoginPage: FC<Props> = (params) => {
   const [isLoginMode, setLoginMode] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const login = useSelector((state: AppState) => state.actions.login);
+  const register = useSelector((state: AppState) => state.actions.register);
 
   const onLoginValidate = useCallback((values: EditRegisterDto) => {
     let errors: { [key in keyof EditRegisterDto]?: string } = {};
@@ -131,7 +135,7 @@ const LoginPage: FC<Props> = (params) => {
         });
       }
     },
-    [dispatch, isLoginMode],
+    [dispatch, isLoginMode, navigate],
   );
 
   return (
@@ -159,6 +163,7 @@ const LoginPage: FC<Props> = (params) => {
             <button type='button' onClick={() => setLoginMode(!isLoginMode)} style={{ fontSize: 18}}>
               {isLoginMode ? 'Switch to Register' : 'Switch to Login'}
             </button>
+            {isLoginMode ? login.errors : register.errors}
           </CenterHorizontalDiv>
         )}
         </Formik>
