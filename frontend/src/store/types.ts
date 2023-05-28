@@ -89,6 +89,7 @@ export interface TaskDto {
   taskState: TaskState;
   canEditState: boolean;
   users: UserDto[];
+  tags: TaskTopic[];
   subtasks: SubtaskDto[];
 }
 
@@ -199,13 +200,13 @@ export interface StatisticDataInfo {
 }
 
 export enum TaskState {
-  Pending,
+  Pending = 1,
   InProgress,
   Done,
   Approve,
 }
 
-export const taskStates: TaskState[] = [0, 1, 2, 3];
+export const taskStates: TaskState[] = [1, 2, 3, 4];
 
 export interface DocumentDto {
   id: number;

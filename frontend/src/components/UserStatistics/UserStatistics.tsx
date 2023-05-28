@@ -1,12 +1,25 @@
 import React, { FC } from 'react';
 import { ClusterInfo, ProjectDto, ProjectDtoFields, StatisticDataInfo, taskTopicToText } from '../../store/types';
 import styled from 'styled-components';
-import { HorizontalGrid } from '../Utils/Utils';
+import { AlignCenter } from "../Utils/Utils"
 import { ProjectsStyled, Table, TD, TH, TR } from '../Projects/Projects';
 
 type Props = {
   meStatistics: StatisticDataInfo[];
 }
+
+export const NarrowTable = styled.table`
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+
+  width: 50%;
+
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
+  margin-bottom: 20px;
+
+  overflow: scroll;
+`;
 
 export const GreenHeader = styled.div`
   background-color: rgb(200, 239, 204);
@@ -28,7 +41,8 @@ export const VerticalGridNoGap = styled.div`
 const UserStatistics: FC<Props> = (params) => {
   return (
     <ProjectsStyled>
-      <Table>
+      <AlignCenter>
+        <NarrowTable>
         <thead>
           <TR>
             <TH>Назва тегу завдання</TH>
@@ -41,13 +55,14 @@ const UserStatistics: FC<Props> = (params) => {
             return (
               <TR>
                 <TD>{taskTopicToText(stats.taskTopic)}</TD>
-                <TD>{Math.floor((stats.taskQuality) * 100)}%</TD>
-                <TD>{stats.taskCount}</TD>
+                <TD>{isNaN(stats.taskQuality) ? "-" : `${Math.floor(stats.taskQuality)}%`}</TD>
+                <TD>{isNaN(stats.taskCount) ? "0" : stats.taskCount}</TD>
               </TR>
             )
           })}
         </tbody>
-      </Table>
+      </NarrowTable>
+      </AlignCenter>
     </ProjectsStyled>
   );
 };

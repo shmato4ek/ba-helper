@@ -404,6 +404,8 @@ export const RootReducer = produce(
         console.log('actionTypes.POST_TASK_SUCCESS')
         draft.actions.postTask.errors = null;
         draft.actions.postTask.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.POST_TASK_FAILURE:
         console.log('actionTypes.POST_TASK_FAILURE')
@@ -420,6 +422,8 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_TASK_SUCCESS')
         draft.actions.putTask.errors = null;
         draft.actions.putTask.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_TASK_FAILURE:
         console.log('actionTypes.PUT_TASK_FAILURE')
@@ -436,6 +440,8 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_TASK_ASSIGN_SUCCESS')
         draft.actions.putTaskAssign.errors = null;
         draft.actions.putTaskAssign.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_TASK_ASSIGN_FAILURE:
         console.log('actionTypes.PUT_TASK_ASSIGN_FAILURE')
@@ -452,6 +458,8 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_TASK_STATE_SUCCESS')
         draft.actions.putTaskState.errors = null;
         draft.actions.putTaskState.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_TASK_STATE_FAILURE:
         console.log('actionTypes.PUT_TASK_STATE_FAILURE')
@@ -463,11 +471,14 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_TASK_APPROVE')
         draft.actions.putTaskApprove.errors = null;
         draft.actions.putTaskApprove.loading = true;
+
         break;
       case actionTypes.PUT_TASK_APPROVE_SUCCESS:
         console.log('actionTypes.PUT_TASK_APPROVE_SUCCESS')
         draft.actions.putTaskApprove.errors = null;
         draft.actions.putTaskApprove.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_TASK_APPROVE_FAILURE:
         console.log('actionTypes.PUT_TASK_APPROVE_FAILURE')
@@ -484,6 +495,8 @@ export const RootReducer = produce(
         console.log('actionTypes.POST_SUBTASK_SUCCESS')
         draft.actions.postSubtask.errors = null;
         draft.actions.postSubtask.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.POST_SUBTASK_FAILURE:
         console.log('actionTypes.POST_SUBTASK_FAILURE')
@@ -500,6 +513,8 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_SUBTASK_SUCCESS')
         draft.actions.putSubtask.errors = null;
         draft.actions.putSubtask.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_SUBTASK_FAILURE:
         console.log('actionTypes.PUT_SUBTASK_FAILURE')
@@ -516,6 +531,8 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_SUBTASK_APPROVE_SUCCESS')
         draft.actions.putSubtaskApprove.errors = null;
         draft.actions.putSubtaskApprove.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_SUBTASK_APPROVE_FAILURE:
         console.log('actionTypes.PUT_SUBTASK_APPROVE_FAILURE')
@@ -532,6 +549,8 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_SUBTASK_STATE_SUCCESS')
         draft.actions.putSubtaskState.errors = null;
         draft.actions.putSubtaskState.loading = false;
+        window.location.reload()
+
         break;
       case actionTypes.PUT_SUBTASK_STATE_FAILURE:
         console.log('actionTypes.PUT_SUBTASK_STATE_FAILURE')
