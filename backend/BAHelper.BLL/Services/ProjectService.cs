@@ -103,13 +103,13 @@ namespace BAHelper.BLL.Services
                 .FirstOrDefaultAsync(user => user.Id == projectEntity.AuthorId);
             projectDto.AuthorName = userEntity.Name;
             projectDto.Tasks = _mapper.Map<List<ProjectTaskInfoDTO>>(tasksEntity);
-            foreach (var t in projectDto.Tasks)
             if (projectDto.AuthorId == userId)
             {
                 projectDto.CanEdit = true;
             }
             else
             {
+                projectDto.CanEdit = false;
                 foreach(var task in projectDto.Tasks)
                 {
                     if(task.Users != null)
@@ -117,6 +117,10 @@ namespace BAHelper.BLL.Services
                         if (task.Users.FirstOrDefault(u => u.Id == userId) != null)
                         {
                             task.CanEditState = true;
+                        }
+                        else
+                        {
+                            task.CanEditState = false;
                         }
                     }
                 }

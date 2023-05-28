@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = BAHelper.BLL
-build_property.ProjectDir = D:\BA Hepler\ba-helper\backend\BAHelper.BLL\
+build_property.ProjectDir = d:\BA Hepler\ba-helper\backend\BAHelper.BLL\

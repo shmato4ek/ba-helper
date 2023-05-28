@@ -210,7 +210,7 @@ namespace BAHelper.BLL.Services
         }
 
 
-        public async Task<ProjectTaskDTO> ChangeTaskState(int userId, int taskId, TaskState taskState)
+        public async Task<ProjectTaskDTO> ChangeTaskState(int userId, int taskId, int taskState)
         {
             var taskEntity = await _context
                 .Tasks
@@ -228,15 +228,15 @@ namespace BAHelper.BLL.Services
                 throw new NoAccessException(userId);
             }
             bool wasInPending = taskEntity.TaskState == TaskState.Pending;
-            bool isInProgress = taskState == TaskState.InProgress;
+            bool isInProgress = (TaskState)taskState == TaskState.InProgress;
             if (wasInPending && isInProgress) 
             {
                 taskEntity.TaskStart = DateTime.UtcNow;
             }
-            taskEntity.TaskState = taskState;
+            taskEntity.TaskState = (TaskState)taskState;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
-            if (taskState == TaskState.Done)
+            if ((TaskState)taskState == TaskState.Done)
             {
                 var projectEntity = await _context
                     .Projects
@@ -253,7 +253,7 @@ namespace BAHelper.BLL.Services
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
         }
 
-        public async Task<ProjectTaskDTO> ApproveTask(int taskId, int userId)
+        public async Task ApproveTask(int taskId, int userId)
         {
             var taskEntity = await _context
                 .Tasks
@@ -291,7 +291,6 @@ namespace BAHelper.BLL.Services
             //        }
             //    }
             //}
-            return _mapper.Map<ProjectTaskDTO>(taskEntity);
         }
 
         private async Task UpdateSatistic(int taskId, int userId)

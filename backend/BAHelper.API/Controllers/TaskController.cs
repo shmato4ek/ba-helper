@@ -28,11 +28,11 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPut("assign")]
-        public async Task<ActionResult> AddUsersToTask(int taskId, string email)
+        public async Task<ActionResult> AddUsersToTask([FromBody] TaskAddUser task)
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.AddUserToTask(taskId, email, userId));
+            return Ok(await _projectTaskService.AddUserToTask(task.TaskId, task.Email, userId));
         }
 
         [HttpPut]
@@ -52,11 +52,11 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPut("state")]
-        public async Task<ActionResult> ChangeTaskState([FromBody] int taskId, TaskState taskState)
+        public async Task<ActionResult> ChangeTaskState([FromBody] ProjectTaskChangeState task)
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.ChangeTaskState(userId, taskId, taskState));
+            return Ok(await _projectTaskService.ChangeTaskState(userId, task.TaskId, task.TaskState));
         }
 
         [HttpPut("subtask/state")]
@@ -94,11 +94,12 @@ namespace BAHelper.API.Controllers
         }
 
         [HttpPut("approve")]
-        public async Task<ActionResult> ApproveTask(int taskId)
+        public async Task<ActionResult> ApproveTask([FromBody]ApproveTaskDTO task)
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.ApproveTask(taskId, userId));
+            await _projectTaskService.ApproveTask(task.TaskId, userId);
+            return Ok();
         }
 
         [HttpPut("subtask/approve")]
@@ -106,7 +107,7 @@ namespace BAHelper.API.Controllers
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _projectTaskService.ApproveSubtask(subtaskId, userId));
+            return Ok();
         }
     }
 }
