@@ -275,7 +275,7 @@ namespace BAHelper.BLL.Services
                 throw new NoAccessException(userId);
             }
             taskEntity.TaskState = TaskState.Approved;
-            //taskEntity.TaskEnd = DateTime.UtcNow;
+            taskEntity.TaskEnd = DateTime.UtcNow;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
             var userEntityId = taskEntity.Users.FirstOrDefault().Id;

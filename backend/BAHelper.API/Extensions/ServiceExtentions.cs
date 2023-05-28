@@ -6,7 +6,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using BAHelper.BLL.Services.Backgound;
 
 namespace BAHelper.API.Extensions
 {
@@ -28,6 +27,7 @@ namespace BAHelper.API.Extensions
             services.AddScoped<JwtFactory>();
             services.AddScoped<MailService>();
             services.AddScoped<KMeansClasterizationService>();
+            services.AddScoped<DbscanClasterization>();
             //services.AddHostedService<ScheduledService>();
         }
 

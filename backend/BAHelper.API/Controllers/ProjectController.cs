@@ -12,12 +12,14 @@ namespace BAHelper.API.Controllers
         private readonly ProjectService _projectService;
         private readonly JwtFactory _jwtFactory;
         private readonly KMeansClasterizationService _clasterizationService;
+        private readonly DbscanClasterization _dbscan;
 
-        public ProjectController(ProjectService projectService, JwtFactory jwtFactory, KMeansClasterizationService clusterizationService)
+        public ProjectController(ProjectService projectService, JwtFactory jwtFactory, KMeansClasterizationService clusterizationService, DbscanClasterization dbscan)
         {
             _projectService = projectService;
             _jwtFactory = jwtFactory;
             _clasterizationService = clusterizationService;
+            _dbscan = dbscan;
         }
 
         [HttpPost]
@@ -91,7 +93,7 @@ namespace BAHelper.API.Controllers
         {
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _clasterizationService.Cluster(projectId, userId));
+            return Ok(await _dbscan.Cluster(projectId, userId));
         }
 
         [HttpPut("restore")]

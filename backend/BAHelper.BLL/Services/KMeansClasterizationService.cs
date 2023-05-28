@@ -43,10 +43,13 @@ namespace BAHelper.BLL.Services
                 foreach (var stat in userEntity.Statistics)
                 {
                     var userStat = new List<double>();
-                    userStat.Add((double)stat.TaskTopic);
-                    userStat.Add(stat.TaskQuality);
-                    userStat.Add(stat.UserId);
-                    usersStatistic.Add(userStat);
+                    if (stat.TaskCount > 0)
+                    {
+                        userStat.Add((double)stat.TaskTopic);
+                        userStat.Add(stat.TaskQuality);
+                        userStat.Add(stat.UserId);
+                        usersStatistic.Add(userStat);
+                    }
                 }
             }
             double[][] rawData = new double[usersStatistic.Count][];
@@ -57,7 +60,7 @@ namespace BAHelper.BLL.Services
                 raw[1] = usersStatistic[i][1];
                 rawData[i] = raw;
             }
-            int numClusters = (int)Math.Round((double)projectEntity.Users.Count);
+            int numClusters = (int)Math.Round((double)usersStatistic.Count/2);
             double[][] data = Normalized(rawData);
 
             bool changed = true;
@@ -71,8 +74,8 @@ namespace BAHelper.BLL.Services
             while (changed == true && success == true && ct < maxCount)
             {
                 ++ct;
-                success = UpdateMeans(data, clustering, ref means);
-                changed = UpdateClustering(data, ref clustering, means);
+                (success, means) = UpdateMeans(data, clustering, means);
+                (changed, clustering) = UpdateClustering(data, clustering, means);
             }
             var newClusters = new List<ClusterDTO>();
             for (int i = 0; i < numClusters; i++)
@@ -129,7 +132,22 @@ namespace BAHelper.BLL.Services
                 clustersInfo.Add(clusterInfo);
             }
             clustersInfo.Sort(CompareClusterInfo);
-            return clustersInfo;
+            var resultClusters = new List<ClusterInfoDTO>();
+            foreach (var c in clustersInfo)
+            {
+                if (c.Users.Count != 0)
+                {
+                    resultClusters.Add(c);
+                }
+            }
+            if (resultClusters.Count <= 10)
+            {
+                return resultClusters;
+            }
+            else
+            {
+                return resultClusters.Take(10).ToList();
+            }
         }
 
         private static int CompareClusterData(ClusterDataDTO x, ClusterDataDTO y)
@@ -249,7 +267,7 @@ namespace BAHelper.BLL.Services
             return result;
         }
 
-        private static bool UpdateMeans(double[][] data, int[] clustering, ref double[][] means)
+        private static (bool, double[][]) UpdateMeans(double[][] data, int[] clustering, double[][] means)
         {
             int numClusters = means.Length;
             int[] clusterCounts = new int[numClusters];
@@ -261,7 +279,7 @@ namespace BAHelper.BLL.Services
 
             for (int k = 0; k < numClusters; ++k)
                 if (clusterCounts[k] == 0)
-                    return false;
+                    return (false, means);
 
             for (int k = 0; k < means.Length; ++k)
                 for (int j = 0; j < means[k].Length; ++j)
@@ -277,10 +295,10 @@ namespace BAHelper.BLL.Services
             for (int k = 0; k < means.Length; ++k)
                 for (int j = 0; j < means[k].Length; ++j)
                     means[k][j] /= clusterCounts[k];
-            return true;
+            return (true, means);
         }
 
-        private static bool UpdateClustering(double[][] data, ref int[] clustering, double[][] means)
+        private static (bool, int[]) UpdateClustering(double[][] data, int[] clustering, double[][] means)
         {
             int numClusters = means.Length;
             bool changed = false;
@@ -304,7 +322,7 @@ namespace BAHelper.BLL.Services
             }
 
             if (changed == false)
-                return false;
+                return (false, clustering);
 
             int[] clusterCounts = new int[numClusters];
             for (int i = 0; i < data.Length; ++i)
@@ -313,12 +331,12 @@ namespace BAHelper.BLL.Services
                 ++clusterCounts[cluster];
             }
 
-            for (int k = 0; k < numClusters; ++k)
-                if (clusterCounts[k] == 0)
-                    return false;
+            //for (int k = 0; k < numClusters; ++k)
+            //    if (clusterCounts[k] == 0)
+            //        return (false, clustering);
 
             Array.Copy(newClustering, clustering, newClustering.Length);
-            return true;
+            return (true, clustering);
         }
 
         private static double Distance(double[] tuple, double[] mean)
