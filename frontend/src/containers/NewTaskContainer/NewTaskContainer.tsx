@@ -92,7 +92,7 @@ const NewTaskContainer = ({
           <TD>
             <FormDropdown
               name='tag'
-              placeholder="Стан завдання"
+              placeholder="Тег завдання"
               label=""
               options={taskTopics.map(x => x)}
               labels={taskTopics.map(x => taskTopicToText(x))}
@@ -100,6 +100,7 @@ const NewTaskContainer = ({
             />
             <FormError name='taskState' />
           </TD>
+          <TD></TD>
           <TD></TD>
           {
           <TDWhite>

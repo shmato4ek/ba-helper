@@ -67,7 +67,7 @@ const ProjectClusterInfo: FC<Props> = (params) => {
                     return (
                       <TR>
                         <TD width={'50%'}>{taskTopicToText(datum.topic)}</TD>
-                        <TD width={'50%'}>{Math.floor((datum.quality) * 100)}%</TD>
+                        <TD width={'50%'}>{datum.quality}%</TD>
                       </TR>
                     )
                   })}

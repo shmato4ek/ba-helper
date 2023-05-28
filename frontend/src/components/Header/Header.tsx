@@ -56,7 +56,7 @@ const Header: FC<Props> = (params) => {
         <HeaderLink link='services'>Сервіси</HeaderLink>
       </Button>  */}
       <Button buttonType='button' styleType='none'>
-        <HeaderLink link='my-projects'>Поточні Проекти</HeaderLink>
+        <HeaderLink link='my-projects'>Поточні проєкти</HeaderLink>
       </Button> 
       <Button buttonType='button' styleType='none'>
         <HeaderLink link='owned-projects'>Керівникам</HeaderLink>

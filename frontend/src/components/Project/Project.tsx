@@ -180,8 +180,10 @@ const Project: FC<Props> = (params) => {
                     <TH>Назва</TH>
                     <TH>Дедлайн</TH>
                     <TH>Кількість годин</TH>
+                    <TH>Тег</TH>
                     <TH>Виконавець</TH>
                     <TH>Статус</TH>
+                    <TH></TH>
                   </TR>
                 </thead>
                 <tbody>

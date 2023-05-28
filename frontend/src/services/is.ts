@@ -5,11 +5,11 @@ export const is = {
 export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
-    // if (is.localhost) {
-    // return 'https://ripe-dots-sit.loca.lt';
-    // }
+    if (is.localhost) {
+    return "https://polite-games-tell.loca.lt";
+    }
 
-    return 'http://localhost:5054';
+    // return 'http://localhost:5054';
   })(),
   ports: {
     be: 5054,

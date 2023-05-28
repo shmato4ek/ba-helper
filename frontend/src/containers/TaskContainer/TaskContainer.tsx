@@ -3,7 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as yup from 'yup'
 import * as _ from 'lodash'
-import { CreateErrorObject, EditPutTaskDto, PutTaskDto, TaskDto, TaskState, taskStates, taskStateToText, UserDto } from '../../store/types';
+import {
+  CreateErrorObject,
+  EditPutTaskDto,
+  PutTaskDto,
+  TaskDto,
+  TaskState,
+  taskStates,
+  taskStateToText,
+  taskTopics, taskTopicToText,
+  UserDto
+} from '../../store/types';
 import { validateStraight } from '../../yup';
 import { PutTask, PutTaskApprove, PutTaskAssign, PutTaskState } from '../../store/actions';
 import { TD, TDWhite, TR } from '../../components/Project/Project';
@@ -124,7 +134,7 @@ const TaskContainer = ({
       <>
         <TR key={`task/${task.id}`}>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormStringField placeholder="Ім'я таски" name={'taskName'} label="" />
                   <FormError name='taskName' />
@@ -132,7 +142,7 @@ const TaskContainer = ({
               : <>{task.taskName}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormDatepicker name={'deadline'} label="" />
                   <FormError name='deadline' />
@@ -140,7 +150,7 @@ const TaskContainer = ({
               : <>{DateTime.fromISO(task.deadline).toFormat('dd.MM.yyyy')}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
               ?  <>
                   <FormStringField placeholder="К-ість годин" name={'hours'} label="" />
                   <FormError name='hours' />
@@ -148,7 +158,22 @@ const TaskContainer = ({
               : <>{task.hours}</>}
           </TD>
           <TD>
-            {isEditMode
+            {canEdit && isEditMode
+                ?  <>
+                  <FormDropdown
+                      name='tag'
+                      placeholder="Тег завдання"
+                      label=""
+                      options={taskTopics.map(x => x)}
+                      labels={taskTopics.map(x => taskTopicToText(x))}
+                      onOptionChoose={() => {}}
+                  />
+                  <FormError name='taskState' />
+                </>
+                : <>{task.tags[0] ? taskTopicToText(task.tags[0]) : "No tags"}</>}
+          </TD>
+          <TD>
+            {canEdit && isEditMode
               ?  <>
                   <FormDropdown
                     name='assignedUser'
@@ -160,7 +185,7 @@ const TaskContainer = ({
                   />
                   <FormError name='assignedUser' />
                 </>
-              : <>{task.users[0] ? task.users[0].name : "Not assigned"}</>}
+              : <>{task.users[0] ? task.users[0].name : "Не призначено"}</>}
           </TD>
           <TD>
             {isEditMode && task.taskState !== TaskState.Approve
@@ -169,17 +194,16 @@ const TaskContainer = ({
                     name='taskState'
                     placeholder="Стан завдання"
                     label=""
-                    options={canEdit ? [0,1,2,3].map(x => x) : [0,1,2].map(x => x) }
-                    labels={canEdit ? [0,1,2,3].map(x => taskStateToText(x)) : [0,1,2].map(x => taskStateToText(x))}
+                    options={canEdit ? [1,2,3,4].map(x => x) : [1,2,3].map(x => x) }
+                    labels={canEdit ? [1,2,3,4].map(x => taskStateToText(x)) : [1,2,3].map(x => taskStateToText(x))}
                     onOptionChoose={onTaskStateChoose as any}
                   />
                   <FormError name='taskState' />
                 </>
               : <>{taskStateToText(task.taskState)}</>}
           </TD>
-          {canEditState &&
-            <TDWhite>
-              {isEditMode
+          <TDWhite>
+          {(canEdit || canEditState) && (isEditMode
                 ? <Button buttonType='button' styleType='none' onClick={() => {
                     handleSubmit();
                     onEditModeSwitch();
@@ -188,9 +212,9 @@ const TaskContainer = ({
                 </Button> 
                 : <Button buttonType='button' styleType='none' onClick={() => onEditModeSwitch()}>
                   <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
-                </Button>}
-            </TDWhite>
-          }
+                </Button>
+          )}
+          </TDWhite>
         </TR>
       </>
     )}
