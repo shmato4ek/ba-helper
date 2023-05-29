@@ -60,7 +60,7 @@ namespace BAHelper.BLL.Services
                 contentParagraph.Format.HorizontalAlignment = HorizontalAlignment.Left;
                 string contentParagraphText = "1. Aim of the project\n" +
                                               "2. Glossary\n" +
-                                              "3. Functional requirements (Use cases)";
+                                              "3. User stories (Use cases)";
                 TextRange contentParagraphTR = contentParagraph.AppendText(contentParagraphText);
                 contentParagraphTR.CharacterFormat.FontSize = 14;
 
@@ -135,9 +135,65 @@ namespace BAHelper.BLL.Services
                 }
                 Section section3 = document.AddSection();
                 Paragraph funcRequirementsHeader = section3.AddParagraph();
-                string funcRequirementsHeaderText = "Functional requirements";
-                funcRequirementsHeader.Text = funcRequirementsHeaderText;
+                string funcRequirementsHeaderText = "User stories";
                 funcRequirementsHeader.Format.HorizontalAlignment = HorizontalAlignment.Center;
+                funcRequirementsHeader.Format.AfterAutoSpacing = false;
+                funcRequirementsHeader.Format.AfterSpacing = 10;
+                TextRange funcHeaderTR = funcRequirementsHeader.AppendText(funcRequirementsHeaderText);
+                funcHeaderTR.CharacterFormat.FontSize = 14;
+                funcHeaderTR.CharacterFormat.Bold = true;
+
+                if (documentEntity.UserStories != null)
+                {
+                    int userStoryIndex = 1;
+                    foreach (var us in documentEntity.UserStories)
+                    {
+                        Paragraph userStoryHeader = section3.AddParagraph();
+                        string userStoryHeaderText = $"User story {userStoryIndex}. {us.Name}";
+                        userStoryHeader.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                        userStoryHeader.Format.AfterAutoSpacing = false;
+                        userStoryHeader.Format.AfterSpacing = 10;
+                        TextRange userStoryHeaderTR = userStoryHeader.AppendText(userStoryHeaderText);
+                        userStoryHeaderTR.CharacterFormat.FontSize = 14;
+                        userStoryHeaderTR.CharacterFormat.Bold = true;
+                        userStoryHeaderTR.CharacterFormat.Italic = true;
+
+                        foreach (var formula in us.Formulas)
+                        {
+                            Paragraph usFormula = section3.AddParagraph();
+                            string usFormulaText = formula;
+                            usFormula.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                            usFormula.Format.AfterAutoSpacing = false;
+                            usFormula.Format.AfterSpacing = 10;
+                            TextRange usFormulaTR = usFormula.AppendText(usFormulaText);
+                            usFormulaTR.CharacterFormat.FontSize = 14;
+                        }
+
+                        Paragraph acceptanceCriteriaHeader = section3.AddParagraph();
+                        string acceptanceCriteriaHeaderText = "Acceptance criteria";
+                        acceptanceCriteriaHeader.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                        acceptanceCriteriaHeader.Format.AfterAutoSpacing = false;
+                        acceptanceCriteriaHeader.Format.AfterSpacing = 10;
+                        TextRange acceptanceCriteriaHeaderTR = acceptanceCriteriaHeader.AppendText(acceptanceCriteriaHeaderText);
+                        acceptanceCriteriaHeaderTR.CharacterFormat.FontSize = 14;
+                        acceptanceCriteriaHeaderTR.CharacterFormat.Bold = true;
+                        acceptanceCriteriaHeaderTR.CharacterFormat.Italic = true;
+
+                        int criteriaIndex = 1;
+                        foreach (var criteria in us.AcceptanceCriterias)
+                        {
+                            Paragraph usCriteria = section3.AddParagraph();
+                            string usCriteriaText = $"\t{criteriaIndex}. {criteria}";
+                            usCriteria.Format.HorizontalAlignment = HorizontalAlignment.Left;
+                            usCriteria.Format.AfterAutoSpacing = false;
+                            usCriteria.Format.AfterSpacing = 10;
+                            TextRange usCriteriaTR = usCriteria.AppendText(usCriteriaText);
+                            usCriteriaTR.CharacterFormat.FontSize = 14;
+                            criteriaIndex++;
+                        }
+                        userStoryIndex++;
+                    }
+                }
 
                 document.SaveToFile("LocalFiles/" + filename, FileFormat.Docx);
                 return _mapper.Map<DocumentDTO>(documentEntity);
