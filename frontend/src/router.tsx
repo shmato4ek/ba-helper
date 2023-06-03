@@ -12,6 +12,7 @@ import DocumentsPage from "./containers/pages/DocumentsPage/DocumentsPage";
 import PostDocumentPage from "./containers/pages/PostDocumentPage/PostDocumentPage";
 import ProjectStatsPage from "./containers/pages/ProjectStatsPage/ProjectStatsPage";
 import ProfileStatisticsPage from "./containers/pages/ProfileStatisticsPage/ProfileStatisticsPage";
+import ProjectStatsPageV2 from "./containers/pages/ProjectStatsPageV2/ProjectStatsPageV2";
 
 export default createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ export default createBrowserRouter(
       <Route path="owned-projects" element={<ProjectsPage />} />
       <Route path="projects/:projectId" element={<ProjectPage />} />
       <Route path="projects/statistics/:projectId" element={<ProjectStatsPage />} />
+      <Route path="projects/statistics/dbscan/:projectId" element={<ProjectStatsPageV2 />} />
       <Route path="projects/new" element={<PostProjectPage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="profile/statistics" element={<ProfileStatisticsPage />} />

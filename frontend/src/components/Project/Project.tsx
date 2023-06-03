@@ -207,15 +207,27 @@ const Project: FC<Props> = (params) => {
             </Wrapper>
             <AlignCenter>
               {params.me.id === params.project.authorId &&
-                <Button buttonType='button' styleType='simple'>
-                  <Link
-                    to={`/projects/statistics/${params.project.id}`}
-                    style={{
-                      textDecoration: 'none',
-                      color: 'white',
-                    }}
-                  >Показати Статистику</Link>
-                </Button>}
+                  <>
+                      <Button buttonType='button' styleType='simple'>
+                          <Link
+                              to={`/projects/statistics/${params.project.id}`}
+                              style={{
+                                  textDecoration: 'none',
+                                  color: 'white',
+                              }}
+                          >Статистика K/means</Link>
+                      </Button>
+                      <Button buttonType='button' styleType='simple'>
+                          <Link
+                              to={`/projects/statistics/dbscan/${params.project.id}`}
+                              style={{
+                                  textDecoration: 'none',
+                                  color: 'white',
+                              }}
+                          >Статистика DBScan</Link>
+                      </Button>
+                  </>
+              }
             </AlignCenter>
             <Footer>
               <b>Загальна кількість годин: {totalHours}</b>

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { put, call, takeLeading } from 'redux-saga/effects';
-import { ErrorCodes } from '../error';
-import { globals } from '../services/is';
+import {call, put, takeLeading} from 'redux-saga/effects';
+import {ErrorCodes} from '../error';
+import {globals} from '../services/is';
 import {
   actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, LogOut, PostDocument, PostProject, PostTask, PutProject, PutTask, PutTaskApprove, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
 } from './actions';
-import { PutUserDto } from './types';
-import { LocalStorageService } from '../services/local-storage';
+import {ClusterType} from './types';
+import {LocalStorageService} from '../services/local-storage';
 
 function* errorHandler(
   error: any,
@@ -197,7 +197,14 @@ function* getProjectStatistics(getProjectStatistics: GetProjectStatistics) {
     const response: {
       data: any
     } = yield call(() => {
-      return axios.get(`${globals.endpoint}${globals.paths.project.stats}/${getProjectStatistics.payload.id}`);
+      let path;
+
+      switch (getProjectStatistics.payload.type) {
+        case ClusterType.Regular: path = globals.paths.project.stats; break;
+        case ClusterType.Dbscan: path = globals.paths.project.statsV2; break;
+      }
+
+      return axios.get(`${globals.endpoint}${path}/${getProjectStatistics.payload.id}`);
     });
 
     yield put<AppAction>({

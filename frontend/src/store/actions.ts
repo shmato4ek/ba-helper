@@ -1,5 +1,29 @@
 import { NavigateFunction } from 'react-router';
-import { ClusterInfo, DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskStateDto, PutTaskApproveDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, StatisticDataInfo, TaskDto, UserDto } from './types';
+import {
+  ClusterInfo,
+  ClusterType,
+  DocumentDto,
+  LoginDto,
+  Me,
+  PostDocumentDto,
+  PostProjectDto,
+  PostSubtaskDto,
+  PostTaskDto,
+  ProjectDto,
+  PutProjectDto,
+  PutSubtaskApproveDto,
+  PutSubtaskDto,
+  PutSubtaskStateDto,
+  PutTaskApproveDto,
+  PutTaskAssignDto,
+  PutTaskDto,
+  PutTaskStateDto,
+  PutUserDto,
+  RegisterDto,
+  StatisticDataInfo,
+  TaskDto,
+  UserDto
+} from './types';
 
 /* Action Types */
 export const actionTypes = {
@@ -291,7 +315,7 @@ export interface GetProjectFailure extends ErrorPayload {
 
 export interface GetProjectStatistics {
   type: typeof actionTypes.GET_PROJECT_STATISTICS;
-  payload: { id: number; }
+  payload: { id: number; type: ClusterType; }
 }
 
 export interface GetProjectStatisticsSuccess {

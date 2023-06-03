@@ -194,6 +194,11 @@ export enum TaskState {
   Approve,
 }
 
+export enum ClusterType{
+  Regular = 0,
+  Dbscan ,
+}
+
 export const taskStates: TaskState[] = [1, 2, 3, 4];
 
 export interface DocumentDto {
