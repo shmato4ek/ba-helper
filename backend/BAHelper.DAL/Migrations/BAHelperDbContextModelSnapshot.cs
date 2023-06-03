@@ -353,36 +353,6 @@ namespace BAHelper.DAL.Migrations
                     b.HasOne("BAHelper.DAL.Entities.Project", null)
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId1");
-
-                    b.OwnsMany("BAHelper.DAL.Entities.Subtask", "Subtasks", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<int>("TaskId")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("TaskState")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("TaskId");
-
-                            b1.ToTable("Subtasks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TaskId");
-                        });
-
-                    b.Navigation("Subtasks");
                 });
 
             modelBuilder.Entity("BAHelper.DAL.Entities.StatisticData", b =>

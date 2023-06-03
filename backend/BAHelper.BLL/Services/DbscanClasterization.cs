@@ -8,7 +8,6 @@ using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Office.Interop.Word;
 
 namespace BAHelper.BLL.Services
 {
@@ -35,12 +34,9 @@ namespace BAHelper.BLL.Services
     }
     public class DbscanClasterization : BaseService
     {
-        private readonly ProjectService _projectService;
-        public DbscanClasterization(BAHelperDbContext context, IMapper mapper, ProjectService projectService)
+        public DbscanClasterization(BAHelperDbContext context, IMapper mapper)
             :base(context, mapper)
-        {
-            _projectService = projectService;
-        }
+        { }
         public async Task<List<ClusterInfoDTO>> Cluster(int projectId, int userId)
         {
             double eps = 0.05;
@@ -95,7 +91,6 @@ namespace BAHelper.BLL.Services
                     if (flag) clusterId++;
                 }
             }
-            // sort out points into their clusters, if any
             int maxClusterId = rawData.OrderBy(p => p.ClusterId).Last().ClusterId;
             for (int i = 0; i < maxClusterId; i++) clusters.Add(new List<Point>());
             foreach (Point p in rawData)
@@ -315,12 +310,12 @@ namespace BAHelper.BLL.Services
         static (bool, List<Point>) ExpandCluster(List<Point> points, Point p, int clusterId, double eps, int minPts)
         {
             List<Point> seeds = GetRegion(points, p, eps);
-            if (seeds.Count < minPts) // no core point
+            if (seeds.Count < minPts)
             {
                 p.ClusterId = Point.NOISE;
                 return (false, points);
             }
-            else // all points in seeds are density reachable from point 'p'
+            else
             {
                 for (int i = 0; i < seeds.Count; i++) seeds[i].ClusterId = clusterId;
                 seeds.Remove(p);

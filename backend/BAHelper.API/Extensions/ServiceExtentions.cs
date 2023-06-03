@@ -28,7 +28,6 @@ namespace BAHelper.API.Extensions
             services.AddScoped<MailService>();
             services.AddScoped<KMeansClasterizationService>();
             services.AddScoped<DbscanClasterization>();
-            //services.AddHostedService<ScheduledService>();
         }
 
         public static void RegisterAutoMapper(this IServiceCollection services)
@@ -44,14 +43,12 @@ namespace BAHelper.API.Extensions
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            var secretKey = configuration["SecretJWTKey"]; // get value from system environment
+            var secretKey = configuration["SecretJWTKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             var validFor = Convert.ToInt64(configuration["ExpireTokenTimeInMin"]);
 
-            // Get options from app settings
             var jwtAppSettingOptions = configuration.GetSection(nameof(JwtIssuerOptions));
 
-            // Configure JwtIssuerOptions
             services.Configure<JwtIssuerOptions>(options =>
             {
                 options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];

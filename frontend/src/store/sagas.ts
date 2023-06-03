@@ -3,7 +3,7 @@ import { put, call, takeLeading } from 'redux-saga/effects';
 import { ErrorCodes } from '../error';
 import { globals } from '../services/is';
 import {
-  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, LogOut, PostDocument, PostProject, PostSubtask, PostTask, PutProject, PutSubtask, PutSubtaskApprove, PutSubtaskState, PutTask, PutTaskApprove, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
+  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, LogOut, PostDocument, PostProject, PostTask, PutProject, PutTask, PutTaskApprove, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
 } from './actions';
 import { PutUserDto } from './types';
 import { LocalStorageService } from '../services/local-storage';
@@ -322,6 +322,26 @@ function* putTask(putTask: PutTask) {
   }
 }
 
+function* putTaskApprove(putTaskApprove: PutTaskApprove) {
+  try {
+    console.log('Put task approve action: ' + putTaskApprove);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.put(`${globals.endpoint}${globals.paths.task.approve}`,  putTaskApprove.payload);
+    });
+
+    yield put<AppAction>({
+      type: 'PUT_TASK_APPROVE_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'PUT_TASK_APPROVE_FAILURE');
+  }
+}
+
+
 function* putTaskAssign(putTaskAssign: PutTaskAssign) {
   try {
     console.log('Put task assign action: ' + putTaskAssign);
@@ -357,101 +377,6 @@ function* putTaskState(putTaskState: PutTaskState) {
     });
   } catch (error) {
     yield call(errorHandler, error, 'PUT_TASK_STATE_FAILURE');
-  }
-}
-
-function* putTaskApprove(putTaskApprove: PutTaskApprove) {
-  try {
-    console.log('Put task approve action: ' + putTaskApprove);
-
-    const response: {
-      data: any
-    } = yield call(() => {
-      return axios.put(`${globals.endpoint}${globals.paths.task.approve}`,  putTaskApprove.payload);
-    });
-
-    yield put<AppAction>({
-      type: 'PUT_SUBTASK_APPROVE_SUCCESS',
-      payload: response.data
-    });
-  } catch (error) {
-    yield call(errorHandler, error, 'PUT_SUBTASK_APPROVE_FAILURE');
-  }
-}
-
-function* postSubtask(postSubtask: PostSubtask) {
-  try {
-    console.log('Post subtask action: ' + postSubtask);
-
-    const response: {
-      data: any
-    } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.task.subtask}`, postSubtask.payload);
-    });
-
-    yield put<AppAction>({
-      type: 'POST_SUBTASK_SUCCESS',
-      payload: response.data
-    });
-  } catch (error) {
-    yield call(errorHandler, error, 'POST_SUBTASK_FAILURE');
-  }
-}
-
-function* putSubtask(putSubtask: PutSubtask) {
-  try {
-    console.log('Put subtask action: ' + putSubtask);
-
-    const response: {
-      data: any
-    } = yield call(() => {
-      return axios.put(`${globals.endpoint}${globals.paths.task.subtask}`, putSubtask.payload);
-    });
-
-    yield put<AppAction>({
-      type: 'PUT_SUBTASK_SUCCESS',
-      payload: response.data
-    });
-  } catch (error) {
-    yield call(errorHandler, error, 'PUT_SUBTASK_FAILURE');
-  }
-}
-
-function* putSubtaskState(putSubtaskState: PutSubtaskState) {
-  try {
-    console.log('Put subtask state action: ' + putSubtaskState);
-
-    const response: {
-      data: any
-    } = yield call(() => {
-      return axios.put(`${globals.endpoint}${globals.paths.task.subtaskState}`, putSubtaskState.payload);
-    });
-
-    yield put<AppAction>({
-      type: 'PUT_SUBTASK_STATE_SUCCESS',
-      payload: response.data
-    });
-  } catch (error) {
-    yield call(errorHandler, error, 'PUT_SUBTASK_STATE_FAILURE');
-  }
-}
-
-function* putSubtaskApprove(putSubtaskApprove: PutSubtaskApprove) {
-  try {
-    console.log('Put subtask approve action: ' + putSubtaskApprove);
-
-    const response: {
-      data: any
-    } = yield call(() => {
-      return axios.put(`${globals.endpoint}${globals.paths.task.subtaskApprove}`,  putSubtaskApprove.payload);
-    });
-
-    yield put<AppAction>({
-      type: 'PUT_SUBTASK_APPROVE_SUCCESS',
-      payload: response.data
-    });
-  } catch (error) {
-    yield call(errorHandler, error, 'PUT_SUBTASK_APPROVE_FAILURE');
   }
 }
 
@@ -543,10 +468,6 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.PUT_TASK_ASSIGN, putTaskAssign);
   yield takeLeading(actionTypes.PUT_TASK_STATE, putTaskState);
   yield takeLeading(actionTypes.PUT_TASK_APPROVE, putTaskApprove);
-  yield takeLeading(actionTypes.POST_SUBTASK, postSubtask);
-  yield takeLeading(actionTypes.PUT_SUBTASK, putSubtask);
-  yield takeLeading(actionTypes.PUT_SUBTASK_STATE, putSubtaskState);
-  yield takeLeading(actionTypes.PUT_SUBTASK_APPROVE, putSubtaskApprove);
   yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);

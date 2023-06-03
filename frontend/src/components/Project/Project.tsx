@@ -13,7 +13,6 @@ import FormStringField from '../Form/FormStringField/FormStringField';
 import FormTextareaField from '../Form/FormTextareaField/FormTextareaField';
 import FormError from '../Form/FormError/FormError';
 import TaskContainer from '../../containers/TaskContainer/TaskContainer';
-import SubtaskContainer from '../../containers/SubtaskContainer/SubtaskContainer';
 import NewTaskContainer from '../../containers/NewTaskContainer/NewTaskContainer';
 
 export const Header = styled.h1`
@@ -197,14 +196,6 @@ const Project: FC<Props> = (params) => {
                           task={task}
                           key={`task/${task.id}`}
                         />
-                        {task.subtasks.map(subtask => {
-                          return <SubtaskContainer
-                            canEdit={params.canEdit}
-                            canEditState={task.canEditState}
-                            subtask={subtask}
-                            key={`subtask/${subtask.id}`}
-                          />
-                        })}
                       </>
                     )
                   })}

@@ -41,14 +41,6 @@ namespace BAHelper.API.Controllers
             return Ok(await _documentService.GetArcivedDocuments(userId));
         }
 
-        [HttpPut]
-        public async Task<ActionResult> UpdateDocument([FromBody] UpdateDocumentDTO updatedDocument)
-        {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _documentService.UpdateDocument(updatedDocument, userId));
-        }
-
         [HttpPut("archive")]
         public async Task<ActionResult> MoveToArvhive(int documentId)
         {

@@ -1,5 +1,5 @@
 import { NavigateFunction } from 'react-router';
-import { ClusterInfo, DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostSubtaskDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskApproveDto, PutSubtaskDto, PutSubtaskStateDto, PutTaskApproveDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, StatisticDataInfo, SubtaskDto, TaskDto, UserDto } from './types';
+import { ClusterInfo, DocumentDto, LoginDto, Me, PostDocumentDto, PostProjectDto, PostTaskDto, ProjectDto, PutProjectDto, PutSubtaskStateDto, PutTaskApproveDto, PutTaskAssignDto, PutTaskDto, PutTaskStateDto, PutUserDto, RegisterDto, StatisticDataInfo, TaskDto, UserDto } from './types';
 
 /* Action Types */
 export const actionTypes = {
@@ -402,63 +402,6 @@ export interface PutTaskApproveFailure extends ErrorPayload {
   type: typeof actionTypes.PUT_TASK_APPROVE_FAILURE;
 }
 
-
-export interface PostSubtask {
-  type: typeof actionTypes.POST_SUBTASK;
-  payload: PostSubtaskDto;
-}
-
-export interface PostSubtaskSuccess {
-  type: typeof actionTypes.POST_SUBTASK_SUCCESS;
-  payload: SubtaskDto;
-}
-
-export interface PostSubtaskFailure extends ErrorPayload {
-  type: typeof actionTypes.POST_SUBTASK_FAILURE;
-}
-
-export interface PutSubtask {
-  type: typeof actionTypes.PUT_SUBTASK;
-  payload: PutSubtaskDto;
-}
-
-export interface PutSubtaskSuccess {
-  type: typeof actionTypes.PUT_SUBTASK_SUCCESS;
-  payload: SubtaskDto;
-}
-
-export interface PutSubtaskFailure extends ErrorPayload {
-  type: typeof actionTypes.PUT_SUBTASK_FAILURE;
-}
-
-export interface PutSubtaskState {
-  type: typeof actionTypes.PUT_SUBTASK_STATE;
-  payload: PutSubtaskStateDto;
-}
-
-export interface PutSubtaskStateSuccess {
-  type: typeof actionTypes.PUT_SUBTASK_STATE_SUCCESS;
-  payload: SubtaskDto;
-}
-
-export interface PutSubtaskApprove {
-  type: typeof actionTypes.PUT_SUBTASK_APPROVE;
-  payload: PutSubtaskApproveDto;
-}
-
-export interface PutSubtaskApproveSuccess {
-  type: typeof actionTypes.PUT_SUBTASK_APPROVE_SUCCESS;
-  payload: SubtaskDto;
-}
-
-export interface PutSubtaskApproveFailure extends ErrorPayload {
-  type: typeof actionTypes.PUT_SUBTASK_APPROVE_FAILURE;
-}
-
-export interface PutSubtaskStateFailure extends ErrorPayload {
-  type: typeof actionTypes.PUT_SUBTASK_STATE_FAILURE;
-}
-
 export interface GetDocuments {
   type: typeof actionTypes.GET_DOCUMENTS;
 }
@@ -520,10 +463,6 @@ export type FailureAppActionTypes =
   | typeof actionTypes.PUT_TASK_ASSIGN_FAILURE
   | typeof actionTypes.PUT_TASK_STATE_FAILURE
   | typeof actionTypes.PUT_TASK_APPROVE_FAILURE
-  | typeof actionTypes.POST_SUBTASK_FAILURE
-  | typeof actionTypes.PUT_SUBTASK_FAILURE
-  | typeof actionTypes.PUT_SUBTASK_STATE_FAILURE
-  | typeof actionTypes.PUT_SUBTASK_APPROVE_FAILURE
   | typeof actionTypes.GET_DOCUMENTS_FAILURE
   | typeof actionTypes.POST_DOCUMENT_FAILURE
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
@@ -549,10 +488,6 @@ export type FailureAppAction =
   | PutTaskAssignFailure
   | PutTaskStateFailure
   | PutTaskApproveFailure
-  | PostSubtaskFailure
-  | PutSubtaskFailure
-  | PutSubtaskStateFailure
-  | PutSubtaskApproveFailure
   | GetDocumentsFailure
   | PostDocumentFailure
   | DocumentDownloadFailure
@@ -615,18 +550,6 @@ export type AppAction =
   | PutTaskApprove
   | PutTaskApproveSuccess
   | PutTaskApproveFailure
-  | PostSubtask
-  | PostSubtaskSuccess
-  | PostSubtaskFailure
-  | PutSubtask
-  | PutSubtaskSuccess
-  | PutSubtaskFailure
-  | PutSubtaskState
-  | PutSubtaskStateSuccess
-  | PutSubtaskStateFailure
-  | PutSubtaskApprove
-  | PutSubtaskApproveSuccess
-  | PutSubtaskApproveFailure
   | GetDocuments
   | GetDocumentsSuccess
   | GetDocumentsFailure

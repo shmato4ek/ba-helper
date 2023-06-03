@@ -10,12 +10,10 @@ namespace BAHelper.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly DocumentService _documentService;
         private readonly JwtFactory _jwtFactory;
-        public UserController(UserService userService, DocumentService documentService, JwtFactory jwtFactory)
+        public UserController(UserService userService, JwtFactory jwtFactory)
         {
             _userService = userService;
-            _documentService = documentService;
             _jwtFactory = jwtFactory;
         }
 

@@ -104,30 +104,6 @@ namespace BAHelper.BLL.Services
             return ownDocuments;
         }
 
-        public async Task<DocumentDTO> UpdateDocument(UpdateDocumentDTO updatedDocument, int userId)
-        {
-            var documentEntity = await _context
-                .Documents
-                .Include(doc => doc.UserStories)
-                .Include(doc => doc.Glossary)
-                .FirstOrDefaultAsync(doc => doc.Id == updatedDocument.Id);
-            if (documentEntity is null)
-            {
-                throw new NotFoundException(nameof(DAL.Entities.Document), updatedDocument.Id);
-            }
-            if (documentEntity.UserId != userId)
-            {
-                throw new NoAccessException(userId);
-            }
-            documentEntity.Name = updatedDocument.Name;
-            documentEntity.ProjectAim = updatedDocument.ProjectAim;
-            documentEntity.Glossary = _mapper.Map<List<Glossary>>(updatedDocument.Glossaries);
-            documentEntity.UserStories = _mapper.Map<List<UserStory>>(updatedDocument.UserStories);
-            _context.Documents.Update(documentEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<DocumentDTO>(documentEntity);
-        }
-
         public async System.Threading.Tasks.Task MoveToArchive(int documentId, int userId)
         {
             var docEntity = await _context

@@ -13,7 +13,6 @@ import FormStringField from '../Form/FormStringField/FormStringField';
 import FormTextareaField from '../Form/FormTextareaField/FormTextareaField';
 import FormError from '../Form/FormError/FormError';
 import TaskContainer from '../../containers/TaskContainer/TaskContainer';
-import SubtaskContainer from '../../containers/SubtaskContainer/SubtaskContainer';
 import { FieldGrid } from '../Project/Project';
 
 export const Header = styled.h1`

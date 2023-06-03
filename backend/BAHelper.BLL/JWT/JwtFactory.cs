@@ -41,11 +41,6 @@ namespace BAHelper.BLL.JWT
             return _jwtSecurityTokenHandler.WriteToken(jwt);
         }
 
-        public string GenerateRefreshToken()
-        {
-            return Convert.ToBase64String(SecurityHelper.GetRandomBytes());
-        }
-
         public int GetValueFromToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();

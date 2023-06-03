@@ -95,7 +95,6 @@ namespace BAHelper.BLL.Services
                 .Tasks
                 .Where(task => task.ProjectId == projectId)
                 .Include(task => task.Users)
-                .Include(task => task.Subtasks)
                 .ToListAsync();
             var projectDto = _mapper.Map<ProjectInfoDTO>(projectEntity);
             var userEntity = await _context
@@ -193,7 +192,6 @@ namespace BAHelper.BLL.Services
                 .Tasks
                 .Where(task => task.ProjectId == projectEntity.Id)
                 .Include(task => task.Users)
-                .Include(task => task.Subtasks)
                 .ToListAsync();
             updatedProjectDto.Tasks = _mapper.Map<List<ProjectTaskInfoDTO>>(tasksDto);
             return updatedProjectDto;
@@ -269,7 +267,6 @@ namespace BAHelper.BLL.Services
                 .Where(project => project.Users.Contains(userEntity))
                 .Include(project => project.Users)
                 .Include(project => project.Tasks)
-                .ThenInclude(task => task.Subtasks)
                 .ToListAsync();
 
             var projectsDto = _mapper.Map<List<ProjectInfoDTO>>(projectsEntity);

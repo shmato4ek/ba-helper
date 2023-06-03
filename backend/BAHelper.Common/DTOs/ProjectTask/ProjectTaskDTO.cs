@@ -1,5 +1,4 @@
-﻿using BAHelper.Common.DTOs.Subtask;
-using BAHelper.Common.DTOs.User;
+﻿using BAHelper.Common.DTOs.User;
 using BAHelper.Common.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace BAHelper.Common.DTOs.ProjectTask
         public DateTime? TaskStart { get; set; }
         public DateTime? TaskEnd { get; set; }
         public List<UserInfoDTO> Users { get; set; }
-        public List<SubtaskDTO> Subtasks { get; set; }
         public int TaskState { get; set; }
     }
 }

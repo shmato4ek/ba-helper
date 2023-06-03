@@ -3,7 +3,6 @@ using BAHelper.BLL.Exceptions;
 using BAHelper.BLL.Services.Abstract;
 using BAHelper.Common.DTOs.ProjectTask;
 using BAHelper.Common.DTOs.StatisticData;
-using BAHelper.Common.DTOs.Subtask;
 using BAHelper.Common.Enums;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
@@ -78,72 +77,6 @@ namespace BAHelper.BLL.Services
             return _mapper.Map<ProjectTaskDTO>(projectTaskEntity);
         }
 
-        public async Task<SubtaskDTO> UpdateSubtask(UpdateSubtaskDTO updatedSubtask, int userId)
-        {
-            var subtaskEntity = await _context
-                .Subtasks
-                .FirstOrDefaultAsync(subtask => subtask.Id == updatedSubtask.Id);
-            if (subtaskEntity is null)
-            {
-                throw new NotFoundException(nameof(Subtask), updatedSubtask.Id);
-            }
-            var taskEntity = await _context
-                .Tasks
-                .FirstOrDefaultAsync(task => task.Id == subtaskEntity.TaskId);
-            if (taskEntity is null)
-            {
-                throw new NotFoundException(nameof(ProjectTask), subtaskEntity.TaskId);
-            }
-            var projectEntity = await _context
-                .Projects
-                .FirstOrDefaultAsync(project => project.Id == taskEntity.ProjectId);
-            if (projectEntity is null)
-            {
-                throw new NotFoundException(nameof(Project), taskEntity.ProjectId);
-            }
-            if (projectEntity.AuthorId != userId)
-            {
-                throw new NoAccessException(userId);
-            }
-
-            subtaskEntity.Name = updatedSubtask.Name;
-            _context.Subtasks.Update(subtaskEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<SubtaskDTO>(subtaskEntity);
-        }
-
-        public async Task<SubtaskDTO> AddSubtask(NewSubtaskDTO newSubtask, int userId)
-        {
-            var taskEntity = await _context
-                .Tasks
-                .FirstOrDefaultAsync(t => t.Id == newSubtask.TaskId);
-            if(taskEntity is null)
-            {
-                throw new NotFoundException(nameof(ProjectTask), newSubtask.TaskId);
-            }
-            var projectEntity = await _context
-                .Projects
-                .FirstOrDefaultAsync(project => project.Id == taskEntity.ProjectId);
-
-            if (projectEntity is null)
-            {
-                throw new NotFoundException(nameof(Project), taskEntity.ProjectId);
-            }
-            if(userId != projectEntity.AuthorId)
-            {
-                throw new NoAccessException(userId);
-            }    
-            var subtaskEntity = _mapper.Map<Subtask>(newSubtask);
-            if (taskEntity.Subtasks == null)
-            {
-                taskEntity.Subtasks = new List<Subtask>();
-            }
-            taskEntity.Subtasks.Add(subtaskEntity);
-            _context.Update(taskEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<SubtaskDTO>(subtaskEntity);
-        }
-
         public async Task<ProjectTaskDTO> AddUserToTask(int taskId, string email, int userId)
         {
             var taskEntity = await _context
@@ -188,22 +121,19 @@ namespace BAHelper.BLL.Services
                 throw new ExistUserException(email);
             }
 
-            //Will be removed
-            //****
             taskEntity.Users = new List<User>();
             taskEntity.Users.Add(userEntity);
-            //taskEntity.Users.Add(userEntity);
             _context.Tasks.Update(taskEntity);
             await _context.SaveChangesAsync();
 
-            //if (userEntity.IsAgreedToNotification)
-            //{
-            //    var authorEntity = await _context
-            //        .Users
-            //        .FirstOrDefaultAsync(user => user.Id == userId);
-            //    string message = $"{authorEntity.Name} asigned task ({taskEntity.TaskName}) of project ({projectEntity.ProjectName}) to you";
-            //    await _mailService.SendMail(userEntity.Email, "Added to task", message, userEntity.Name);
-            //}
+            if (userEntity.IsAgreedToNotification)
+            {
+                var authorEntity = await _context
+                    .Users
+                    .FirstOrDefaultAsync(user => user.Id == userId);
+                string message = $"{authorEntity.Name} asigned task ({taskEntity.TaskName}) of project ({projectEntity.ProjectName}) to you";
+                await _mailService.SendMail(userEntity.Email, "Added to task", message, userEntity.Name);
+            }
 
             return _mapper.Map<ProjectTaskDTO>(taskEntity);
 
@@ -280,17 +210,17 @@ namespace BAHelper.BLL.Services
             _context.SaveChanges();
             var userEntityId = taskEntity.Users.FirstOrDefault().Id;
             await UpdateSatistic(taskEntity.Id, userEntityId);
-            //if (taskEntity.Users.Count != 0)
-            //{
-            //    foreach (var user in taskEntity.Users)
-            //    {
-            //        if (user.IsAgreedToNotification)
-            //        {
-            //            string message = $"Your task {taskEntity.TaskName} was approved.";
-            //            await _mailService.SendMail(user.Email, "Task approved", message, user.Name);
-            //        }
-            //    }
-            //}
+            if (taskEntity.Users.Count != 0)
+            {
+                foreach (var user in taskEntity.Users)
+                {
+                    if (user.IsAgreedToNotification)
+                    {
+                        string message = $"Your task {taskEntity.TaskName} was approved.";
+                        await _mailService.SendMail(user.Email, "Task approved", message, user.Name);
+                    }
+                }
+            }
         }
 
         private async Task UpdateSatistic(int taskId, int userId)
@@ -344,67 +274,6 @@ namespace BAHelper.BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<SubtaskDTO> ChangeSubtaskState(int subtaskId, TaskState taskState, int userId)
-        {
-            var subtaskEntity = await _context
-                .Subtasks
-                .FirstOrDefaultAsync(subtask => subtask.Id == subtaskId);
-            if(subtaskEntity is null)
-            {
-                throw new NotFoundException(nameof(Subtask), subtaskId);
-            }
-            var taskEntity = await _context
-                .Tasks
-                .Include(task => task.Users)
-                .FirstOrDefaultAsync(task => task.Id == subtaskEntity.TaskId);
-            if (taskEntity is null) 
-            {
-                throw new NotFoundException(nameof(ProjectTask), subtaskEntity.TaskId);
-            }
-            var foundUser = taskEntity.Users.FirstOrDefault(user => user.Id == userId);
-            if (foundUser is null)
-            {
-                throw new NoAccessException(userId);
-            }
-            subtaskEntity.TaskState = taskState;
-            _context.Subtasks.Update(subtaskEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<SubtaskDTO>(subtaskEntity);
-        }
-
-        public async Task<SubtaskDTO> ApproveSubtask(int subtaskId, int userId)
-        {
-            var subtaskEntity = await _context
-                .Subtasks
-                .FirstOrDefaultAsync(subtask => subtask.Id == subtaskId);
-            if (subtaskEntity is null)
-            {
-                throw new NotFoundException(nameof(Subtask), subtaskId);
-            }
-            var taskEntity = await _context
-                .Tasks
-                .FirstOrDefaultAsync(task => task.Id == subtaskEntity.TaskId);
-            if (taskEntity is null)
-            {
-                throw new NotFoundException(nameof(ProjectTask), subtaskEntity.TaskId);
-            }
-            var projectEntity = await _context
-                .Projects
-                .FirstOrDefaultAsync(project => project.Id == taskEntity.ProjectId);
-            if (projectEntity is null)
-            {
-                throw new NotFoundException(nameof(Project), taskEntity.ProjectId);
-            }
-            if (projectEntity.AuthorId != userId)
-            {
-                throw new NoAccessException(userId);
-            }
-            subtaskEntity.TaskState = TaskState.Approved;
-            _context.Subtasks.Update(subtaskEntity);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<SubtaskDTO>(subtaskEntity);
-        }
-
         public async Task DeleteTask(int taskId, int userId)
         {
             var taskEntity = await _context
@@ -428,38 +297,6 @@ namespace BAHelper.BLL.Services
             projectEntity.Hours -= taskEntity.Hours;
             _context.Projects.Update(projectEntity);
             _context.Tasks.Remove(taskEntity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteSubtask(int subtaskId, int userId)
-        {
-            var subtaskEntity = await _context
-                .Subtasks
-                .FirstOrDefaultAsync(subtask => subtask.Id == subtaskId);
-            if (subtaskEntity is null)
-            {
-                throw new NotFoundException(nameof(Subtask), subtaskId);
-            }
-            var taskEntity = await _context
-                .Tasks
-                .FirstOrDefaultAsync(task => task.Id == subtaskEntity.TaskId);
-            if (taskEntity is null)
-            {
-                throw new NotFoundException(nameof(ProjectTask), subtaskEntity.TaskId);
-            }
-            var projectEntity = await _context
-                .Projects
-                .FirstOrDefaultAsync(project => project.Id == taskEntity.ProjectId);
-            if (projectEntity is null)
-            {
-                throw new NotFoundException(nameof(Project), taskEntity.ProjectId);
-            }
-
-            if (projectEntity.AuthorId != userId)
-            {
-                throw new NoAccessException(userId);
-            }    
-            _context.Subtasks.Remove(subtaskEntity);
             await _context.SaveChangesAsync();
         }
     }

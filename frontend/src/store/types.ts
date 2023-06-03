@@ -90,7 +90,6 @@ export interface TaskDto {
   canEditState: boolean;
   users: UserDto[];
   tags: TaskTopic[];
-  subtasks: SubtaskDto[];
 }
 
 export interface PostTaskDto {
@@ -129,17 +128,6 @@ export interface PutTaskStateDto {
 
 export interface PutTaskApproveDto {
   taskId: number;
-}
-
-/**
- * @description - SubTask
- */
-export interface SubtaskDto {
-  id: number;
-  taskId: number;
-  name: string;
-  // deadline: Date;
-  taskState: TaskState;
 }
 
 export interface PostSubtaskDto {

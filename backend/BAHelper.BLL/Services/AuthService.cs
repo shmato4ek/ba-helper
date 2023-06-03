@@ -7,14 +7,8 @@ using BAHelper.Common.DTOs.User;
 using BAHelper.Common.Security;
 using BAHelper.DAL.Context;
 using BAHelper.DAL.Entities;
-using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BAHelper.BLL.Services
 {
@@ -53,38 +47,9 @@ namespace BAHelper.BLL.Services
 
         public async Task<TokenDTO> GenerateAccessToken(int id, string userName, string userEmail)
         {
-            //string refreshToken = _jwtFactory.GenerateRefreshToken();
-
-            //_context.RefreshTokens.Add(new RefreshToken
-            //{
-            //    Token = refreshToken,
-            //    UserId = id
-            //});
-
             await _context.SaveChangesAsync();
-
             string accessToken = await _jwtFactory.GenerateAccessToken(id, userName, userEmail);
-
-            //return new TokenDTO(accessToken, refreshToken);
             return new TokenDTO(accessToken);
         }
-
-        //public async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(ExternalAuthDto externalAuth)
-        //{
-        //    try
-        //    {
-        //        string clientId = _configuration["GoogleClientId"];
-        //        var settings = new GoogleJsonWebSignature.ValidationSettings()
-        //        {
-        //            Audience = new List<string>() { clientId }
-        //        };
-        //        var payload = await GoogleJsonWebSignature.ValidateAsync(externalAuth.IdToken, settings);
-        //        return payload;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return null;
-        //    }
-        //}
     }
 }

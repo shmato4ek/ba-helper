@@ -1,5 +1,4 @@
-﻿using BAHelper.Common.DTOs.Subtask;
-using BAHelper.Common.DTOs.User;
+﻿using BAHelper.Common.DTOs.User;
 
 namespace BAHelper.Common.DTOs.ProjectTask
 {
@@ -13,7 +12,6 @@ namespace BAHelper.Common.DTOs.ProjectTask
         public bool CanEditState { get; set; } = false;
         public List<int>? Tags { get; set; }
         public List<UserInfoDTO>? Users { get; set; }
-        public List<SubtaskDTO>? Subtasks { get; set; }
         public int TaskState { get; set; }
     }
 }
