@@ -34,6 +34,7 @@ export const globals = {
       user: '/api/project/user',
       userOwn: '/api/project/user/own',
       stats: '/api/project/statistics',
+      statsV2: '/api/project/statistics/dbscan',
     },
     task: {
       _: '/api/task',

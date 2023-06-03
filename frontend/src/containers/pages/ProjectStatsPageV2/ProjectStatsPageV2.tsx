@@ -10,7 +10,7 @@ import * as _ from 'lodash'
 import ProjectClusterInfo from '../../../components/ProjectClusterInfo/ProjectClusterInfo';
 import {ClusterType} from "../../../store/types";
 
-const ProjectStatsPage = () => {
+const ProjectStatsPageV2 = () => {
   const dispatch = useDispatch();
   const currentProjectStats = useSelector((state: AppState) => state.currentProjectStats);
   const getProjectAction = useSelector((state: AppState) => state.actions.getProject);
@@ -23,7 +23,7 @@ const ProjectStatsPage = () => {
     if(!getProjectAction.loading && !currentProjectStats) {
       dispatch<AppAction>({ type: 'GET_PROJECT_STATISTICS', payload: {
           id: Number(projectId as any),
-          type: ClusterType.Regular
+          type: ClusterType.Dbscan
         }
       });
     }
@@ -40,4 +40,4 @@ const ProjectStatsPage = () => {
   );
 };
 
-export default ProjectStatsPage;
+export default ProjectStatsPageV2;
