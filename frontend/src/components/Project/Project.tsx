@@ -207,7 +207,7 @@ const Project: FC<Props> = (params) => {
             </Wrapper>
             <AlignCenter>
               {params.me.id === params.project.authorId &&
-                  <>
+                  <HorizontalGrid>
                       <Button buttonType='button' styleType='simple'>
                           <Link
                               to={`/projects/statistics/${params.project.id}`}
@@ -226,7 +226,7 @@ const Project: FC<Props> = (params) => {
                               }}
                           >Статистика DBScan</Link>
                       </Button>
-                  </>
+                  </HorizontalGrid>
               }
             </AlignCenter>
             <Footer>
