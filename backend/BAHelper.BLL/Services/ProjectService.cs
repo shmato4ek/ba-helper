@@ -247,6 +247,10 @@ namespace BAHelper.BLL.Services
             {
                 if (project.IsDeleted == true)
                 {
+                    if (project.Tasks.Count == 0)
+                    {
+                        project.Hours = 0;
+                    }
                     ownProjects.Add(project);
                 }
             }

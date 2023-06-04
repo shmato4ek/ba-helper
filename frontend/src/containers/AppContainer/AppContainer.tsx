@@ -64,7 +64,7 @@ const AppContainer = () => {
       <MainGrid>
         <HeaderContainer/>
         <Outlet />
-        <Footer>2023 production</Footer>
+        <Footer>2023</Footer>
       </MainGrid>
     </Page>
   );

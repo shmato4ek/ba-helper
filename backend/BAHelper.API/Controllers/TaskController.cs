@@ -50,7 +50,7 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectTaskService.ChangeTaskState(userId, task.TaskId, task.TaskState));
         }
 
-        [HttpDelete]
+        [HttpDelete("{taskId:int}")]
         public async Task<ActionResult> DeleteTask(int taskId)
         {
             var token = Request.Headers["x-auth-token"].ToString();

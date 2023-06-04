@@ -148,7 +148,7 @@ const PostUserStoryContainer: FC<Props> = ({
               )
             }
           >
-            Додати Acceptance Criteria
+            Додати Критерій прийняття
           </Button>
           <div></div>
           <Button
@@ -169,7 +169,7 @@ const PostUserStoryContainer: FC<Props> = ({
               )
             }
           >
-            Додати User Formula
+            Додати Формулу
           </Button>
         </Footer>
       </Card>
