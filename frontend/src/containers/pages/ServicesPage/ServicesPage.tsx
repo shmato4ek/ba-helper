@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Button from '../../../components/Button/Button';
 import Font from '../../../components/Font/Font';
 import { HeaderLink } from '../../../components/Header/Header'
+import {Link} from "react-router-dom";
 
 const FrontPageStyled = styled.div`
   display: grid;
@@ -61,7 +62,6 @@ type Props = {
 }
 
 const ServicesPage: FC<Props> = (params) => {
-
   
   return (
     <FrontPageStyled>
@@ -79,12 +79,12 @@ const ServicesPage: FC<Props> = (params) => {
             </GreenCard>
           </Button>
 
-          {/* <Button buttonType='button' styleType='none'>
-            <GreenCard>
-              <Icon type='diagram'/>
-              Створити діаграму
-            </GreenCard>
-          </Button>
+          {/*<Button buttonType='button' styleType='none'>*/}
+          {/*  <GreenCard>*/}
+          {/*    <Icon type='diagram'/>*/}
+          {/*    Створити діаграму*/}
+          {/*  </GreenCard>*/}
+          {/*</Button>*/}
 
           <Button buttonType='button' styleType='none'>
             <GreenCard>
@@ -96,9 +96,11 @@ const ServicesPage: FC<Props> = (params) => {
           <Button buttonType='button' styleType='none'>
             <GreenCard>
               <Icon type='text-file'/>
-              Створити план комунікації
+              <HeaderLink link="/communication-plan">
+                Створити план комунікації
+              </HeaderLink>
             </GreenCard>
-          </Button> */}
+          </Button>
         </List>
       </Services>
     </FrontPageStyled>

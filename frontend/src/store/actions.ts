@@ -26,7 +26,7 @@ import {
   RegisterDto,
   StatisticDataInfo,
   TaskDto,
-  UserDto
+  UserDto, DownloadCommunicationPlan
 } from './types';
 
 /* Action Types */
@@ -179,6 +179,11 @@ export const actionTypes = {
   DOCUMENT_DOWNLOAD: 'DOCUMENT_DOWNLOAD' as 'DOCUMENT_DOWNLOAD',
   DOCUMENT_DOWNLOAD_SUCCESS: 'DOCUMENT_DOWNLOAD_SUCCESS' as 'DOCUMENT_DOWNLOAD_SUCCESS',
   DOCUMENT_DOWNLOAD_FAILURE: 'DOCUMENT_DOWNLOAD_FAILURE' as 'DOCUMENT_DOWNLOAD_FAILURE',
+
+  // POST /api/download/plan
+  PLAN_DOWNLOAD: 'PLAN_DOWNLOAD' as 'PLAN_DOWNLOAD',
+  PLAN_DOWNLOAD_SUCCESS: 'PLAN_DOWNLOAD_SUCCESS' as 'PLAN_DOWNLOAD_SUCCESS',
+  PLAN_DOWNLOAD_FAILURE: 'PLAN_DOWNLOAD_FAILURE' as 'PLAN_DOWNLOAD_FAILURE',
 
   /** ui actions */
   SET_PROVIDER_INITIAL_VALUES: 'SET_PROVIDER_INITIAL_VALUES' as 'SET_PROVIDER_INITIAL_VALUES',
@@ -562,6 +567,20 @@ export interface DocumentDownloadFailure extends ErrorPayload {
   type: typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE;
 }
 
+export interface PlanDownload {
+  type: typeof actionTypes.PLAN_DOWNLOAD;
+  payload: DownloadCommunicationPlan;
+}
+
+export interface PlanDownloadSuccess {
+  type: typeof actionTypes.PLAN_DOWNLOAD_SUCCESS;
+  payload: string;
+}
+
+export interface PlanDownloadFailure extends ErrorPayload {
+  type: typeof actionTypes.PLAN_DOWNLOAD_FAILURE;
+}
+
 /** UI actions */
 export type FailureAppActionTypes =
   | typeof actionTypes.GET_ME_FAILURE
@@ -589,6 +608,7 @@ export type FailureAppActionTypes =
   | typeof actionTypes.GET_DOCUMENTS_FAILURE
   | typeof actionTypes.POST_DOCUMENT_FAILURE
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
+  | typeof actionTypes.PLAN_DOWNLOAD_FAILURE
   | typeof actionTypes.LOG_OUT_ENDUSER_FAILURE
   ;
 
@@ -619,6 +639,7 @@ export type FailureAppAction =
   | GetDocumentsFailure
   | PostDocumentFailure
   | DocumentDownloadFailure
+  | PlanDownloadFailure
   ;
 
 export type AppAction =
@@ -701,4 +722,7 @@ export type AppAction =
   | DocumentDownload
   | DocumentDownloadSuccess
   | DocumentDownloadFailure
+  | PlanDownload
+  | PlanDownloadSuccess
+  | PlanDownloadFailure
   ;

@@ -62,6 +62,18 @@ export interface EditPostProjectDto
   users: string;
 }
 
+export interface DownloadCommunicationPlan {
+  plan: Pick<CommunicationPlanDto, "description" | "frequency" | "channel" | "audience" | "organizer">[];
+}
+
+export interface CommunicationPlanDto {
+  description: string,
+  frequency: string,
+  channel: string,
+  audience: string,
+  organizer: string
+}
+
 export interface PutProjectDto
   extends Pick<
     PostProjectDto,

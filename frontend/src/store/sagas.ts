@@ -28,7 +28,7 @@ import {
   Register,
   RegisterSuccess,
   PutProjectUnarchive,
-  DeleteProject
+  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload
 } from './actions';
 import {ClusterType} from './types';
 import {LocalStorageService} from '../services/local-storage';
@@ -41,7 +41,7 @@ function* errorHandler(
   
 
   if (error.request && error.response) {
-    yield put<FailureAppAction>({
+    yield put<FailureAppAction>(<FailureAppAction>{
       type: actionType,
       payload: {
         errors: [error.response.data.message],
@@ -51,14 +51,14 @@ function* errorHandler(
     error instanceof TypeError &&
     /network request failed/gi.test(error.message)
   ) {
-    yield put<FailureAppAction>({
+    yield put<FailureAppAction>(<FailureAppAction>{
       type: actionType,
       payload: {
         errors: [ErrorCodes.SERVER_IS_UNAVAILABLE],
       },
     });
   } else {
-    yield put<FailureAppAction>({
+    yield put<FailureAppAction>(<FailureAppAction>{
       type: actionType,
       payload: {
         errors: [ErrorCodes.INTERNAL_FRONTEND_ERROR],
@@ -309,6 +309,8 @@ function* postProject(postProject: PostProject) {
     });
 
     postProject.navigate(`/projects/${response.data.id}`);
+
+    window.location.reload();
   } catch (error) {
     yield call(errorHandler, error, 'POST_PROJECT_FAILURE');
   }
@@ -571,6 +573,34 @@ function* documentDownload(documentDownload: DocumentDownload) {
   }
 }
 
+function* planDownload(planDownload: PlanDownload) {
+  try {
+    console.log('Plan download state action ' + JSON.stringify(planDownload));
+
+    const response: {
+      data: any;
+      blob: any;
+    } = yield call(() => {
+      return axios.post(`${globals.endpoint}${globals.paths.download.plan}`, planDownload.payload
+        // headers: {
+        //   'Content-Type': 'application/problem+json; charset=utf-8'
+        // }
+      );
+    });
+    console.log('@response');
+    console.log(JSON.stringify(response.data, null, 2));
+
+    window.open(`${globals.endpoint}${globals.paths.download.plan}`, '_blank');
+
+    yield put<AppAction>({
+      type: 'PLAN_DOWNLOAD_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'PLAN_DOWNLOAD_FAILURE');
+  }
+}
+
 export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.GET_ME, getMe);
   yield takeLeading(actionTypes.GET_ME_STATISTICS, getMeStatistics);
@@ -597,5 +627,6 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);
+  yield takeLeading(actionTypes.PLAN_DOWNLOAD, planDownload);
   yield takeLeading(actionTypes.LOG_OUT_ENDUSER, logout);
 };

@@ -6,7 +6,7 @@ export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
     if (is.localhost) {
-    return "https://clean-paws-think.loca.lt";
+    return "https://early-socks-drum.loca.lt";
     }
 
     // return 'http://localhost:5054';
@@ -49,7 +49,8 @@ export const globals = {
       subtaskApprove: '/api/task/subtask/approve',
     },
     download: {
-      _: '/api/download'
+      _: '/api/download',
+      plan: '/api/download/plan'
     }
   },
   fePaths: {
