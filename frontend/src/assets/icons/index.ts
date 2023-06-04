@@ -22,3 +22,7 @@ export { ReactComponent as EditPencilIcon } from './edit-pencil.svg';
 export { ReactComponent as SaveIcon } from './save.svg';
 
 export { ReactComponent as GreenPlusIcon } from './green-plus.svg';
+
+export { ReactComponent as ArchiveIcon } from './archive.svg';
+export { ReactComponent as TrashCanIcon } from './trash-can.svg';
+export { ReactComponent as ArrowUpIcon } from './arrow-up.svg';

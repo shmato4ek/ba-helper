@@ -3,7 +3,32 @@ import {call, put, takeLeading} from 'redux-saga/effects';
 import {ErrorCodes} from '../error';
 import {globals} from '../services/is';
 import {
-  actionTypes, AppAction, DeleteUser, DocumentDownload, FailureAppAction, FailureAppActionTypes, GetProject, GetProjectStatistics, Login, LoginSuccess, LogOut, PostDocument, PostProject, PostTask, PutProject, PutTask, PutTaskApprove, PutTaskAssign, PutTaskState, PutUser, Register, RegisterSuccess,
+  actionTypes,
+  AppAction,
+  DeleteUser,
+  DocumentDownload,
+  FailureAppAction,
+  FailureAppActionTypes,
+  GetProject,
+  GetProjectStatistics,
+  PutProjectArchive,
+  Login,
+  LoginSuccess,
+  LogOut,
+  PostDocument,
+  PostProject,
+  PostTask,
+  PutProject,
+  PutTask,
+  PutTaskApprove,
+  PutTaskAssign,
+  PutTaskState,
+  DeleteTask,
+  PutUser,
+  Register,
+  RegisterSuccess,
+  PutProjectUnarchive,
+  DeleteProject
 } from './actions';
 import {ClusterType} from './types';
 import {LocalStorageService} from '../services/local-storage';
@@ -250,6 +275,24 @@ function* getProjectsOwn() {
   }
 }
 
+function* getProjectsArchive() {
+  try {
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.get(`${globals.endpoint}${globals.paths.project.userArchive}`);
+    });
+
+    yield put<AppAction>({
+      type: 'GET_PROJECTS_ARCHIVE_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'GET_PROJECTS_ARCHIVE_FAILURE');
+  }
+}
+
+
 function* postProject(postProject: PostProject) {
   try {
     console.log('Post project action: ' + postProject);
@@ -288,6 +331,60 @@ function* putProject(putProject: PutProject) {
     });
   } catch (error) {
     yield call(errorHandler, error, 'PUT_PROJECT_FAILURE');
+  }
+}
+
+function* putProjectArchive(putProjectArchive: PutProjectArchive) {
+  try {
+    console.log('Archive project action: ' + putProjectArchive);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.put(`${globals.endpoint}${globals.paths.project.archive}/${putProjectArchive.payload.projectId}`);
+    });
+
+    yield put<AppAction>({
+      type: 'PUT_PROJECT_ARCHIVE_SUCCESS'
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'PUT_PROJECT_ARCHIVE_FAILURE');
+  }
+}
+
+function* putProjectUnarchive(putProjectUnarchive: PutProjectUnarchive) {
+  try {
+    console.log('Unarchive project action: ' + putProjectUnarchive);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.put(`${globals.endpoint}${globals.paths.project.restore}/${putProjectUnarchive.payload.projectId}`);
+    });
+
+    yield put<AppAction>({
+      type: 'PUT_PROJECT_UNARCHIVE_SUCCESS'
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'PUT_PROJECT_UNARCHIVE_FAILURE');
+  }
+}
+
+function* deleteProject(deleteProject: DeleteProject) {
+  try {
+    console.log('Delete project action: ' + deleteProject);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.delete(`${globals.endpoint}${globals.paths.project._}/${deleteProject.payload.projectId}`);
+    });
+
+    yield put<AppAction>({
+      type: 'DELETE_PROJECT_SUCCESS'
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'DELETE_PROJECT_FAILURE');
   }
 }
 
@@ -348,6 +445,23 @@ function* putTaskApprove(putTaskApprove: PutTaskApprove) {
   }
 }
 
+function* deleteTask(deleteTask: DeleteTask) {
+  try {
+    console.log('Delete task action: ' + deleteTask);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.delete(`${globals.endpoint}${globals.paths.task._}/${deleteTask.payload.taskId}`);
+    });
+
+    yield put<AppAction>({
+      type: 'DELETE_TASK_SUCCESS'
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'DELETE_TASK_FAILURE');
+  }
+}
 
 function* putTaskAssign(putTaskAssign: PutTaskAssign) {
   try {
@@ -468,13 +582,18 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.GET_PROJECT_STATISTICS, getProjectStatistics);
   yield takeLeading(actionTypes.GET_PROJECTS, getProjects);
   yield takeLeading(actionTypes.GET_PROJECTS_OWN, getProjectsOwn);
+  yield takeLeading(actionTypes.GET_PROJECTS_ARCHIVE, getProjectsArchive);
   yield takeLeading(actionTypes.POST_PROJECT, postProject);
   yield takeLeading(actionTypes.PUT_PROJECT, putProject);
+  yield takeLeading(actionTypes.PUT_PROJECT_ARCHIVE, putProjectArchive);
+  yield takeLeading(actionTypes.PUT_PROJECT_UNARCHIVE, putProjectUnarchive);
+  yield takeLeading(actionTypes.DELETE_PROJECT, deleteProject);
   yield takeLeading(actionTypes.POST_TASK, postTask);
   yield takeLeading(actionTypes.PUT_TASK, putTask);
   yield takeLeading(actionTypes.PUT_TASK_ASSIGN, putTaskAssign);
   yield takeLeading(actionTypes.PUT_TASK_STATE, putTaskState);
   yield takeLeading(actionTypes.PUT_TASK_APPROVE, putTaskApprove);
+  yield takeLeading(actionTypes.DELETE_TASK, deleteTask);
   yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);

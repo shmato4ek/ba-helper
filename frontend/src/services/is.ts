@@ -5,11 +5,11 @@ export const is = {
 export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
-    //if (is.localhost) {
-    //return "https://polite-games-tell.loca.lt";
-    //}
+    if (is.localhost) {
+    return "https://clean-paws-think.loca.lt";
+    }
 
-    return 'http://localhost:5054';
+    // return 'http://localhost:5054';
   })(),
   ports: {
     be: 5054,
@@ -33,8 +33,11 @@ export const globals = {
       _: '/api/project',
       user: '/api/project/user',
       userOwn: '/api/project/user/own',
+      userArchive: '/api/project/user/own/archive',
       stats: '/api/project/statistics',
       statsV2: '/api/project/statistics/dbscan',
+      archive: '/api/project/archive',
+      restore: '/api/project/restore'
     },
     task: {
       _: '/api/task',
@@ -53,6 +56,7 @@ export const globals = {
     services: 'services',
     myProjects: 'my-projects',
     ownedProjects: 'owned-projects',
+    archivedProjects: 'archived-projects',
   },
   restrictedFePaths: [] as string[]
 };

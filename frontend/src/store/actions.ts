@@ -2,6 +2,10 @@ import { NavigateFunction } from 'react-router';
 import {
   ClusterInfo,
   ClusterType,
+  DeleteTaskDto,
+  PutProjectArchiveDto,
+  PutProjectUnarchiveDto,
+  DeleteProjectDto,
   DocumentDto,
   LoginDto,
   Me,
@@ -66,6 +70,11 @@ export const actionTypes = {
   GET_PROJECTS_OWN_SUCCESS: 'GET_PROJECTS_OWN_SUCCESS' as 'GET_PROJECTS_OWN_SUCCESS',
   GET_PROJECTS_OWN_FAILURE: 'GET_PROJECTS_OWN_FAILURE' as 'GET_PROJECTS_OWN_FAILURE',
 
+  // GET /api/project/user/own/archive
+  GET_PROJECTS_ARCHIVE: 'GET_PROJECTS_ARCHIVE' as 'GET_PROJECTS_ARCHIVE',
+  GET_PROJECTS_ARCHIVE_SUCCESS: 'GET_PROJECTS_ARCHIVE_SUCCESS' as 'GET_PROJECTS_ARCHIVE_SUCCESS',
+  GET_PROJECTS_ARCHIVE_FAILURE: 'GET_PROJECTS_ARCHIVE_FAILURE' as 'GET_PROJECTS_ARCHIVE_FAILURE',
+
   // GET /api/project/user
   GET_PROJECTS: 'GET_PROJECTS' as 'GET_PROJECTS',
   GET_PROJECTS_SUCCESS: 'GET_PROJECTS_SUCCESS' as 'GET_PROJECTS_SUCCESS',
@@ -91,6 +100,21 @@ export const actionTypes = {
   PUT_PROJECT_SUCCESS: 'PUT_PROJECT_SUCCESS' as 'PUT_PROJECT_SUCCESS',
   PUT_PROJECT_FAILURE: 'PUT_PROJECT_FAILURE' as 'PUT_PROJECT_FAILURE',
 
+  // PUT /api/project/archive/:id
+  PUT_PROJECT_ARCHIVE: 'PUT_PROJECT_ARCHIVE' as 'PUT_PROJECT_ARCHIVE',
+  PUT_PROJECT_ARCHIVE_SUCCESS: 'PUT_PROJECT_ARCHIVE_SUCCESS' as 'PUT_PROJECT_ARCHIVE_SUCCESS',
+  PUT_PROJECT_ARCHIVE_FAILURE: 'PUT_PROJECT_ARCHIVE_FAILURE' as 'PUT_PROJECT_ARCHIVE_FAILURE',
+
+  // PUT /api/project/restore/:id
+  PUT_PROJECT_UNARCHIVE: 'PUT_PROJECT_UNARCHIVE' as 'PUT_PROJECT_UNARCHIVE',
+  PUT_PROJECT_UNARCHIVE_SUCCESS: 'PUT_PROJECT_UNARCHIVE_SUCCESS' as 'PUT_PROJECT_UNARCHIVE_SUCCESS',
+  PUT_PROJECT_UNARCHIVE_FAILURE: 'PUT_PROJECT_UNARCHIVE_FAILURE' as 'PUT_PROJECT_UNARCHIVE_FAILURE',
+
+  // DELETE /api/project
+  DELETE_PROJECT: 'DELETE_PROJECT' as 'DELETE_PROJECT',
+  DELETE_PROJECT_SUCCESS: 'DELETE_PROJECT_SUCCESS' as 'DELETE_PROJECT_SUCCESS',
+  DELETE_PROJECT_FAILURE: 'DELETE_PROJECT_FAILURE' as 'DELETE_PROJECT_FAILURE',
+
   // POST /api/task
   POST_TASK: 'POST_TASK' as 'POST_TASK',
   POST_TASK_SUCCESS: 'POST_TASK_SUCCESS' as 'POST_TASK_SUCCESS',
@@ -115,6 +139,11 @@ export const actionTypes = {
   PUT_TASK_APPROVE: 'PUT_TASK_APPROVE' as 'PUT_TASK_APPROVE',
   PUT_TASK_APPROVE_SUCCESS: 'PUT_TASK_APPROVE_SUCCESS' as 'PUT_TASK_APPROVE_SUCCESS',
   PUT_TASK_APPROVE_FAILURE: 'PUT_TASK_APPROVE_FAILURE' as 'PUT_TASK_APPROVE_FAILURE',
+
+  // DELETE /api/task/:id
+  DELETE_TASK: 'DELETE_TASK' as 'DELETE_TASK',
+  DELETE_TASK_SUCCESS: 'DELETE_TASK_SUCCESS' as 'DELETE_TASK_SUCCESS',
+  DELETE_TASK_FAILURE: 'DELETE_TASK_FAILURE' as 'DELETE_TASK_FAILURE',
 
   // POST /api/task/subtask
   POST_SUBTASK: 'POST_SUBTASK' as 'POST_SUBTASK',
@@ -299,6 +328,19 @@ export interface GetProjectsOwnFailure extends ErrorPayload {
   type: typeof actionTypes.GET_PROJECTS_OWN_FAILURE;
 }
 
+export interface GetProjectsArchive {
+  type: typeof actionTypes.GET_PROJECTS_ARCHIVE
+}
+
+export interface GetProjectsArchiveSuccess {
+  type: typeof actionTypes.GET_PROJECTS_ARCHIVE_SUCCESS;
+  payload: ProjectDto[];
+}
+
+export interface GetProjectsArchiveFailure extends ErrorPayload {
+  type: typeof actionTypes.GET_PROJECTS_ARCHIVE_FAILURE;
+}
+
 export interface GetProject {
   type: typeof actionTypes.GET_PROJECT;
   payload: { id: number; }
@@ -354,6 +396,45 @@ export interface PutProjectSuccess {
 
 export interface PutProjectFailure extends ErrorPayload {
   type: typeof actionTypes.PUT_PROJECT_FAILURE;
+}
+
+export interface PutProjectArchive {
+  type: typeof actionTypes.PUT_PROJECT_ARCHIVE;
+  payload: PutProjectArchiveDto;
+}
+
+export interface PutProjectArchiveSuccess {
+  type: typeof actionTypes.PUT_PROJECT_ARCHIVE_SUCCESS;
+}
+
+export interface PutProjectArchiveFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_PROJECT_ARCHIVE_FAILURE;
+}
+
+export interface PutProjectUnarchive {
+  type: typeof actionTypes.PUT_PROJECT_UNARCHIVE;
+  payload: PutProjectUnarchiveDto;
+}
+
+export interface PutProjectUnarchiveSuccess {
+  type: typeof actionTypes.PUT_PROJECT_UNARCHIVE_SUCCESS;
+}
+
+export interface PutProjectUnarchiveFailure extends ErrorPayload {
+  type: typeof actionTypes.PUT_PROJECT_UNARCHIVE_FAILURE;
+}
+
+export interface DeleteProject {
+  type: typeof actionTypes.DELETE_PROJECT;
+  payload: DeleteProjectDto;
+}
+
+export interface DeleteProjectSuccess {
+  type: typeof actionTypes.DELETE_PROJECT_SUCCESS;
+}
+
+export interface DeleteProjectFailure extends ErrorPayload {
+  type: typeof actionTypes.DELETE_PROJECT_FAILURE;
 }
 
 export interface PostTask {
@@ -426,6 +507,19 @@ export interface PutTaskApproveFailure extends ErrorPayload {
   type: typeof actionTypes.PUT_TASK_APPROVE_FAILURE;
 }
 
+export interface DeleteTask {
+  type: typeof actionTypes.DELETE_TASK;
+  payload: DeleteTaskDto;
+}
+
+export interface DeleteTaskSuccess {
+  type: typeof actionTypes.DELETE_TASK_SUCCESS;
+}
+
+export interface DeleteTaskFailure extends ErrorPayload {
+  type: typeof actionTypes.DELETE_TASK_FAILURE;
+}
+
 export interface GetDocuments {
   type: typeof actionTypes.GET_DOCUMENTS;
 }
@@ -478,15 +572,20 @@ export type FailureAppActionTypes =
   | typeof actionTypes.LOGIN_FAILURE
   | typeof actionTypes.GET_PROJECTS_FAILURE
   | typeof actionTypes.GET_PROJECTS_OWN_FAILURE
+  | typeof actionTypes.GET_PROJECTS_ARCHIVE_FAILURE
   | typeof actionTypes.GET_PROJECT_FAILURE
   | typeof actionTypes.GET_PROJECT_STATISTICS_FAILURE
   | typeof actionTypes.POST_PROJECT_FAILURE
   | typeof actionTypes.PUT_PROJECT_FAILURE
+  | typeof actionTypes.PUT_PROJECT_ARCHIVE_FAILURE
+  | typeof actionTypes.PUT_PROJECT_UNARCHIVE_FAILURE
+  | typeof actionTypes.DELETE_PROJECT_FAILURE
   | typeof actionTypes.POST_TASK_FAILURE
   | typeof actionTypes.PUT_TASK_FAILURE
   | typeof actionTypes.PUT_TASK_ASSIGN_FAILURE
   | typeof actionTypes.PUT_TASK_STATE_FAILURE
   | typeof actionTypes.PUT_TASK_APPROVE_FAILURE
+  | typeof actionTypes.DELETE_TASK_FAILURE
   | typeof actionTypes.GET_DOCUMENTS_FAILURE
   | typeof actionTypes.POST_DOCUMENT_FAILURE
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
@@ -503,19 +602,23 @@ export type FailureAppAction =
   | LogOutFailure
   | GetProjectsFailure
   | GetProjectsOwnFailure
+  | GetProjectsArchiveFailure
   | GetProjectFailure
   | GetProjectStatisticsFailure
   | PostProjectFailure
   | PutProjectFailure
+  | PutProjectArchiveFailure
+  | PutProjectUnarchiveFailure
+  | DeleteProjectFailure
   | PostTaskFailure
   | PutTaskFailure
   | PutTaskAssignFailure
   | PutTaskStateFailure
   | PutTaskApproveFailure
+  | DeleteTaskFailure
   | GetDocumentsFailure
   | PostDocumentFailure
   | DocumentDownloadFailure
-  | LogOutFailure
   ;
 
 export type AppAction =
@@ -547,6 +650,9 @@ export type AppAction =
   | GetProjectsOwn
   | GetProjectsOwnSuccess
   | GetProjectsOwnFailure
+  | GetProjectsArchive
+  | GetProjectsArchiveSuccess
+  | GetProjectsArchiveFailure
   | GetProject
   | GetProjectSuccess
   | GetProjectFailure
@@ -559,6 +665,15 @@ export type AppAction =
   | PutProject
   | PutProjectSuccess
   | PutProjectFailure
+  | PutProjectArchive
+  | PutProjectArchiveSuccess
+  | PutProjectArchiveFailure
+  | PutProjectUnarchive
+  | PutProjectUnarchiveSuccess
+  | PutProjectUnarchiveFailure
+  | DeleteProject
+  | DeleteProjectSuccess
+  | DeleteProjectFailure
   | PostTask
   | PostTaskSuccess
   | PostTaskFailure
@@ -574,6 +689,9 @@ export type AppAction =
   | PutTaskApprove
   | PutTaskApproveSuccess
   | PutTaskApproveFailure
+  | DeleteTask
+  | DeleteTaskSuccess
+  | DeleteTaskFailure
   | GetDocuments
   | GetDocumentsSuccess
   | GetDocumentsFailure
@@ -583,7 +701,4 @@ export type AppAction =
   | DocumentDownload
   | DocumentDownloadSuccess
   | DocumentDownloadFailure
-  | LogOut
-  | LogOutSuccess
-  | LogOutFailure
   ;

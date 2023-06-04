@@ -15,7 +15,7 @@ import {
   UserDto
 } from '../../store/types';
 import { validateStraight } from '../../yup';
-import { PutTask, PutTaskApprove, PutTaskAssign, PutTaskState } from '../../store/actions';
+import {DeleteTask, PutTask, PutTaskApprove, PutTaskAssign, PutTaskState} from '../../store/actions';
 import { TD, TDWhite, TR } from '../../components/Project/Project';
 import { DateTime } from 'luxon';
 import { Formik, FormikProps } from 'formik';
@@ -111,6 +111,17 @@ const TaskContainer = ({
       payload: {
         taskId: task.id,
         email,
+      }
+    })
+  }, [dispatch, task.id]);
+
+  const onDelete = useCallback(() => {
+    console.log('Task deleted');
+
+    dispatch<DeleteTask>({
+      type: 'DELETE_TASK',
+      payload: {
+        taskId: task.id
       }
     })
   }, [dispatch, task.id]);
@@ -214,6 +225,13 @@ const TaskContainer = ({
                   <Icon type='edit-pencil' style={{width: 30, height: 30 }} />
                 </Button>
           )}
+          </TDWhite>
+          <TDWhite>
+            {(canEdit || canEditState) && isEditMode && (
+                <Button buttonType='button' styleType='none' onClick={onDelete as any}>
+                    <Icon type='trash-can' style={{width: 30, height: 30 }} />
+                </Button>
+            )}
           </TDWhite>
         </TR>
       </>

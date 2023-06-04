@@ -30,6 +30,7 @@ export const AlphaProject: ProjectDto  = {
   tasks: [],
   users: [],
   deadline: '2023-05-02T05:34:45.151Z',
+  archivedDate: null,
 };
 
 export const BetaProject: ProjectDto = {
@@ -44,4 +45,5 @@ export const BetaProject: ProjectDto = {
   tasks: [],
   users: [],
   deadline: '2023-05-02T05:34:45.151Z',
+  archivedDate: null,
 };

@@ -21,6 +21,7 @@ export default createBrowserRouter(
       {/* <Route path="services" element={<ServicesPage />} /> */}
       <Route path="my-projects" element={<ProjectsPage />} />
       <Route path="owned-projects" element={<ProjectsPage />} />
+      <Route path="archived-projects" element={<ProjectsPage />} />
       <Route path="projects/:projectId" element={<ProjectPage />} />
       <Route path="projects/statistics/:projectId" element={<ProjectStatsPage />} />
       <Route path="projects/statistics/dbscan/:projectId" element={<ProjectStatsPageV2 />} />

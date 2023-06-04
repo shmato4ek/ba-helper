@@ -10,6 +10,7 @@ export enum ProjectDtoFields {
   id = "id",
   projectName = "projectName",
   deadline = "deadline",
+  archivedDate = "archivedDate",
   hours = "hours",
   taskCount = "taskCount",
   authorName = "authorName",
@@ -21,6 +22,7 @@ export enum ProjectDtoFields {
 export interface ProjectDto {
   id: number;
   deadline: string;
+  archivedDate: string | null;
   authorId: number; // Hide since it's not needed
   authorName: string;
   description: string; // Post MVP
@@ -66,6 +68,18 @@ export interface PutProjectDto
     "deadline" | "projectName" | "description" | "users"
   > {
   id: number;
+}
+
+export interface PutProjectArchiveDto {
+  projectId: number;
+}
+
+export interface PutProjectUnarchiveDto {
+  projectId: number;
+}
+
+export interface DeleteProjectDto {
+  projectId: number;
 }
 
 /**
@@ -127,6 +141,10 @@ export interface PutTaskStateDto {
 }
 
 export interface PutTaskApproveDto {
+  taskId: number;
+}
+
+export interface DeleteTaskDto {
   taskId: number;
 }
 
@@ -370,6 +388,7 @@ export interface EditRegisterDto {
 export enum ServiceRoutes {
   OWNED_PROJECTS = "/owned-projects",
   MY_PROJECTS = "/my-projects",
+  ARCHIVED_PROJECTS = "/archived-projects"
 }
 
 export type CreateErrorObject<T extends { [key: string]: any }> = {
