@@ -70,7 +70,7 @@ namespace BAHelper.API.Controllers
             return Ok(await _projectService.UpdateProject(updatedProject, userId));
         }
 
-        [HttpPut("archive")]
+        [HttpPut("archive/{projectId:int}")]
         public async Task<ActionResult> MoveToArchive(int projectId)
         {
             var token = Request.Headers["x-auth-token"].ToString();
@@ -79,7 +79,7 @@ namespace BAHelper.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{projectId:int}")]
         public async Task<ActionResult> DeleteProject(int projectId)
         {
             var token = Request.Headers["x-auth-token"].ToString();
@@ -104,7 +104,7 @@ namespace BAHelper.API.Controllers
             return Ok(await _dbscan.Cluster(projectId, userId));
         }
 
-        [HttpPut("restore")]
+        [HttpPut("restore/{projectId:int}")]
         public async Task<ActionResult> RestoreProject(int projectId)
         {
             var token = Request.Headers["x-auth-token"].ToString();

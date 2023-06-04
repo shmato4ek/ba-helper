@@ -169,7 +169,6 @@ const PostDocument: FC<Props> = (params) => {
                     </Button>
                   </AlignCenter>
                   <Header>Користувацькі історії:</Header>
-                  <b>Створені користувацькі історії</b>
                   {params.userStories.map((userStory, index) => {
                     return <PostUserStoryContainer 
                       userStoryIndex={index}
@@ -190,7 +189,7 @@ const PostDocument: FC<Props> = (params) => {
                           ])
                         }
                       >
-                      Додати Юзер Сторі
+                      Додати Користувацьку історію
                     </Button>
                     <div></div>
                     <Button

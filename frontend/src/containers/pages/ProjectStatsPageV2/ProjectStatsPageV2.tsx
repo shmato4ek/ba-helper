@@ -16,9 +16,6 @@ const ProjectStatsPageV2 = () => {
   const getProjectAction = useSelector((state: AppState) => state.actions.getProject);
   const { projectId } = useParams();
 
-  console.log('@currentProjectStats');
-  console.log(JSON.stringify(currentProjectStats, null, 2));
-
   useEffect(()=> {
     if(!getProjectAction.loading && !currentProjectStats) {
       dispatch<AppAction>({ type: 'GET_PROJECT_STATISTICS', payload: {

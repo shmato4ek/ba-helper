@@ -8,6 +8,7 @@ export class InterceptorService {
     Axios.defaults.baseURL = `${appConfig.host}${appConfig.apiBaseUrl}`;
 
     InterceptorService.addRequestInterceptor();
+    InterceptorService.addTimeInterceptor();
   }
 
   private static requestInterceptorId = -1;
@@ -22,5 +23,19 @@ export class InterceptorService {
         },
       );
     }
+  }
+
+  private static addTimeInterceptor(): void {
+    const axios = require('axios').default;
+
+    axios.interceptors.request.use( (x: { meta: { requestStartedAt?: any; }; }) => {
+        x.meta = x.meta || {}
+        x.meta.requestStartedAt = new Date().getTime();
+        return x;
+    }) 
+    axios.interceptors.response.use((x: { config: { url: any; meta: { requestStartedAt: number; }; }; }) => {
+      console.log(`Execution time for: ${x.config.url} - ${new Date().getTime() - x.config.meta.requestStartedAt} ms`)
+      return x;
+    })
   }
 }
