@@ -1,10 +1,20 @@
 import React from 'react';
 import {
   AddFileIcon,
+  ArchiveIcon, ArrowUpIcon,
   CalendarIcon,
   DiagramIcon,
   EditPencilIcon,
-  EyeIcon, FileIcon, GreenPlusIcon, LogoIcon, PeopleIcon, ProfileIcon, ProfileWhiteIcon, RaciIcon, SaveIcon, TextFileIcon,
+  EyeIcon,
+  FileIcon,
+  GreenPlusIcon,
+  LogoIcon,
+  PeopleIcon,
+  ProfileIcon,
+  ProfileWhiteIcon,
+  RaciIcon,
+  SaveIcon,
+  TextFileIcon, TrashCanIcon,
 } from '../../assets/icons';
 
 interface Props {
@@ -25,7 +35,10 @@ interface Props {
   | 'edit-pencil'
   | 'save'
   | 'green-plus'
-  | 'triangle';
+  | 'triangle'
+  | 'archive'
+  | 'trash-can'
+  | 'arrow-up';
   style?: React.CSSProperties;
   onClick?: () => any;
 }
@@ -60,6 +73,12 @@ const Icon = ({ type, style, onClick }: Props) => {
       return <EditPencilIcon style={style} onClick={onClick} />;
     case 'green-plus':
       return <GreenPlusIcon style={style} onClick={onClick} />;
+    case 'archive':
+      return <ArchiveIcon style={style} onClick={onClick} />;
+    case 'trash-can':
+      return <TrashCanIcon style={style} onClick={onClick} />;
+    case 'arrow-up':
+      return <ArrowUpIcon style={style} onClick={onClick} />;
     default:
       return <></>;
   }

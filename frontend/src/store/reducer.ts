@@ -75,6 +75,11 @@ export const RootReducerInitialState = {
       errors: null as string[] | null,
     },
 
+    getProjectsArchive: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
     getProjects: {
       loading: false as boolean,
       errors: null as string[] | null,
@@ -100,6 +105,21 @@ export const RootReducerInitialState = {
       errors: null as string[] | null,
     },
 
+    putProjectArchive: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    putProjectUnarchive: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    deleteProject: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
     postTask: {
       loading: false as boolean,
       errors: null as string[] | null,
@@ -121,6 +141,11 @@ export const RootReducerInitialState = {
     },
 
     putTaskApprove: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
+
+    deleteTask: {
       loading: false as boolean,
       errors: null as string[] | null,
     },
@@ -164,6 +189,7 @@ export const RootReducerInitialState = {
   meStatistics: null as StatisticDataInfo[] | null,
   projects: null as ProjectDto[] | null,
   projectsOwn: null as ProjectDto[] | null,
+  projectsArchive: null as ProjectDto[] | null,
   currentProject: null as ProjectDto | null,
   currentProjectStats: null as ClusterInfo[] | null,
   documents: null as DocumentDto[] | null,
@@ -327,6 +353,23 @@ export const RootReducer = produce(
         draft.actions.getProjects.loading = false;
         break;
 
+      case actionTypes.GET_PROJECTS_ARCHIVE:
+        console.log('actionTypes.GET_PROJECTS_ARCHIVE')
+        draft.actions.getProjectsArchive.errors = null;
+        draft.actions.getProjectsArchive.loading = true;
+        break;
+      case actionTypes.GET_PROJECTS_ARCHIVE_SUCCESS:
+        console.log('actionTypes.GET_PROJECTS_ARCHIVE_SUCCESS')
+        draft.projectsArchive = action.payload;
+        draft.actions.getProjectsArchive.errors = null;
+        draft.actions.getProjectsArchive.loading = false;
+        break;
+      case actionTypes.GET_PROJECTS_ARCHIVE_FAILURE:
+        console.log('actionTypes.GET_PROJECTS_ARCHIVE_FAILURE')
+        draft.actions.getProjectsArchive.errors = action.payload.errors;
+        draft.actions.getProjectsArchive.loading = false;
+        break;
+
       case actionTypes.GET_PROJECT:
         console.log('actionTypes.GET_PROJECT')
         draft.actions.getProject.errors = null;
@@ -393,6 +436,66 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_PROJECT_FAILURE')
         draft.actions.putProject.errors = action.payload.errors;
         draft.actions.putProject.loading = false;
+        break;
+
+      case actionTypes.PUT_PROJECT_ARCHIVE:
+        console.log('actionTypes.PUT_PROJECT_ARCHIVE')
+
+        draft.actions.putProjectArchive.errors = null;
+        draft.actions.putProjectArchive.loading = true;
+
+        break;
+      case actionTypes.PUT_PROJECT_ARCHIVE_SUCCESS:
+        console.log('actionTypes.PUT_PROJECT_ARCHIVE_SUCCESS')
+        draft.actions.putProjectArchive.errors = null;
+        draft.actions.putProjectArchive.loading = false;
+        window.location.reload()
+
+        break;
+      case actionTypes.PUT_PROJECT_ARCHIVE_FAILURE:
+        console.log('actionTypes.PUT_PROJECT_ARCHIVE_FAILURE')
+        draft.actions.putProjectArchive.errors = action.payload.errors;
+        draft.actions.putProjectArchive.loading = false;
+        break;
+
+      case actionTypes.PUT_PROJECT_UNARCHIVE:
+        console.log('actionTypes.PUT_PROJECT_UNARCHIVE')
+
+        draft.actions.putProjectUnarchive.errors = null;
+        draft.actions.putProjectUnarchive.loading = true;
+
+        break;
+      case actionTypes.PUT_PROJECT_UNARCHIVE_SUCCESS:
+        console.log('actionTypes.PUT_PROJECT_UNARCHIVE_SUCCESS')
+        draft.actions.putProjectUnarchive.errors = null;
+        draft.actions.putProjectUnarchive.loading = false;
+        window.location.reload()
+
+        break;
+      case actionTypes.PUT_PROJECT_UNARCHIVE_FAILURE:
+        console.log('actionTypes.PUT_PROJECT_UNARCHIVE_FAILURE')
+        draft.actions.putProjectUnarchive.errors = action.payload.errors;
+        draft.actions.putProjectUnarchive.loading = false;
+        break;
+
+      case actionTypes.DELETE_PROJECT:
+        console.log('actionTypes.DELETE_PROJECT')
+
+        draft.actions.deleteProject.errors = null;
+        draft.actions.deleteProject.loading = true;
+
+        break;
+      case actionTypes.DELETE_PROJECT_SUCCESS:
+        console.log('actionTypes.DELETE_PROJECT_SUCCESS')
+        draft.actions.deleteProject.errors = null;
+        draft.actions.deleteProject.loading = false;
+        window.location.reload()
+
+        break;
+      case actionTypes.DELETE_PROJECT_FAILURE:
+        console.log('actionTypes.DELETE_PROJECT_FAILURE')
+        draft.actions.deleteProject.errors = action.payload.errors;
+        draft.actions.deleteProject.loading = false;
         break;
 
       case actionTypes.POST_TASK:
@@ -484,6 +587,26 @@ export const RootReducer = produce(
         console.log('actionTypes.PUT_TASK_APPROVE_FAILURE')
         draft.actions.putTaskApprove.errors = action.payload.errors;
         draft.actions.putTaskApprove.loading = false;
+        break;
+
+      case actionTypes.DELETE_TASK:
+        console.log('actionTypes.DELETE_TASK')
+
+        draft.actions.deleteTask.errors = null;
+        draft.actions.deleteTask.loading = true;
+
+        break;
+      case actionTypes.DELETE_TASK_SUCCESS:
+        console.log('actionTypes.DELETE_TASK_SUCCESS')
+        draft.actions.deleteTask.errors = null;
+        draft.actions.deleteTask.loading = false;
+        window.location.reload()
+
+        break;
+      case actionTypes.DELETE_TASK_FAILURE:
+        console.log('actionTypes.DELETE_TASK_FAILURE')
+        draft.actions.deleteTask.errors = action.payload.errors;
+        draft.actions.deleteTask.loading = false;
         break;
 
       case actionTypes.GET_DOCUMENTS:

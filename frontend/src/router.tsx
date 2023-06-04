@@ -13,14 +13,17 @@ import PostDocumentPage from "./containers/pages/PostDocumentPage/PostDocumentPa
 import ProjectStatsPage from "./containers/pages/ProjectStatsPage/ProjectStatsPage";
 import ProfileStatisticsPage from "./containers/pages/ProfileStatisticsPage/ProfileStatisticsPage";
 import ProjectStatsPageV2 from "./containers/pages/ProjectStatsPageV2/ProjectStatsPageV2";
+import CommunicationPlanPage from "./containers/pages/CommunicationPlanPage/CreateCommunicationPlan";
 
 export default createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<AppContainer />}>
       <Route index element={<FrontPage />} />
-      {/* <Route path="services" element={<ServicesPage />} /> */}
+      <Route path="services" element={<ServicesPage />} />
+      <Route path="communication-plan" element={<CommunicationPlanPage />} />
       <Route path="my-projects" element={<ProjectsPage />} />
       <Route path="owned-projects" element={<ProjectsPage />} />
+      <Route path="archived-projects" element={<ProjectsPage />} />
       <Route path="projects/:projectId" element={<ProjectPage />} />
       <Route path="projects/statistics/:projectId" element={<ProjectStatsPage />} />
       <Route path="projects/statistics/dbscan/:projectId" element={<ProjectStatsPageV2 />} />

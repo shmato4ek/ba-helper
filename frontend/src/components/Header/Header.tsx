@@ -52,9 +52,9 @@ const Header: FC<Props> = (params) => {
       <Link to='/'>
         <Icon type='logo' />
       </Link>
-      {/* <Button buttonType='button' styleType='none'>
+      <Button buttonType='button' styleType='none'>
         <HeaderLink link='services'>Сервіси</HeaderLink>
-      </Button>  */}
+      </Button>
       <Button buttonType='button' styleType='none'>
         <HeaderLink link='my-projects'>Поточні проєкти</HeaderLink>
       </Button> 

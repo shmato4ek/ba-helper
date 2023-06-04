@@ -33,3 +33,11 @@ export const AlignCenter = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+export const AlignLeft = styled.div`
+  padding: 1rem 6rem 0rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+`;
