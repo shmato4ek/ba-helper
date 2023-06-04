@@ -1,7 +1,6 @@
 ﻿using BAHelper.BLL.JWT;
 using BAHelper.BLL.Services;
 using BAHelper.Common.DTOs.ProjectTask;
-using BAHelper.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BAHelper.API.Controllers
@@ -65,6 +64,13 @@ namespace BAHelper.API.Controllers
             var token = Request.Headers["x-auth-token"].ToString();
             var userId = _jwtFactory.GetValueFromToken(token);
             await _projectTaskService.ApproveTask(task.TaskId, userId);
+            return Ok();
+        }
+
+        [HttpGet("rnd-tasks")]
+        public async Task<ActionResult> RandomTasks(int projectId, int count)
+        {
+            await _projectTaskService.AddRandomTasks(projectId, count);
             return Ok();
         }
     }

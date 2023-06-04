@@ -205,7 +205,7 @@ namespace BAHelper.BLL.Services
                 throw new NoAccessException(userId);
             }
             taskEntity.TaskState = TaskState.Approved;
-            taskEntity.TaskEnd = DateTime.UtcNow;
+            //taskEntity.TaskEnd = DateTime.UtcNow;
             _context.Tasks.Update(taskEntity);
             _context.SaveChanges();
             var userEntityId = taskEntity.Users.FirstOrDefault().Id;
@@ -239,7 +239,33 @@ namespace BAHelper.BLL.Services
                 newStatistic.TaskTopic = topic;
                 var timeDifference = (TimeSpan)(taskEntity.TaskEnd - taskEntity.TaskStart);
                 var diff = timeDifference.TotalHours;
-                double taskQuality = 50 + (taskEntity.Hours - diff)/ taskEntity.Hours*50;
+                double K;
+                if (diff <= 0.5*taskEntity.Hours)
+                {
+                    K = 1;
+                }
+                else if (diff < taskEntity.Hours)
+                {
+                    K = (taskEntity.Hours - diff) / taskEntity.Hours;
+                }
+                else
+                {
+                    K = 0;
+                }
+                double C;
+                if (taskEntity.Hours >= 60)
+                {
+                    C = 1;
+                }
+                else if (taskEntity.Hours >= 40)
+                {
+                    C = 0.9;
+                }
+                else
+                {
+                    C = 0.8;
+                }
+                double taskQuality = 100 * K * C;
 
                 if (taskQuality >= 0)
                 {
@@ -298,6 +324,29 @@ namespace BAHelper.BLL.Services
             _context.Projects.Update(projectEntity);
             _context.Tasks.Remove(taskEntity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddRandomTasks(int projectId, int count)
+        {
+            var projectEntity = await _context
+                .Projects
+                .Include(p => p.Tasks)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+                var rnd = new Random();
+                List<double> randomHour = new List<double>(){40, 45, 50, 55, 60};
+            for (int i = 0; i < count; i++)
+            {
+                NewProjectTaskDTO newTask = new NewProjectTaskDTO();
+                newTask.Deadline = projectEntity.Deadline;
+                newTask.Description = "";
+                newTask.Hours = randomHour[rnd.Next(randomHour.Count)];
+                newTask.ProjectId = projectId;
+                newTask.Tags = new List<TopicTag>() {(TopicTag)rnd.Next(8)};
+                newTask.TaskName = $"Завдання {i}";
+                projectEntity.Tasks.Add(_mapper.Map<ProjectTask>(newTask));
+                _context.Projects.Update(projectEntity);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
