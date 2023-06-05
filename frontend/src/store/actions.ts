@@ -26,7 +26,7 @@ import {
   RegisterDto,
   StatisticDataInfo,
   TaskDto,
-  UserDto, DownloadCommunicationPlan, RACIMatrixDto
+  UserDto, DownloadCommunicationPlan, RACIMatrixDto, DeleteDocumentDto
 } from './types';
 
 /* Action Types */
@@ -174,6 +174,11 @@ export const actionTypes = {
   POST_DOCUMENT: 'POST_DOCUMENT' as 'POST_DOCUMENT',
   POST_DOCUMENT_SUCCESS: 'POST_DOCUMENT_SUCCESS' as 'POST_DOCUMENT_SUCCESS',
   POST_DOCUMENT_FAILURE: 'POST_DOCUMENT_FAILURE' as 'POST_DOCUMENT_FAILURE',
+
+  // DELETE /api/document
+  DELETE_DOCUMENT: 'DELETE_DOCUMENT' as 'DELETE_DOCUMENT',
+  DELETE_DOCUMENT_SUCCESS: 'DELETE_DOCUMENT_SUCCESS' as 'DELETE_DOCUMENT_SUCCESS',
+  DELETE_DOCUMENT_FAILURE: 'DELETE_DOCUMENT_FAILURE' as 'DELETE_DOCUMENT_FAILURE',
 
   // GET /api/download
   DOCUMENT_DOWNLOAD: 'DOCUMENT_DOWNLOAD' as 'DOCUMENT_DOWNLOAD',
@@ -558,6 +563,19 @@ export interface PostDocumentFailure extends ErrorPayload {
   type: typeof actionTypes.POST_DOCUMENT_FAILURE;
 }
 
+export interface DeleteDocument {
+  type: typeof actionTypes.DELETE_DOCUMENT;
+  payload: DeleteDocumentDto;
+}
+
+export interface DeleteDocumentSuccess {
+  type: typeof actionTypes.DELETE_DOCUMENT_SUCCESS;
+}
+
+export interface DeleteDocumentFailure extends ErrorPayload {
+  type: typeof actionTypes.DELETE_DOCUMENT_FAILURE;
+}
+
 export interface DocumentDownload {
   type: typeof actionTypes.DOCUMENT_DOWNLOAD;
   payload: number;
@@ -626,6 +644,7 @@ export type FailureAppActionTypes =
   | typeof actionTypes.DELETE_TASK_FAILURE
   | typeof actionTypes.GET_DOCUMENTS_FAILURE
   | typeof actionTypes.POST_DOCUMENT_FAILURE
+  | typeof actionTypes.DELETE_DOCUMENT_FAILURE
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
   | typeof actionTypes.PLAN_DOWNLOAD_FAILURE
   | typeof actionTypes.LOG_OUT_ENDUSER_FAILURE
@@ -658,6 +677,7 @@ export type FailureAppAction =
   | DeleteTaskFailure
   | GetDocumentsFailure
   | PostDocumentFailure
+  | DeleteDocumentFailure
   | DocumentDownloadFailure
   | PlanDownloadFailure
   | RACIDownloadFailure
@@ -740,6 +760,9 @@ export type AppAction =
   | PostDocument
   | PostDocumentSuccess
   | PostDocumentFailure
+  | DeleteDocument
+  | DeleteDocumentSuccess
+  | DeleteDocumentFailure
   | DocumentDownload
   | DocumentDownloadSuccess
   | DocumentDownloadFailure

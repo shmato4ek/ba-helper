@@ -28,7 +28,7 @@ import {
   Register,
   RegisterSuccess,
   PutProjectUnarchive,
-  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload, RACIDownload
+  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload, RACIDownload, DeleteDocument
 } from './actions';
 import {ClusterType, RACIMatrixDto} from './types';
 import {LocalStorageService} from '../services/local-storage';
@@ -543,6 +543,24 @@ function* postDocument(postDocument: PostDocument) {
   }
 }
 
+function* deleteDocument(deleteDocument: DeleteDocument) {
+  try {
+    console.log('Delete document action: ' + deleteDocument);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.delete(`${globals.endpoint}${globals.paths.document._}/${deleteDocument.payload.documentId}`);
+    });
+
+    yield put<AppAction>({
+      type: 'DELETE_DOCUMENT_SUCCESS'
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'DELETE_DOCUMENT_FAILURE');
+  }
+}
+
 function* documentDownload(documentDownload: DocumentDownload) {
   try {
     console.log('Document download state action');
@@ -654,6 +672,7 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.DELETE_TASK, deleteTask);
   yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
+  yield takeLeading(actionTypes.DELETE_DOCUMENT, deleteDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);
   yield takeLeading(actionTypes.PLAN_DOWNLOAD, planDownload);
   yield takeLeading(actionTypes.RACI_DOWNLOAD, raciDownload);

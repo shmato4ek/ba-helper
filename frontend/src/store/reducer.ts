@@ -179,6 +179,11 @@ export const RootReducerInitialState = {
       loading: false as boolean,
       errors: null as string[] | null,
     },
+
+    deleteDocument: {
+      loading: false as boolean,
+      errors: null as string[] | null,
+    },
   },
 
   /**
@@ -642,6 +647,25 @@ export const RootReducer = produce(
         draft.actions.postDocument.loading = false;
         break;
 
+      case actionTypes.DELETE_DOCUMENT:
+        console.log('actionTypes.DELETE_DOCUMENT')
+
+        draft.actions.deleteDocument.errors = null;
+        draft.actions.deleteDocument.loading = true;
+
+        break;
+      case actionTypes.DELETE_DOCUMENT_SUCCESS:
+        console.log('actionTypes.DELETE_DOCUMENT_SUCCESS')
+        draft.actions.deleteDocument.errors = null;
+        draft.actions.deleteDocument.loading = false;
+        window.location.reload()
+
+        break;
+      case actionTypes.DELETE_DOCUMENT_FAILURE:
+        console.log('actionTypes.DELETE_DOCUMENT_FAILURE')
+        draft.actions.deleteDocument.errors = action.payload.errors;
+        draft.actions.deleteDocument.loading = false;
+        break;
       /* UI actions */
 
       default:

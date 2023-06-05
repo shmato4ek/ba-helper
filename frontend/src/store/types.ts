@@ -241,6 +241,10 @@ export interface DocumentDto {
   userStories: UserStory[];
 }
 
+export interface DeleteDocumentDto {
+  documentId: number;
+}
+
 export interface Glossary {
   id: number;
   documentId: number;
