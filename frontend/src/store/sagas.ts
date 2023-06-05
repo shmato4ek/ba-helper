@@ -28,9 +28,9 @@ import {
   Register,
   RegisterSuccess,
   PutProjectUnarchive,
-  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload
+  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload, RACIDownload
 } from './actions';
-import {ClusterType} from './types';
+import {ClusterType, RACIMatrixDto} from './types';
 import {LocalStorageService} from '../services/local-storage';
 
 function* errorHandler(
@@ -575,7 +575,7 @@ function* documentDownload(documentDownload: DocumentDownload) {
 
 function* planDownload(planDownload: PlanDownload) {
   try {
-    console.log('Plan download state action ' + JSON.stringify(planDownload));
+    console.log('Plan download action ' + JSON.stringify(planDownload));
 
     const response: {
       data: any;
@@ -598,6 +598,34 @@ function* planDownload(planDownload: PlanDownload) {
     });
   } catch (error) {
     yield call(errorHandler, error, 'PLAN_DOWNLOAD_FAILURE');
+  }
+}
+
+function* raciDownload(raciDownload: RACIDownload) {
+  try {
+    console.log('RACI download action ' + JSON.stringify(planDownload));
+
+    const response: {
+      data: any;
+      blob: any;
+    } = yield call(() => {
+      return axios.post(`${globals.endpoint}${globals.paths.download.raci}`, raciDownload.payload
+          // headers: {
+          //   'Content-Type': 'application/problem+json; charset=utf-8'
+          // }
+      );
+    });
+    console.log('@response');
+    console.log(JSON.stringify(response.data, null, 2));
+
+    window.open(`${globals.endpoint}${globals.paths.download.raci}`, '_blank');
+
+    yield put<AppAction>({
+      type: 'RACI_DOWNLOAD_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'RACI_DOWNLOAD_FAILURE');
   }
 }
 
@@ -628,5 +656,6 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);
   yield takeLeading(actionTypes.PLAN_DOWNLOAD, planDownload);
+  yield takeLeading(actionTypes.RACI_DOWNLOAD, raciDownload);
   yield takeLeading(actionTypes.LOG_OUT_ENDUSER, logout);
 };

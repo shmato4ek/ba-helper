@@ -377,7 +377,28 @@ export enum RACIStatus {
   Accountable,
   Consulted,
   Informed,
+  Unknown,
 }
+
+export const raciValues: RACIStatus[] = [0,1,2,3,4];
+
+export const raciStatusToName = (raci: RACIStatus) => {
+  switch (raci) {
+    case RACIStatus.Responsible:
+      return "Responsible";
+    case RACIStatus.Accountable:
+      return "Accountable";
+    case RACIStatus.Consulted:
+      return "Consulted";
+    case RACIStatus.Informed:
+      return "Informed";
+    case RACIStatus.Unknown:
+      return "-";
+
+    default:
+      return raci;
+  }
+};
 
 export interface LoginDto {
   email: string;

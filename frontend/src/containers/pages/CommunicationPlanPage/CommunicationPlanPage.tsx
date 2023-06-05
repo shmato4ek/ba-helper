@@ -88,7 +88,7 @@ const CommunicationPlanPage = () => {
             type: 'PLAN_DOWNLOAD',
             payload: value
         });
-    }, [dispatch]);
+    }, [dispatch, planState]);
 
     return (
         <AlignCenter>

@@ -26,7 +26,7 @@ import {
   RegisterDto,
   StatisticDataInfo,
   TaskDto,
-  UserDto, DownloadCommunicationPlan
+  UserDto, DownloadCommunicationPlan, RACIMatrixDto
 } from './types';
 
 /* Action Types */
@@ -184,6 +184,11 @@ export const actionTypes = {
   PLAN_DOWNLOAD: 'PLAN_DOWNLOAD' as 'PLAN_DOWNLOAD',
   PLAN_DOWNLOAD_SUCCESS: 'PLAN_DOWNLOAD_SUCCESS' as 'PLAN_DOWNLOAD_SUCCESS',
   PLAN_DOWNLOAD_FAILURE: 'PLAN_DOWNLOAD_FAILURE' as 'PLAN_DOWNLOAD_FAILURE',
+
+  // POST /api/download/raci
+  RACI_DOWNLOAD: 'RACI_DOWNLOAD' as 'RACI_DOWNLOAD',
+  RACI_DOWNLOAD_SUCCESS: 'RACI_DOWNLOAD_SUCCESS' as 'RACI_DOWNLOAD_SUCCESS',
+  RACI_DOWNLOAD_FAILURE: 'RACI_DOWNLOAD_FAILURE' as 'RACI_DOWNLOAD_FAILURE',
 
   /** ui actions */
   SET_PROVIDER_INITIAL_VALUES: 'SET_PROVIDER_INITIAL_VALUES' as 'SET_PROVIDER_INITIAL_VALUES',
@@ -581,6 +586,20 @@ export interface PlanDownloadFailure extends ErrorPayload {
   type: typeof actionTypes.PLAN_DOWNLOAD_FAILURE;
 }
 
+export interface RACIDownload {
+  type: typeof actionTypes.RACI_DOWNLOAD;
+  payload: RACIMatrixDto;
+}
+
+export interface RACIDownloadSuccess {
+  type: typeof actionTypes.RACI_DOWNLOAD_SUCCESS;
+  payload: string;
+}
+
+export interface RACIDownloadFailure extends ErrorPayload {
+  type: typeof actionTypes.RACI_DOWNLOAD_FAILURE;
+}
+
 /** UI actions */
 export type FailureAppActionTypes =
   | typeof actionTypes.GET_ME_FAILURE
@@ -610,6 +629,7 @@ export type FailureAppActionTypes =
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
   | typeof actionTypes.PLAN_DOWNLOAD_FAILURE
   | typeof actionTypes.LOG_OUT_ENDUSER_FAILURE
+  | typeof actionTypes.RACI_DOWNLOAD_FAILURE
   ;
 
 export type FailureAppAction =
@@ -640,6 +660,7 @@ export type FailureAppAction =
   | PostDocumentFailure
   | DocumentDownloadFailure
   | PlanDownloadFailure
+  | RACIDownloadFailure
   ;
 
 export type AppAction =
@@ -725,4 +746,7 @@ export type AppAction =
   | PlanDownload
   | PlanDownloadSuccess
   | PlanDownloadFailure
+  | RACIDownload
+  | RACIDownloadSuccess
+  | RACIDownloadFailure
   ;
