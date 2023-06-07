@@ -522,27 +522,6 @@ function* getDocuments() {
   }
 }
 
-function* postDocument(postDocument: PostDocument) {
-  try {
-    console.log('Post document state action');
-
-    const response: {
-      data: any
-    } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.document._}`, postDocument.payload);
-    });
-
-    yield put<AppAction>({
-      type: 'POST_DOCUMENT_SUCCESS',
-      payload: response.data
-    });
-
-    postDocument.navigate(`/documents`);
-  } catch (error) {
-    yield call(errorHandler, error, 'POST_DOCUMENT_FAILURE');
-  }
-}
-
 function* documentDownload(documentDownload: DocumentDownload) {
   try {
     console.log('Document download state action');
@@ -561,7 +540,6 @@ function* documentDownload(documentDownload: DocumentDownload) {
     console.log('@response');
     console.log(JSON.stringify(response.data, null, 2));
 
-
     window.open(`${globals.endpoint}${globals.paths.download._}/${documentDownload.payload}`, '_blank');
 
     yield put<AppAction>({
@@ -573,6 +551,28 @@ function* documentDownload(documentDownload: DocumentDownload) {
   }
 }
 
+function* postDocument(postDocument: PostDocument) {
+  try {
+    console.log('Post document state action');
+
+    const response: {
+      data: any;
+      blob: any;
+    } = yield call(() => {
+      return axios.post(`${globals.endpoint}${globals.paths.document._}`, postDocument.payload);
+    });
+
+    yield put<AppAction>({
+      type: 'POST_DOCUMENT_SUCCESS',
+      payload: response.data
+    });
+
+    postDocument.navigate(`/documents`);
+  } catch (error) {
+    yield call(errorHandler, error, 'POST_DOCUMENT_FAILURE');
+  }
+}
+
 function* planDownload(planDownload: PlanDownload) {
   try {
     console.log('Plan download state action ' + JSON.stringify(planDownload));
@@ -581,7 +581,7 @@ function* planDownload(planDownload: PlanDownload) {
       data: any;
       blob: any;
     } = yield call(() => {
-      return axios.post(`${globals.endpoint}${globals.paths.download.plan}`, planDownload.payload
+      return axios.post(`${globals.endpoint}${globals.paths.download.plan}`, planDownload.payload.plan
         // headers: {
         //   'Content-Type': 'application/problem+json; charset=utf-8'
         // }
@@ -589,6 +589,7 @@ function* planDownload(planDownload: PlanDownload) {
     });
     console.log('@response');
     console.log(JSON.stringify(response.data, null, 2));
+    console.log(JSON.stringify(typeof(response.blob)));
 
     window.open(`${globals.endpoint}${globals.paths.download.plan}`, '_blank');
 

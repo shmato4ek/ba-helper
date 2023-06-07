@@ -6,6 +6,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BAHelper.BLL.Services.Cache;
 
 namespace BAHelper.API.Extensions
 {
@@ -28,6 +29,7 @@ namespace BAHelper.API.Extensions
             services.AddScoped<MailService>();
             services.AddScoped<KMeansClasterizationService>();
             services.AddScoped<DbscanClasterization>();
+            services.AddSingleton<InMemoryCache>();
         }
 
         public static void RegisterAutoMapper(this IServiceCollection services)

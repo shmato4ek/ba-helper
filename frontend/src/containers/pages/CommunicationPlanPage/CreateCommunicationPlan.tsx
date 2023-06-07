@@ -78,6 +78,7 @@ const CommunicationPlanPage = () => {
     }
 
     const onPlanDownload = useCallback(() => {
+        console.log(JSON.stringify(planState));
         const value: DownloadCommunicationPlan = {
             plan: planState
         }
@@ -88,8 +89,31 @@ const CommunicationPlanPage = () => {
             type: 'PLAN_DOWNLOAD',
             payload: value
         });
-    }, [dispatch]);
+    }, [dispatch, planState]);
 
+
+    /*
+  const onSubmit = useCallback(
+    (values: PostDocumentDto) => {
+      const postDocumentDto: PostDocumentDto = {
+        name: values.name,
+        projectAim: values.projectAim,
+        glossaries: glossaries,
+        userStories: userStories,
+      };
+
+      console.log("Create Project Page values submit");
+      console.log(JSON.stringify(postDocumentDto, null, 2));
+
+      dispatch<PostDocumentAction>({
+        type: "POST_DOCUMENT",
+        payload: postDocumentDto,
+        navigate,
+      });
+    },
+    [dispatch, navigate, glossaries, userStories]
+  );
+    */
     return (
         <AlignCenter>
             <h1 style={{marginTop: "2rem"}}>План комунікації</h1>

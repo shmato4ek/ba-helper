@@ -50,7 +50,7 @@ namespace BAHelper.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{documentId:int}")]
         public async Task<ActionResult> DeleteDocument(int documentId)
         {
             var token = Request.Headers["x-auth-token"].ToString();

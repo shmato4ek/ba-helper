@@ -91,17 +91,17 @@ namespace BAHelper.API.Controllers
         [HttpGet("statistics/{projectId:int}")]
         public async Task<ActionResult> KMeansCluster(int projectId)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _clasterizationService.Cluster(projectId, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _clasterizationService.Cluster(projectId, 1));
         }
 
         [HttpGet("statistics/dbscan/{projectId:int}")]
         public async Task<ActionResult> DbscanCluster(int projectId)
         {
-            var token = Request.Headers["x-auth-token"].ToString();
-            var userId = _jwtFactory.GetValueFromToken(token);
-            return Ok(await _dbscan.Cluster(projectId, userId));
+            //var token = Request.Headers["x-auth-token"].ToString();
+            //var userId = _jwtFactory.GetValueFromToken(token);
+            return Ok(await _dbscan.Cluster(projectId, 1));
         }
 
         [HttpPut("restore/{projectId:int}")]

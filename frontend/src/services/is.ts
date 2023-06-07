@@ -5,11 +5,11 @@ export const is = {
 export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
-    if (is.localhost) {
-    return "https://early-socks-drum.loca.lt";
-    }
+    //if (is.localhost) {
+    //return "https://early-socks-drum.loca.lt";
+    //}
 
-    // return 'http://localhost:5054';
+    return 'http://localhost:5054';
   })(),
   ports: {
     be: 5054,

@@ -3,5 +3,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
-  "typescript.tsdk": "./test-backend/node_modules/typescript/lib"
+  "typescript.tsdk": "./test-backend/node_modules/typescript/lib",
+  "workbench.colorTheme": "Default Dark Modern"
 }

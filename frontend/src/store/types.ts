@@ -63,7 +63,7 @@ export interface EditPostProjectDto
 }
 
 export interface DownloadCommunicationPlan {
-  plan: Pick<CommunicationPlanDto, "description" | "frequency" | "channel" | "audience" | "organizer">[];
+ plan: Pick<CommunicationPlanDto, "description" | "frequency" | "channel" | "audience" | "organizer">[];
 }
 
 export interface CommunicationPlanDto {
