@@ -89,7 +89,9 @@ const ServicesPage: FC<Props> = (params) => {
           <Button buttonType='button' styleType='none'>
             <GreenCard>
               <Icon type='raci'/>
-              Створити RACI матрицю
+              <HeaderLink link="/raci-matrix">
+                Створити RACI матрицю
+              </HeaderLink>
             </GreenCard>
           </Button>
 

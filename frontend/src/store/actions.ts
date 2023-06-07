@@ -26,7 +26,7 @@ import {
   RegisterDto,
   StatisticDataInfo,
   TaskDto,
-  UserDto, DownloadCommunicationPlan
+  UserDto, DownloadCommunicationPlan, RACIMatrixDto, DeleteDocumentDto
 } from './types';
 
 /* Action Types */
@@ -175,6 +175,11 @@ export const actionTypes = {
   POST_DOCUMENT_SUCCESS: 'POST_DOCUMENT_SUCCESS' as 'POST_DOCUMENT_SUCCESS',
   POST_DOCUMENT_FAILURE: 'POST_DOCUMENT_FAILURE' as 'POST_DOCUMENT_FAILURE',
 
+  // DELETE /api/document
+  DELETE_DOCUMENT: 'DELETE_DOCUMENT' as 'DELETE_DOCUMENT',
+  DELETE_DOCUMENT_SUCCESS: 'DELETE_DOCUMENT_SUCCESS' as 'DELETE_DOCUMENT_SUCCESS',
+  DELETE_DOCUMENT_FAILURE: 'DELETE_DOCUMENT_FAILURE' as 'DELETE_DOCUMENT_FAILURE',
+
   // GET /api/download
   DOCUMENT_DOWNLOAD: 'DOCUMENT_DOWNLOAD' as 'DOCUMENT_DOWNLOAD',
   DOCUMENT_DOWNLOAD_SUCCESS: 'DOCUMENT_DOWNLOAD_SUCCESS' as 'DOCUMENT_DOWNLOAD_SUCCESS',
@@ -184,6 +189,11 @@ export const actionTypes = {
   PLAN_DOWNLOAD: 'PLAN_DOWNLOAD' as 'PLAN_DOWNLOAD',
   PLAN_DOWNLOAD_SUCCESS: 'PLAN_DOWNLOAD_SUCCESS' as 'PLAN_DOWNLOAD_SUCCESS',
   PLAN_DOWNLOAD_FAILURE: 'PLAN_DOWNLOAD_FAILURE' as 'PLAN_DOWNLOAD_FAILURE',
+
+  // POST /api/download/raci
+  RACI_DOWNLOAD: 'RACI_DOWNLOAD' as 'RACI_DOWNLOAD',
+  RACI_DOWNLOAD_SUCCESS: 'RACI_DOWNLOAD_SUCCESS' as 'RACI_DOWNLOAD_SUCCESS',
+  RACI_DOWNLOAD_FAILURE: 'RACI_DOWNLOAD_FAILURE' as 'RACI_DOWNLOAD_FAILURE',
 
   /** ui actions */
   SET_PROVIDER_INITIAL_VALUES: 'SET_PROVIDER_INITIAL_VALUES' as 'SET_PROVIDER_INITIAL_VALUES',
@@ -553,6 +563,19 @@ export interface PostDocumentFailure extends ErrorPayload {
   type: typeof actionTypes.POST_DOCUMENT_FAILURE;
 }
 
+export interface DeleteDocument {
+  type: typeof actionTypes.DELETE_DOCUMENT;
+  payload: DeleteDocumentDto;
+}
+
+export interface DeleteDocumentSuccess {
+  type: typeof actionTypes.DELETE_DOCUMENT_SUCCESS;
+}
+
+export interface DeleteDocumentFailure extends ErrorPayload {
+  type: typeof actionTypes.DELETE_DOCUMENT_FAILURE;
+}
+
 export interface DocumentDownload {
   type: typeof actionTypes.DOCUMENT_DOWNLOAD;
   payload: number;
@@ -581,6 +604,20 @@ export interface PlanDownloadFailure extends ErrorPayload {
   type: typeof actionTypes.PLAN_DOWNLOAD_FAILURE;
 }
 
+export interface RACIDownload {
+  type: typeof actionTypes.RACI_DOWNLOAD;
+  payload: RACIMatrixDto;
+}
+
+export interface RACIDownloadSuccess {
+  type: typeof actionTypes.RACI_DOWNLOAD_SUCCESS;
+  payload: string;
+}
+
+export interface RACIDownloadFailure extends ErrorPayload {
+  type: typeof actionTypes.RACI_DOWNLOAD_FAILURE;
+}
+
 /** UI actions */
 export type FailureAppActionTypes =
   | typeof actionTypes.GET_ME_FAILURE
@@ -607,9 +644,11 @@ export type FailureAppActionTypes =
   | typeof actionTypes.DELETE_TASK_FAILURE
   | typeof actionTypes.GET_DOCUMENTS_FAILURE
   | typeof actionTypes.POST_DOCUMENT_FAILURE
+  | typeof actionTypes.DELETE_DOCUMENT_FAILURE
   | typeof actionTypes.DOCUMENT_DOWNLOAD_FAILURE
   | typeof actionTypes.PLAN_DOWNLOAD_FAILURE
   | typeof actionTypes.LOG_OUT_ENDUSER_FAILURE
+  | typeof actionTypes.RACI_DOWNLOAD_FAILURE
   ;
 
 export type FailureAppAction =
@@ -638,8 +677,10 @@ export type FailureAppAction =
   | DeleteTaskFailure
   | GetDocumentsFailure
   | PostDocumentFailure
+  | DeleteDocumentFailure
   | DocumentDownloadFailure
   | PlanDownloadFailure
+  | RACIDownloadFailure
   ;
 
 export type AppAction =
@@ -719,10 +760,16 @@ export type AppAction =
   | PostDocument
   | PostDocumentSuccess
   | PostDocumentFailure
+  | DeleteDocument
+  | DeleteDocumentSuccess
+  | DeleteDocumentFailure
   | DocumentDownload
   | DocumentDownloadSuccess
   | DocumentDownloadFailure
   | PlanDownload
   | PlanDownloadSuccess
   | PlanDownloadFailure
+  | RACIDownload
+  | RACIDownloadSuccess
+  | RACIDownloadFailure
   ;

@@ -6,7 +6,7 @@ export const globals = {
   localhost: 'localhost',
   endpoint: (() => {
     //if (is.localhost) {
-    //return "https://early-socks-drum.loca.lt";
+    //return "https://stupid-colts-thank.loca.lt";
     //}
 
     return 'http://localhost:5054';
@@ -50,7 +50,8 @@ export const globals = {
     },
     download: {
       _: '/api/download',
-      plan: '/api/download/plan'
+      plan: '/api/download/plan',
+      raci: '/api/download/raci'
     }
   },
   fePaths: {

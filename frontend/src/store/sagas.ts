@@ -28,9 +28,9 @@ import {
   Register,
   RegisterSuccess,
   PutProjectUnarchive,
-  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload
+  DeleteProject, GetMeFailure, GetMeStatisticsFailure, LoginFailure, PlanDownload, RACIDownload, DeleteDocument
 } from './actions';
-import {ClusterType} from './types';
+import {ClusterType, RACIMatrixDto} from './types';
 import {LocalStorageService} from '../services/local-storage';
 
 function* errorHandler(
@@ -522,6 +522,24 @@ function* getDocuments() {
   }
 }
 
+function* deleteDocument(deleteDocument: DeleteDocument) {
+  try {
+    console.log('Delete document action: ' + deleteDocument);
+
+    const response: {
+      data: any
+    } = yield call(() => {
+      return axios.delete(`${globals.endpoint}${globals.paths.document._}/${deleteDocument.payload.documentId}`);
+    });
+
+    yield put<AppAction>({
+      type: 'DELETE_DOCUMENT_SUCCESS'
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'DELETE_DOCUMENT_FAILURE');
+  }
+}
+
 function* documentDownload(documentDownload: DocumentDownload) {
   try {
     console.log('Document download state action');
@@ -575,7 +593,7 @@ function* postDocument(postDocument: PostDocument) {
 
 function* planDownload(planDownload: PlanDownload) {
   try {
-    console.log('Plan download state action ' + JSON.stringify(planDownload));
+    console.log('Plan download action ' + JSON.stringify(planDownload));
 
     const response: {
       data: any;
@@ -599,6 +617,34 @@ function* planDownload(planDownload: PlanDownload) {
     });
   } catch (error) {
     yield call(errorHandler, error, 'PLAN_DOWNLOAD_FAILURE');
+  }
+}
+
+function* raciDownload(raciDownload: RACIDownload) {
+  try {
+    console.log('RACI download action ' + JSON.stringify(planDownload));
+
+    const response: {
+      data: any;
+      blob: any;
+    } = yield call(() => {
+      return axios.post(`${globals.endpoint}${globals.paths.download.raci}`, raciDownload.payload
+          // headers: {
+          //   'Content-Type': 'application/problem+json; charset=utf-8'
+          // }
+      );
+    });
+    console.log('@response');
+    console.log(JSON.stringify(response.data, null, 2));
+
+    window.open(`${globals.endpoint}${globals.paths.download.raci}`, '_blank');
+
+    yield put<AppAction>({
+      type: 'RACI_DOWNLOAD_SUCCESS',
+      payload: response.data
+    });
+  } catch (error) {
+    yield call(errorHandler, error, 'RACI_DOWNLOAD_FAILURE');
   }
 }
 
@@ -627,7 +673,9 @@ export const rootSaga = function* rootSaga() {
   yield takeLeading(actionTypes.DELETE_TASK, deleteTask);
   yield takeLeading(actionTypes.GET_DOCUMENTS, getDocuments);
   yield takeLeading(actionTypes.POST_DOCUMENT, postDocument);
+  yield takeLeading(actionTypes.DELETE_DOCUMENT, deleteDocument);
   yield takeLeading(actionTypes.DOCUMENT_DOWNLOAD, documentDownload);
   yield takeLeading(actionTypes.PLAN_DOWNLOAD, planDownload);
+  yield takeLeading(actionTypes.RACI_DOWNLOAD, raciDownload);
   yield takeLeading(actionTypes.LOG_OUT_ENDUSER, logout);
 };
